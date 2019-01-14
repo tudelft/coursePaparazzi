@@ -1,6 +1,4 @@
 
-
-
 all:  crashCoursePaparazziPart1.pdf  crashCoursePaparazziPart2.pdf  crashCoursePaparazziPart3.pdf  crashCoursePaparazziPart4.pdf
 
 crashCoursePaparazziPart1.pdf: crashCoursePaparazziWeek1.tex

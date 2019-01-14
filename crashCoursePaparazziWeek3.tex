@@ -13,7 +13,6 @@ To do this we will try writing code, but not before more explanations of Paparaz
 \item Know how and where to get help
 \item Adding a module
 \item Learning how to debug
-\item Making decisions onboard
 \item Moving waypoints
 \end{itemize}
 \subsection*{How to get help}
@@ -25,7 +24,7 @@ Here is where you can get help if you are stuck:
 \item If you can't find something in Paparazzi use the "Find in file" function of Eclipse. This will help you find the files or variables you are searching for.
 \item If you can't find it with Eclipse you can try searching the Paparazzi wiki (\url{https://wiki.paparazziuav.org}). It is a huge collection of information and almost everything is documented there. If you find something that is not yet documented: please add it yourself to the wiki and help your fellow students. Additionally, auto-generated documentation can be found at \url{http://docs.paparazziuav.org/latest/}.
 \item If you still can't find a specific Paparazzi function chat with the developers of Paparazzi on gitter.im/paparazzi.
-\item If you have questions about the C language: check Stackoverflow for answers to your question.
+\item If you have questions about the C language: check \href{https://stackoverflow.com/}{Stackoverflow} for answers to your question.
 \end{itemize}
 
 \subsection*{Adding a module}
@@ -45,43 +44,23 @@ For printing to the terminal: you can use the following in your code:
 printf("Integer variable: %d\n",myIntegerVariable);
 \end{verbatim}
 To see this text appear open a terminal on your laptop and type:
-\begin{verbatim}
+\begin{lstlisting}[style=Bash]
 telnet 192.168.42.1
 cd data/ftp/internal_000/paparazzi
 killall -9 ap.elf 
 ./ap.elf
-\end{verbatim}
+\end{lstlisting}
 Your program is now restarted, and your message will appear in your terminal. 
 
 \bigskip
 To learn more about paparazzi messages check this webpage: \url{http://wiki.paparazziuav.org/wiki/Telemetry}.
-If conf/messages.xml does not exist, you should copy the file from \begin{verbatim}sw/ext/pprzlink/message_definitions/v1.0/\end{verbatim} to the conf directory.
-Create a new message now and send an arbitrary value. Check if you receive it by running the messages program in Paparazzi. 
+If conf/messages.xml does not exist, you should copy the messages.xml from the pprzlink submodule to the conf directory.
 
-\subsection*{Making decisions onboard}
-As you saw last week you can leave blocks in your flight plan by adding an exception. Paparazzi allows you to use a variable of your module as a trigger for an exception. When the variable you selected is not equal to zero, the exception will occur and a next block is selected. 
-Let's try to create the following behaviour: 
-\begin{itemize}
-\item Start at waypoint one, and enter your newly created block. 
-\item The drone will now fly towards waypoint two. 
-\item As soon as the drone spent five seconds flying towards this waypoint (or was there for too long) we fly back to waypoint one. 
-\end{itemize}
-Checking if the drone spent a long time in a block can be done in the block itself with the line:
-\begin{verbatim}
-<exception cond="LessThan(5, block_time)" deroute="Standby" /> 
-\end{verbatim}
-However, we will create this as a function in your module.h file as such:
-\begin{verbatim}
-extern bool spentLongTimeInBlock(int timeInBlock){
-	return timeInBlock > 5;
-}
-\end{verbatim}
-And add it to our block:
-\begin{verbatim}
-<exception cond="spentLongTimeInBlock(block_time)" deroute="Standby"/>
-\end{verbatim}
-Fly and verify that your program works. Now you know that you can add complex functions in your module, and call them from your flightplan. 
-You are now also able to create exceptions yourself!
+\begin{lstlisting}[style=Bash]
+cp sw/ext/pprzlink/message_definitions/v1.0/messages.xml conf/
+\end{lstlisting}
+
+Create a new message now and send an arbitrary value. Check if you receive it by running the messages program in Paparazzi. 
 
 \subsection*{Exercise: moving waypoints}
 Now that we can make decisions we can also move waypoints. The goal of this exercise is to fly in the pattern of a house inside the arena. 

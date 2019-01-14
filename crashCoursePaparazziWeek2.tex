@@ -154,7 +154,7 @@ If something goes wrong during autonomous flight, you may have to take over manu
 Make sure that your throttle is about halfway up, then set the autopilot mode to ATT. You are now in full control of the drone. Try to land the drone in a controlled manner. Select the `Holding Point' block before switching the autopilot back to NAV mode.
 
 \medskip
-When you are finished, close the simulation using the `Stop/Remove All Processess' button.
+When you are finished, close the simulation using the `Stop/Remove All Processes' button.
 
 
 \subsection*{OptiTrack setup}
@@ -234,37 +234,67 @@ When flying your drone you want your drone to do something as soon as these dang
 \end{itemize}
 The Paparazzi flight plan allows you to create exceptions: when the check of that exception becomes true the drone will execute a certain block. Look at the flight plan file 
 
-\fbox{flight\_plans/tudelft/course2018\_orangeavoid\_cyberzoo.xml} to see how these exceptions are implemented. 
+\fbox{flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo.xml} to see how these exceptions are implemented. 
 
 \clearpage
 \section*{Installation manual}
 
 This manual is only required if you're not using the supplied USB image.\\
 
-\noindent To get the tudelft/mavlabCourse2018 branch working there are some instructions you'll have to follow. The instructions are straightforward and should be easy enough to follow. Try to understand why every step is neccesary, this will improve your understanding of how everything works.
+\noindent To get the tudelft/mavlabCourse2019 branch working there are some instructions you'll have to follow. The instructions are straightforward and should be easy enough to follow. Try to understand why every step is necessary, this will improve your understanding of how everything works.
 
 \medskip
-If you have not yet installed Ubuntu, you can install it next to Windows by following this tutorial: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. The rest of this manual assumes that you are running Ubuntu.
+If you have not yet installed Ubuntu, you can install it next to Windows by following this tutorial: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. We recommend you install Ubuntu 18.04 Bionic Beaver \url{https://www.ubuntu.com/download/desktop}. The rest of this manual assumes that you are running Ubuntu.
 
 \begin{enumerate}
 \item{Install Paparazzi UAV as mentioned in \url{http://wiki.paparazziuav.org/wiki/Installation}. It is recommended for Ubuntu users to use the one-liner.}
-\item{Open a terminal window (Ctrl+Alt+T) and navigate to the paparazzi folder "cd paparazzi". Add the mavlabCourse remote "git remote add mavlabCourse https://github.com/tudelft/paparazzi", and update using "git fetch mavlabCourse mavlabCourse2018"}
-\item{Checkout the mavlabCourse2018 branch using "git checkout mavlabCourse2018"}
-\item{Sync, initialize and update the submodules using:
-\begin{enumerate}
-\item{"git submodule sync"}
-\item{"git submodule init"}
-\item{"git submodule update"}
-\end{enumerate}
+\item{Open a terminal window (Ctrl+Alt+T), navigate to the paparazzi folder and add and update the mavlabCourse remote.
+\begin{lstlisting}[style=Bash]
+cd paparazzi
+git checkout mavlabCourse2019
+git remote add mavlabCourse https://github.com/tudelft/paparazzi
+git fetch mavlabCourse mavlabCourse2019
+\end{lstlisting}
 }
-\item{Build paparazzi by using "make clean" and "make"}
-\item{Select the right conf and control\_panel files using "python start.py"}
-\item{Install ffmpeg, vlc, cmake and java using "sudo apt-get install ffmpeg vlc cmake default-jre"}
-\item{Install Gazebo.
+\item{Checkout the mavlabCourse2019 branch using:
+\begin{lstlisting}[style=Bash]
+git checkout mavlabCourse2019
+\end{lstlisting}
+}
+\item{Sync, initialize and update the submodules using:
+\begin{lstlisting}[style=Bash]
+git submodule init
+git submodule sync
+git submodule update
+\end{lstlisting}
+}
+\item{Build paparazzi by using:
+
+\item{Select the right conf and control\_panel files using:
+\begin{lstlisting}[style=Bash]
+python start.py
+\end{lstlisting}
+}
+\item{Install ffmpeg, vlc, cmake and java using:
+\begin{lstlisting}[style=Bash]
+sudo apt install ffmpeg vlc cmake default-jre
+\end{lstlisting}
+}
+}
+\item{Install and setup Gazebo simulator.
 \begin{enumerate}
-\item{Install gazebo using "sudo apt-get install gazebo7 libgazebo7-dev"}
-\item{Go to your home folder `cd', start ``gedit .bashrc'' and scroll down to the end of the file. There, add the line:\\
-\verb|export GAZEBO_MODEL_PATH="<pprz>/conf/simulator/gazebo/models:$GAZEBO_MODEL_PATH"|, where \verb"<pprz>" should be replaced by your Paparazzi directory. Save and close the editor.}
+\item{Gazebo version 9 is recommendd with Ubuntu 18.04, earlier versions may require version 8. Install gazebo using:
+\begin{lstlisting}[style=Bash]
+sudo apt install gazebo9 libgazebo9-dev
+\end{lstlisting}
+}
+\item{Open the .bashrc in your home folder
+\begin{lstlisting}[style=Bash]
+gedit ~/.bashrc
+\end{lstlisting}
+ and scroll down to the end of the file. There, add the line:\\
+\verb|export GAZEBO_MODEL_PATH="<pprz>/conf/simulator/gazebo/models:$GAZEBO_MODEL_PATH"|\\
+where \verb"<pprz>" should be replaced by your Paparazzi directory. Save and close the editor.}
 \end{enumerate}}
 \item{Install eclipse to easily navigate through the paparazzi source code.
 \begin{enumerate}
@@ -280,14 +310,23 @@ If you have not yet installed Ubuntu, you can install it next to Windows by foll
 \item{Make openCV.
 \begin{enumerate}
 \item{Navigate to sw/ext/opencv\_bebop using "cd ./paparazzi/sw/ext/opencv\_bebop}
-\item{Set up your git Email using \verb"git config --global user.email 'your_email@host.com'"}
-\item{Set up your git Name using \verb"git config --global user.name 'your_name'"}
-\item{Make openCV using "make"}
+\item{Set up your git Email using :
+\begin{lstlisting}[style=Bash]
+git config --global user.email !\hl{`your\_email@host.com'}!
+\end{lstlisting}}
+\item{Set up your git Name using
+\begin{lstlisting}[style=Bash]
+git config --global user.name !\hl{`your\_name'}!}
+\end{lstlisting}}
+\item{Make openCV using:
+\begin{lstlisting}[style=Bash]
+make
+\end{lstlisting}}
 \end{enumerate}
 }
-\item{From the paparazzi folder, run start.py "python start.py" and select\\
-as Conf: \fbox{userconf/tudelft/course2018\_conf.xml}\\
-and as Controlpanel: \fbox{userconf/tudelft/course2018\_control\_panel.xml}. }
-\item{You can now enjoy running paparazzi and developing paparazzi in eclipse. Run paparazzi at any time by either the .desktop file located in "./conf/system/launcher/Paparazzi.desktop" or by using "./paparazzi" from the paparazzi folder.}
+\item{From the paparazzi folder, run start.py ``python start.py" and select\\
+as Conf: \fbox{userconf/tudelft/course2019\_conf.xml}\\
+and as Controlpanel: \fbox{userconf/tudelft/course2019\_control\_panel.xml}. }
+\item{You can now enjoy running paparazzi and developing paparazzi in eclipse. Run paparazzi at any time by either the .desktop file located in ``./conf/system/launcher/Paparazzi.desktop" or by using ``./paparazzi" from the paparazzi folder.}
 \end{enumerate}
 \end{document}

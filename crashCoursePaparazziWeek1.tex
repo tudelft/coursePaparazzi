@@ -18,14 +18,18 @@ Welcome to the first lesson of a short and gentle introduction to programming au
 \subsection*{Why do drones and batteries break? (and how can YOU break them?)}
 Breaking a drone is easy, they tend to break when they fall on the ground, or get stuck in the net. As you will create an autonomous drone during this course, it is important to start with learning how to prevent breaking this fragile and expensive (600 euros) machine. The most common reasons for a drone and/or its battery to break are:
 \begin{itemize}
-\item Low power: when the battery is drained too much the drone will fall down. Sometimes the battery has enough charge to keep the drone in the air, but not enough charge to perform a special manouevre such as yawing. It then starts to behave strangely, as the battery can't provide enough thrust for all the motors. This behaviour will start suddenly, so it is important to stop flying in time! The battery of the Bebop will become dangerously low if it is below 11.1 volts.  
+\item Low power: when the battery is drained too much the drone will fall down. Sometimes the battery has enough charge to keep the drone in the air, but not enough charge to perform a special manouevre such as yawing. It then starts to behave strangely, as the battery can't provide enough thrust for all the motors. This behaviour will start suddenly, so it is important to stop flying in time!
 
-When you fly too long with a battery not only do you risk breaking the drone, you will definitely break the battery. Flying too long makes the batteries lose capacity, and in the end makes them unreliable. Batteries with low capacities can lead to dangerous situations. 
+Lithium Ion (LiPo) batteries, in particular, become permanently damaged when the battery voltage drops too low. This damage is irreversible and will lead to a permanent reduction in total battery capacity.
+
+For the bebop, a full battery has a voltage of 12.4 V and an empty on 11.1 V. Land once the battery voltage drops below 11.1 V! Additionally, the bebop will use power when on, so don't forget to check the battery level even when not flying, e.g. while debugging.
+
+
 \item Lost GPS: knowing its location is important for your drone when it is flying autonomously. When you are navigating on a flight plan your drone tries to reach a certain waypoint. If the location of the drone is not updated it thinks it has to go on and on, until it hits a wall. 
 
 During this course the position of the drone is supplied by a computer in the Cyberzoo: the Optitrack system. Sometimes this system can break, or somebody puts the wrong settings in the Optitrack computer, or the connection to your drone is lost. Be sure to always check if the GPS data is correct before every flight and program an appropriate landing as soon as the GPS is lost. Also be prepared to take over your drone manually at any time. 
 
-\item Lost Wifi: when this happens the drone receives nothing from your laptop. This means that the joystick commands you give don't reach the drone, and that the GPS is not updated anymore. To prevent this you will need to program a fail-safe mode. Note that you lose wifi more often when there are many laptops or drones in the arena. 
+\item Lost Wifi: when this happens the drone receives nothing from your laptop. This means that the joystick commands you give don't reach the drone, and that the GPS is not updated anymore. To prevent this you will need to program a fail-safe mode (which we will discuss in more detail later). Note that you lose wifi more often when there are many laptops or drones in the arena. 
 \item Bad code: Programming the wrong code will mean your drone does something unexpected. Examples are: 
 \begin{itemize}
 	\item Not detecting an obstacle and therefore flying into this obstacle. 
