@@ -17,11 +17,11 @@ Before you start flying autonomously, it is good to have a basic understanding o
 
 \emph{Guidance} -- also called outer-loop control -- controls the position, velocities and accelerations of the drone. The guidance controller sends attitude setpoints and throttle commands to the stabilization controller. Later in the course you can provide your own setpoints to the guidance controller to navigate the drone around obstacles.
 
+Detailed information on the control loops can be found on the \href{http://wiki.paparazziuav.org/wiki/Control_Loops#Rotorcraft_autopilot}{Paparazzi wiki}.
+
 In this example, the guidance setpoints are provided by the \emph{flight plan}. The flight plan acts as a state machine and will typically only change its setpoints in response to certain events, such as the drone arriving at a target waypoint. In later parts of the course, you will send guidance setpoints directly from your own code instead of from the flight plan.
 
-Apart from the control loops, the autopilot uses estimators (AHRS, INS) to keep track of the drone's state. The estimators will not be considered in this course.
-
-Detailed information on the control loops can be found on the \href{http://wiki.paparazziuav.org/wiki/Control_Loops#Rotorcraft_autopilot}{Paparazzi wiki}.
+Apart from the control loops, the autopilot uses estimators (\href{http://wiki.paparazziuav.org/wiki/Subsystem/ahrs}{AHRS}, \href{http://wiki.paparazziuav.org/wiki/Subsystem/ins}{INS}) to keep track of the drone's state. The estimators will not be considered in this course.
 
 
 
