@@ -7,7 +7,24 @@
 
 In this exercise you will use the provided aircraft and flight plan to avoid orange obstacles inside the CyberZoo.
 
-If necessary, repeat the pre-flight preparation steps listed above: charge your batteries and make sure your joystick is connected and calibrated.
+If necessary, repeat the pre-flight preparation steps from part 2: charge your batteries and make sure your joystick is connected and calibrated.
+
+
+\section{Preface: autopilot overview}
+Before you start flying autonomously, it is good to have a basic understanding of what is going on inside the autopilot. Broadly speaking, the drone is controlled by two nested control loops: stabilization and guidance.
+
+\emph{Stabilization} -- also called inner-loop control -- controls the attitude of the drone. Since quadrotors are inherently unstable, the stabilization controller is typically always running, even during manual flight. During the course you will not interact with the stabilization controller unless you provide attitude setpoints.
+
+\emph{Guidance} -- also called outer-loop control -- controls the position, velocities and accelerations of the drone. The guidance controller sends attitude setpoints and throttle commands to the stabilization controller. Later in the course you can provide your own setpoints to the guidance controller to navigate the drone around obstacles.
+
+In this example, the guidance setpoints are provided by the \emph{flight plan}. The flight plan acts as a state machine and will typically only change its setpoints in response to certain events, such as the drone arriving at a target waypoint. In later parts of the course, you will send guidance setpoints directly from your own code instead of from the flight plan.
+
+Apart from the control loops, the autopilot uses estimators (AHRS, INS) to keep track of the drone's state. The estimators will not be considered in this course.
+
+Detailed information on the control loops can be found on the \href{http://wiki.paparazziuav.org/wiki/Control_Loops#Rotorcraft_autopilot}{Paparazzi wiki}.
+
+
+
 
 \section{Simulation}
 It is important to test your autonomous flight plan in simulation before testing it on your real drone. This allows you to find and fix mistakes in your code before they cause damage to your drone. The simulator also allows you to prepare and test your flight plan without coming to the CyberZoo, charging batteries, etc.
