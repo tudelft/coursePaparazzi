@@ -1,0 +1,162 @@
+\documentclass{article}
+
+\input{ccpap}
+
+\begin{document}
+\ccpmaketitle[Tom van Dijk]{Manual flight with Paparazzi}{}{Part 2}
+
+
+\section{Safety rules}
+
+Last year we managed to break zero drones, let's keep it that way :).
+
+\textbf{Carefully read and follow the rules below!}
+\subsubsection*{Cyberzoo rules}
+\begin{itemize}
+\item No access after 18:00.
+\item Persons inside the flying area:
+\begin{itemize}
+\item Try to avoid having people inside the flight area when drones are flying.
+\item If there are people inside the flight area, notify them when you start flying.
+\item If you are inside the flight area while other drones are flying, we recommend you to wear safety glasses. These hang on the poles next to the entrances.
+\end{itemize}
+\item When leaving the Cyberzoo:
+\begin{itemize}
+\item Clear up the desks.
+\item Remove all obstacles from the Cyberzoo.
+\item Shut down Motive on the Optitrack PC.
+\item Open the curtain.
+\end{itemize}
+\item Do not borrow any materials from the desks behind the Cyberzoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
+\end{itemize}
+
+\subsubsection*{Handling the drone}
+\begin{itemize}
+\item If you damage or break anything, report this to the TA's so we can fix or replace it.
+\item Demonstrate your flying skills -- including nose-in flight -- in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
+\item Prevent common problems:
+\begin{itemize}
+\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
+\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in part 3). The Optitrack system can fail when you did not initialize your drone's rigid body correctly, when you forget to plug in the ethernet cable, when your drone gets confused with another team's drone, etc. Therefore:
+\begin{itemize}
+\item Before taking off, verify that the drone's position and heading in the Ground Control Station are correct.
+\item During flight, be ready to take over if the GPS fix is lost.
+\item The flight plan should automatically trigger a landing when the GPS fix is lost.
+\end{itemize}
+\item WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, you are no longer able to control the drone. Therefore:
+\begin{itemize}
+\item Do not remove the datalink loss exception from the flight plan. This exception will land the drone automatically when the connection is lost.
+\item Before uploading your code, make sure that you are connected to the right drone. Other teams will not appreciate it if you upload new code to their drone while in flight.
+\end{itemize}
+\item Joystick issues. Make sure the joystick is calibrated and working correctly before flying. Before takeoff, check in the GCS that the mode switch is working.
+\item Bad code. Bad code can cause a variety of problems, from missing an obstacle and crashing into it, to segmentation faults that kill the autopilot altogether, often with the motors still running. Therefore:
+\begin{itemize}
+\item Test your code in simulation before testing it on the real drone.
+\item When possible, test your vision code on a dataset you collected beforehand or with an in-hand test on the real drone, before testing it in-flight.
+\item If your drone crashed because of unexpected behavior, try to find out what went wrong before flying again. Do not keep testing the same code in the hopes that it will work the next time. Logging (part 5) will help you find out what went wrong.
+\end{itemize}
+\end{itemize}
+\item Regarding batteries:
+\begin{itemize}
+\item{LiPo batteries, as used in the Bebop, become permanently damaged when the battery voltage drops too low. This will result in a lower battery capacity and shorter flight time. The Bebop battery has a voltage of 12.4~V when full, and 11.1~V when empty. \textbf{You should land when the battery level drops to 11.1~V or below}. The Ground Control Station will give an audible warning when this happens (`BAT LOW'), make sure to turn your sound on. If you hear `BAT CRITICAL', you are too late. The drone also consumes power while it is stationary (e.g. during debugging), make sure to check the battery voltage from time to time.
+
+If you suspect your battery is damaged (BAT LOW at takeoff, exceptionally short flight times or physical damage), contact one of the TA's.}
+
+\item{LiPo batteries are a fire hazard, do not leave the batteries unattended while charging.}
+\end{itemize}
+\end{itemize}
+
+
+
+
+\section{Pre-flight preparation}
+Before you begin your preparation, charge your battery if you have not already done so. Charging can take a significant amount of time, so you should do this beforehand or during your preparation.
+
+\subsubsection*{Connect and calibrate your joystick}
+Before you can fly, you need to connect and calibrate your joystick.
+Connect the joystick to your computer. Ensure that the trim sliders to the right and below the two sticks are in the center position.
+
+Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \verb"/dev/input/js0", write down the number after `js', you will need this later. Double-click on your joystick to start the test and calibration program.
+
+Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. With the control sticks centered, click on the `Ok' and `Close' buttons.
+
+Joystick calibration should be repeated every time you connect a joystick to your computer, as the center positions may vary slightly per device and the trim sliders may have shifted. It is also a good test to verify that your joystick is working correctly.
+
+\subsubsection*{Start Paparazzi Center}
+Start Paparazzi: go back to your terminal and navigate to the paparazzi directory: \fbox{cd paparazzi}. Then, start the Paparazzi Center using \fbox{./paparazzi}.
+
+\medskip
+The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
+
+The top left corner shows the current aircraft (A/C). Use the drop-down menu to select `bebop\_orange\_avoid'.
+Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
+
+The buttons in the top center (Target, Flash mode, Clean, Build, Upload) are used to compile and upload your code.
+
+Finally, the top right allows you to execute a `session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick.
+
+
+
+\section{Flying in simulation}
+Before you fly with the real drone, you will first practice in the simulator.
+This allows you to practice without the risk of breaking your drone. It also allows you to practice somewhere else than the CyberZoo as long as you have access to a joystick.
+
+\medskip
+The simulation is started as follows:
+\begin{enumerate}
+\item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \emph{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
+\item Click `Clean', then `Build'. Paparazzi will now compile your autopilot.
+\item In the Session drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press execute to start the simulation.\smallskip\\
+If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
+\end{enumerate}
+
+After these steps, two new windows will have appeared: `GCS' and `Gazebo'.
+GCS is the \emph{Ground Control Station}, from here you can control and monitor your drone.
+The top left of this screen shows the status of your drone. Pay extra attention to the following fields:
+\begin{itemize}
+\item Bat: this shows the battery level of your drone. Stop flying when the voltage drops to 11.1 or below, otherwise you will damage the battery. This is of course not a problem in the simulator.
+\item Link: indicates that the drone and GCS are connected. This should be green.
+\item Status:
+\begin{itemize}
+\item Autopilot mode (ATT or NAV): this is the current mode of the autopilot. In ATT mode you are in control of the drone, in NAV mode the drone will follow the flight plan. Check that the mode switch on the top left of the joystick toggles the autopilot mode, then set it to ATT.
+\item RC/Joystick status (OK): this indicates that your joystick is operating correctly.
+\item GPS status (3D): this indicates that the drone has a position fix. This field should be green and at `3D' for autonomous flight.
+\end{itemize}
+\item Throttle (red, 0\%): this shows the current throttle level. The indicator is red when the motors are killed and orange/green when the motors are running.
+\end{itemize}
+The right part of the GCS window shows a map of your drone and flight plan (top), and the flight plan itself (bottom). The autonomous flight exercise will show how to use the flight plan.
+
+\medskip
+The Gazebo window provides a view of your simulation. Navigate around the Cyberzoo by panning (left mouse button), zooming (scroll) and rotating (middle mouse button).
+You can reduce the clutter by going to the `Layers' tab (top left) and unchecking the checkboxes. (Note: the CyberZoo and environment will remain visible to the drone's camera).
+
+\medskip
+Now that you are familiar with the GCS and Gazebo, it is time for your first flight.
+Open the GCS and make sure that the autopilot is in ATT mode (use the top left switch of the joystick). Then, move the throttle/yaw stick (left) fully to the bottom-right position until the throttle indicator turns orange: you have now started the motors.
+
+Switch to the Gazebo window. Slowly advance the throttle until the drone takes off.
+You can now use the simulator to practice your manual flying skills. It is very important to test if you can fly a drone nose-in (with its nose pointing towards you). When you can do this perfectly you can consider yourself good enough to serve as a safety pilot during this course.
+
+When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop/Remove All Processess' button.
+
+
+
+\subsection{Flying the real drone}
+Once you have mastered flying in the simulator, it is time to transition to the real drone.
+If this is your first flight, first demonstrate your flying skills in the simulator to one of the TA's.
+Then:
+
+\begin{enumerate}
+\item Place the Bebop inside the CyberZoo. Connect the battery and turn the drone on using the power button on the rear side. When the light stops blinking, press the power button four times. (This allows custom code to be uploaded).
+\item Return to your computer and connect to your Bebop's WiFi access point. (Note: disable and re-enable the WiFi in Ubuntu if the Bebop takes too long to appear in the list of available networks.)
+Make sure that you have connected to the right Bebop, it is a good idea to write down its number somewhere.
+\item In the Paparazzi Center, select the `ap' target and click `Clean' and `Build'. Check that you are connected to the right Bebop, then click the `Upload' button. You should get a message that the autopilot has been started successfully.
+\item Select the `Flight UDP' session and click `Execute'.
+\end{enumerate}
+
+After these steps, the GCS window should appear.
+Ensure that the battery level is sufficient, the Link indicator is green, the RC status indicator is `OK' and that the autopilot is in ATT mode. Since you will fly manually, it is ok if the GPS fix indicator is red.
+If everything is in order, start the engines by moving the yaw/throttle stick to the bottom-right. Slowly increase the throttle to take off, then enter a stable hover. Congratulations, you are now flying with Paparazzi!
+
+
+\end{document}
