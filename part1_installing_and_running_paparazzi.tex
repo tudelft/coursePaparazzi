@@ -1,0 +1,117 @@
+\documentclass{article}
+
+\input{ccpap}
+
+\begin{document}
+\ccpmaketitle[Tom van Dijk, Kirk Scheper]{Installing and running Paparazzi}{}{Part 1}
+
+In this part you will install Ubuntu and the Paparazzi autopilot.
+In the following parts you will perform your first flight using Paparazzi, make the drone autonomous and implement your own algorithms.
+
+
+\section{Installing Ubuntu}
+For this course you are required to install Ubuntu.
+If you are already running Ubuntu, skip to the next section.
+Otherwise, follow the steps here to install Ubuntu in a dual-boot setup with your existing Windows installation.
+This allows you to keep using your existing Windows installation next to Ubuntu.
+While it is possible to install Ubuntu as a virtual machine, this frequently causes problems with networking, USB and GPU support. Therefore we do not support virtual machines during the course.
+
+The dual-boot installation of Ubuntu requires you to format parts of your drive, therefore there is a small risk of losing important files.
+Make sure you have backed up your files before starting the installation.
+
+Follow this tutorial to install Ubuntu next to an existing Windows installation: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. We recommend you install Ubuntu 18.04 Bionic Beaver \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu.
+
+
+
+\section{Installing Paparazzi}
+Once Ubuntu is running, the next step is to install Paparazzi.
+We have prepared a github branch \href{https://github.com/tudelft/paparazzi/tree/mavlabCourse2019}{here} that contains the Paparazzi autopilot and example files for the course. Use the following steps to download this branch and install Paparazzi:
+
+\begin{enumerate}
+\item{Install Paparazzi UAV by opening a terminal (Ctrl+Alt+T) and running the one-liner found here: \url{http://wiki.paparazziuav.org/wiki/Installation}. After running the one-liner, you should see the Paparazzi center. Close this and return to the terminal.}
+\item{Set up your git credentials using
+\begin{lstlisting}[style=Bash]
+git config --global user.name !\hl{your\_name}!
+git config --global user.email !\hl{your\_email@host.com}!
+\end{lstlisting}}
+\item{Navigate to the paparazzi folder and add the tudelft remote.
+\begin{lstlisting}[style=Bash]
+cd ~/paparazzi
+git remote add tudelft https://github.com/tudelft/paparazzi
+git fetch tudelft mavlabCourse2019
+\end{lstlisting}
+}
+\item{Checkout the mavlabCourse2019 branch using:
+\begin{lstlisting}[style=Bash]
+git checkout mavlabCourse2019
+\end{lstlisting}
+}
+\item{Initialize, sync and update Paparazzi's submodules using:
+\begin{lstlisting}[style=Bash]
+git submodule init
+git submodule sync
+git submodule update
+\end{lstlisting}
+}
+\item{Build Paparazzi by using:
+\begin{lstlisting}[style=Bash]
+make clean
+make
+\end{lstlisting}
+\item{Select the conf and control panel files that were prepared for the course by running:
+\begin{lstlisting}[style=Bash]
+python start.py
+\end{lstlisting}
+and select as Conf: \fbox{userconf/tudelft/course2019\_conf.xml}\\
+and as Controlpanel: \fbox{userconf/tudelft/course2019\_control\_panel.xml}.\\
+Click `Set active' and close the dialog.}
+\item{Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake and java using:
+\begin{lstlisting}[style=Bash]
+sudo apt install ffmpeg vlc cmake default-jre
+\end{lstlisting}
+}
+}
+\item{Install the Gazebo simulator. Gazebo version 9 is recommended for Ubuntu 18.04, earlier versions of Ubuntu may require Gazebo version 8. Install Gazebo 9 using:
+\begin{lstlisting}[style=Bash]
+sudo apt install gazebo9 libgazebo9-dev
+\end{lstlisting}
+}
+\item{Install eclipse to easily navigate through the paparazzi source code.
+\begin{enumerate}
+\item{Download the eclipse-installer from \url{https://www.eclipse.org/downloads/download.php?file=/oomph/epp/neon/R2a/eclipse-inst-linux64.tar.gz}}
+\item{Navigate to the Downloads directory, extract the .tar.gz file and run eclipse-inst.}
+\item{Select the C/C++ version}
+\item{It is recommended to use the default installation directory}
+\item{After eclipse is installed start eclipse}
+\item{Navigate to "File - New - Makefile Project with Existing Code}
+\item{Name the project paparazzi select the paparazzi installation location and keep the default options}
+\end{enumerate}
+}
+\item{Build OpenCV for the Bebop.
+\begin{enumerate}
+\item{Navigate to paparazzi/sw/ext/opencv\_bebop:
+\begin{lstlisting}[style=Bash]
+cd ~/paparazzi/sw/ext/opencv_bebop
+\end{lstlisting}}
+\item{Make openCV using:
+\begin{lstlisting}[style=Bash]
+make
+\end{lstlisting}}
+\end{enumerate}
+}
+\end{enumerate}
+
+
+\section{Running your first simulation}
+To test your Paparazzi installation, you will perform a short test-flight in simulation.
+Navigate to the Paparazzi folder and launch the Paparazzi Center using
+\begin{lstlisting}[style=Bash]
+./paparazzi
+\end{lstlisting}
+In the top left drop-down box labeled `A/C', select the `bebop\_orange\_avoid' aircraft.
+In the top middle under `Target', select `nps', the Paparazzi simulator.
+Click `Clean', then `Build' to compile the example code.
+Under `Session', select `Simulation - Gazebo' and click `Execute'. You should now see the Ground Control Station and the Gazebo simulator.
+Click `Stop/Remove All Processes' in the Paparazzi Center to end the simulation.
+
+\end{document}

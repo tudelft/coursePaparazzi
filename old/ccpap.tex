@@ -1,0 +1,53 @@
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{hyperref}
+%% Define no indent with line skip with new paragraph
+\usepackage{parskip}
+
+\definecolor{code}{rgb}{.92,.92,.99}
+\definecolor{codered}{rgb}{.92,.62,.62}
+\definecolor{darkgreen}{rgb}{.2,.62,.18}
+\usepackage{listings}
+\lstset{xrightmargin=10pt,xleftmargin=10pt,language=Java,captionpos=b,tabsize=3,frame=none,keywordstyle=\color{blue},commentstyle=\color{darkgreen},stringstyle=\color{red},showstringspaces=false,basicstyle=\footnotesize\ttfamily,emph={label},backgroundcolor=\color{code}}
+%%numbers=left,numberstyle=\tiny,numbersep=5pt,breaklines=true,\
+
+\usepackage{soul}
+\lstdefinestyle{Bash}
+{language=bash,
+  escapechar=!,
+  backgroundcolor=\color{white},
+  columns=fullflexible,
+  breaklines=true,         
+  breakatwhitespace=false,
+  inputencoding=utf8x,
+  keywordstyle=\color{black},
+  basicstyle=\small\ttfamily,
+%  morekeywords={peter@kbpet},
+%  alsoletter={:~$},
+%  morekeywords=[2]{peter@kbpet:},
+%  keywordstyle=[2]{\color{red}},
+%  literate={\$}{{\textcolor{red}{\$}}}1 
+%         {:}{{\textcolor{red}{:}}}1
+%         {~}{{\textcolor{red}{\textasciitilde}}}1,
+  literate={~}{\raisebox{-0.5ex}{\textasciitilde}}1,
+}
+
+\newenvironment{code}
+{\begin{minipage}[l]{\textwidth}}
+{\end{minipage}}
+
+\newcommand{\ccpmaketitle}[4][Roland Meertens, Christophe de Wagter, Guido de Croon, Tom van Dijk] {
+	\fancyhead[LO,LE]{Crash Course Paparazzi 2019}
+	\fancyfoot[LO,LE]{{\small Crash Course Paparazzi 2019}}
+	\fancyfoot[CO,CE]{\thepage}
+	\author{#1}
+	\title{\bf Crash Course Paparazzi 2019\\#2\\{\large #4#3}}
+	\date{February 2019}
+	\setlength{\parindent}{0em}
+	\maketitle
+}
