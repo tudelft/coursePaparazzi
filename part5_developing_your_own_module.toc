@@ -12,14 +12,14 @@
 \contentsline {subsection}{\numberline {1.7}Defines and settings}{12}{subsection.1.7}
 \contentsline {section}{\numberline {2}Logging}{13}{section.2}
 \contentsline {subsection}{\numberline {2.1}Printing to terminal}{13}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Telemetry}{13}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Video streaming}{13}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}CSV file logging}{13}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Video capture}{13}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}Downloading log files through FTP}{13}{subsection.2.6}
-\contentsline {section}{\numberline {3}Testing}{13}{section.3}
-\contentsline {subsection}{\numberline {3.1}Offline development with python and cv2}{13}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Testing in simulation}{14}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Testing on the real drone}{14}{subsection.3.3}
-\contentsline {section}{\numberline {4}Collaboration using git}{14}{section.4}
-\contentsline {section}{\numberline {5}Where to find more information}{14}{section.5}
+\contentsline {subsection}{\numberline {2.2}Telemetry}{14}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Video streaming}{15}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}CSV file logging}{15}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Video capture}{16}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Downloading log files through FTP}{17}{subsection.2.6}
+\contentsline {section}{\numberline {3}Testing}{17}{section.3}
+\contentsline {subsection}{\numberline {3.1}Offline development with python and cv2}{17}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Testing in simulation}{17}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Testing on the real drone}{17}{subsection.3.3}
+\contentsline {section}{\numberline {4}Collaboration using git}{17}{section.4}
+\contentsline {section}{\numberline {5}Where to find more information}{17}{section.5}

@@ -5,9 +5,9 @@
 \begin{document}
 \ccpmaketitle[Tom van Dijk]{Developing your own module}{}{Part 5}
 
-This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you a brief overview of the concepts involved in writing your own module and it will show you where to find further information.
+This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you an overview of the concepts involved in writing your own module, using the colored object detector and orange avoider as examples. You do not need to read this entire document (although you are recommended to do so), use the table of contents below to quickly find the information you need.
 
-The simplest way to start writing your own code is by modifying the example modules: the colored object detector and orange avoider. The rest of this document will often refer to these modules as examples and describe \emph{why} they are written as they are. Once you understand how these example modules work, you can create new or additional modules if you need them.
+The simplest way to start writing your own code is by modifying the example modules: the colored object detector and orange avoider. The rest of this document will often refer to these modules as examples and describe \emph{why} they are written the way they are. Once you understand how these example modules work, you can create new or additional modules if you need them.
 
 \tableofcontents
 
@@ -111,8 +111,7 @@ At the end of the function you need to return a \texttt{struct image\_t} pointer
 The video callback function takes a pointer to the latest camera frame as argument.
 This camera frame is an \texttt{image\_t} struct, as defined in \texttt{sw/airborne/modules/computer\_vision/lib/vision/image.h} (line 43).
 This struct gives you access to the raw pixel values in the \texttt{buf} field.
-
-Images in Paparazzi use a \href{https://en.wikipedia.org/wiki/YUV}{YUV encoding}, where Y is the luminance (`brightness') of a pixel and U and V specify the color. Pixel colors are stored in a \href{https://www.fourcc.org/pixel-format/yuv-uyvy/}{UYVY format}, which works as follows: for each pixel, two bytes of color information are used: one byte for the Y value, and one byte for either the U or V value. In other words, each pixel is described by either a (U, Y) or (V, Y) byte pair.
+Images in Paparazzi use a \href{https://en.wikipedia.org/wiki/YUV}{YUV color space}, where Y is the luminance (`brightness') of a pixel and U and V specify the color. Pixel colors are stored in a \href{https://www.fourcc.org/pixel-format/yuv-uyvy/}{UYVY format} which works as follows: for each pixel, two bytes of color information are used: one byte for either the U or V value, then one byte for the Y value. In other words, each pixel is described by either a (U, Y) or (V, Y) byte pair.
 This means that \emph{you cannot get both the U and V value for a single pixel}! Instead, you need to read the missing U or V value from a neighboring pixel, which is a reasonable approximation in most natural images.
 
 While it is possible to work directly with the UYVY values (as, for instance, in \texttt{image.c}'s \texttt{image\_yuv422\_colorfilt} (line 154)), it is probably easier to transform this image to an OpenCV \texttt{Mat} which allows you to use OpenCV to further process the image. An example of this can be found in \texttt{sw/airborne/modules/computer\_vision/opencv\_example.cpp}:
@@ -144,7 +143,7 @@ At the end of the function, the image is transformed back to Paparazzi's UYVY fo
 Unlike the module's periodic function, the video callback functions run in a separate thread from the autopilot. This means that the video callback runs \emph{in parallel} to the autopilot loop, and as a result the processing time in your callback function can exceed 2~ms without slowing down the rest of the autopilot.
 
 Threading, however, makes it tricky to send information from the video callback to the module's periodic function, as both functions could be running in parallel and reading/writing the same variable at the same time. Threading problems are notoriously hard to debug as they often depend on the relative timing between threads, which is more-or-less random.
-To prevent threading issues, variables accessed by the video thread should be protected by a \emph{mutex}. Before accessing shared variables, a thread will attempt to lock this mutex. A mutex can only be locked once, other threads that try to lock the same mutex will wait until the mutex is unlocked again. Proper use of a mutex ensures that shared variables are accessed by only one thread at a time.
+To prevent threading issues, variables accessed by the video thread should be protected by a \href{https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/}{\emph{mutex}}. Before accessing shared variables, a thread will attempt to lock this mutex. A mutex can only be locked once, other threads that try to lock the same mutex will wait until the mutex is unlocked again. Proper use of a mutex ensures that shared variables are accessed by only one thread at a time.
 A full-on introduction of mutexes is far beyond the scope of this course, instead you are recommended to follow the example from \texttt{sw/airborne/modules/computer\_vision/cv\_detect\_color\_object.c}:
 \begin{lstlisting}[language=c]
 #include "pthread.h"
@@ -188,7 +187,7 @@ void color_object_detector_periodic(void) {
 	...
 }
 \end{lstlisting}
-The example works as follows: this module contains two functions that need to communicate with each other: a video callback function \texttt{object\_detector} that runs on the video thread and performs computationally intensive calculations, and a periodic function \texttt{color\_object\_detector\_periodic} that runs on the autopilot thread and further processes the result.
+The example works as follows: this module is accessed by two threads that need to communicate with each other: a video thread that calls \texttt{object\_detector} to perform computationally intensive calculations whenever a new video frame is available, and the main autopilot thread that periodically calls \texttt{color\_object\_detector\_periodic} to further process the results of \texttt{object\_detector}.
 
 The threads communicate through the \texttt{global\_filter} struct, which holds the object detection results that should be processed in the periodic function. Access to this struct is protected by the \texttt{mutex} object. The mutex object is initialized in the module's init function using \texttt{pthread\_mutex\_init(...)}.
 
@@ -392,7 +391,7 @@ uint8_t moveWaypointForward(uint8_t waypoint, float distanceMeters)
 }
 \end{lstlisting}
 
-In this example, the flight plan does not seem to do much: in the \texttt{START} block, it first places the \texttt{GOAL} waypoint at the drone's current position, then stays at this waypoint. Indeed, without the module, the drone would just stay in place. The avoidance behavior in this case comes from the orange\_avoider module. In its periodic function, it will move the GOAL waypoint to a new location. Because the drone is commanded to stay at this waypoint, it will move to follow it.
+In this example, the flight plan does not seem to do much: in the \texttt{START} block, it first places the \texttt{GOAL} waypoint at the drone's current position, then stays at this waypoint. Indeed, without the orange avoider module the drone would just stay in place. The avoidance behavior in this case comes from the orange\_avoider's periodic function. In this function it moves the GOAL waypoint to a new location. Because the drone is commanded to stay at this waypoint, it will move to follow it.
 
 Using the flight plan and waypoints works, but has its limitations. While you can control where the drone is going, it is not possible to control the drone's velocities. Furthermore, this method assumes that the drone's position is fully known, which may not always be the case such as when flying without Optitrack.
 
@@ -501,7 +500,7 @@ As you can see, defines can be set at multiple places in the airframe file. The 
 During compilation, these defines are turned into preprocessor macros and can be referred to directly from your code.
 
 
-Airframe defines allow you to set constant parameters at compile-time, but in some cases it would be easier if you could change these values during the flight. This is possible with the `settings' system. Settings are defined in the module xml file. Take for example \texttt{conf/modules/cv\_detect\_color\_orange.xml}:
+Airframe defines allow you to set constant parameters at compile-time, but in some cases it would be easier if you could change these values during the flight. This is possible with the \href{https://wiki.paparazziuav.org/wiki/Settings}{`settings'} mechanism. Settings are defined in the module xml file. Take for example \texttt{conf/modules/cv\_detect\_color\_orange.xml}:
 \begin{lstlisting}[language=xml]
 <module name="cv_detect_color_object" ...>
 	...
@@ -513,7 +512,7 @@ Airframe defines allow you to set constant parameters at compile-time, but in so
 	</settings>
 </module>
 \end{lstlisting}
-Settings listed in the module xml can be tuned from the Ground Control station by going to the `Settings' tab and then selecting the tab belonging to your module, as defined in the \texttt{dl\_settings} element (here \texttt{ColorObjectDetector}). To read the current value of a parameter from the drone, click its value (the number) in the GCS. Te set a value on the drone, adjust the slider, \emph{then click the green checkmark} to upload this new value to the drone. Click the value number again to make sure the setting was updated.
+Settings listed in the module xml can be \href{https://wiki.paparazziuav.org/wiki/GCS#Settings}{tuned from the Ground Control Station} by going to the `Settings' tab and then selecting the tab belonging to your module, as defined in the \texttt{dl\_settings} element (here \texttt{ColorObjectDetector}). To read the current value of a parameter from the drone, click its value (the number) in the GCS. Te set a value on the drone, adjust the slider, \emph{then click the green checkmark} to upload this new value to the drone. Click the value number again to make sure the setting was updated.
 
 Use the \texttt{dl\_setting} element in your module xml to add a setting to your module. The \texttt{var} attribute specifies the variable this setting should be written to; this variable should be globally accessible. The \texttt{min}, \texttt{step} and \texttt{max} attributes let you specify a range of possible values for this setting. Finally, using \texttt{shortname} you can control the name under which this setting is listed in the GCS.
 
@@ -531,18 +530,160 @@ In this example, \texttt{MY\_DEFINE} provides the initial value of \texttt{my\_s
 
 
 \section{Logging}
+While writing your module, you will likely want feedback on what is happening in your code while the module is running. Especially when things go wrong (and they will), logging is essential in tracking down and fixing problems. In this section you will find a brief overview of approaches to logging.
 
 \subsection{Printing to terminal}
+Perhaps one of the easiest approaches to logging is to make your module print messages to a terminal. While running the simulations of the earlier parts, you may already have noticed that the example modules print information to the terminal in the Paparazzi Center:
+\begin{lstlisting}
+[orange_avoider->calculateForwards()] Calculated 1.000000 m forward position.
+  x: -0.164062  y: 0.968750 based on pos(-0.007860, -0.017677) and heading(-9.120324)
+[orange_avoider->moveWaypoint()] Moving waypoint 5 to x:-0.164062 y:0.968750
+\end{lstlisting}
+You can add your own debug messages as follows: first, include the \texttt{<stdio.h>} header to get access to the \texttt{printf} function. Then, at any point in your code, use \href{http://www.cplusplus.com/reference/cstdio/printf/}{\texttt{printf}} to print your debug message. Printf requires a format string to know how to print the variables you specify, follow the link to find out more.
+
+When running in simulation the printf messages will automatically appear in the Paparazzi Center. You can also read these messages on the real drone using the following steps:
+\begin{enumerate}
+\item Open a terminal window (Ctrl+Alt+T)
+\item Make sure you are connected to the drone's WiFi access point, the open a telnet connection using \fbox{telnet 192.168.42.1}.
+\item Navigate to the Paparazzi folder using \fbox{cd data/ftp/internal\_000/paparazzi}.
+\item You need to restart the autopilot for the messages to show up. Run \fbox{killall -9 ap.elf}, then \fbox{./ap.elf} to restart the autopilot.
+\item When you are finished and the drone is landed, kill the autopilot by pressing Ctrl+C twice, then disconnect using Ctrl+D.
+\end{enumerate}
+
 
 \subsection{Telemetry}
+Paparazzi also provides a \href{https://wiki.paparazziuav.org/wiki/Telemetry}{telemetry} system to track and plot variables in real-time.
+Adding your own telemetry message requires you to change multiple files, which will be summarized here.
+
+First of all you need to define your telemetry message. For this, you will need to edit \texttt{conf/messages.xml}, but if you are running a clean installation of Paparazzi this file will not exist. Copy this file from \texttt{sw/ext/pprzlink/message\_definitions/v1.0/} and paste it in the \texttt{conf/} folder. This will override the default messages provided by \href{https://github.com/paparazzi/pprzlink}{pprzlink} and allow you to add your own.
+The \texttt{messages.xml} file contains a collection of message types, their id numbers and their fields. The file looks as follows:
+\begin{lstlisting}[language=xml]
+<protocol>
+	<msg_class name="telemetry" id="1">
+		...
+		<message name="DRAGSPEED" id="38">
+			<description>...</description>
+			<field name="u_est" type="float" unit="m/s"/>
+			...
+		</message>
+		...
+	</msg_class>
+</protocol>
+\end{lstlisting}
+The \texttt{message} element describes a message class. Each message class is given a unique \texttt{id} number between 0 and 255. Most id numbers are already taken, you can find out which ones are free by running \fbox{./sw/tools/find\_free\_msg\_id.out} from the paparazzi folder or by looking for comments such as \texttt{<!-- 45 is free -->}.
+The message itself is defined by a collection of \texttt{field}s, for which you need to specify the \texttt{name}, data \texttt{type} and optionally a \texttt{unit}.
+
+Paparazzi needs to generate c code to send and receive your message class. After changing the messages.xml file, you will need to remake Paparazzi. Close paparazzi if it is still running, open a terminal (Ctrl+Alt+T), go to the paparazzi folder \fbox{cd paparazzi} and run \fbox{make clean \&\& make}.
+
+After adding your message class, you need to inform Paparazzi that it should actually send this message. For this you need to edit the drone's telemetry xml, which in the example aircraft is \texttt{conf/telemetry/default\_rotorcraft.xml}:
+\begin{lstlisting}[language=xml]
+<telemetry>
+	<process name="Main">
+		<mode name="default" ...>
+			...
+			<message name="DRAGSPEED" period="0.02"/>
+		</mode>
+		...
+	</process>
+</telemetry>
+\end{lstlisting}
+Now, Paparazzi will know that it has to send the message, but it does not know \emph{how} yet.
+
+For this, you will need to edit your module. We take the dragspeed module (\texttt{sw/airborne/modules/dragspeed/dragspeed.c} as an example:
+\begin{lstlisting}[language=c]
+#include "subsystems/datalink/telemetry.h"
+
+...
+
+void dragspeed_init(void) {
+	...
+	// Register callbacks
+	register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_DRAGSPEED, send_dragspeed);
+	...
+}
+
+...
+
+static void send_dragspeed(struct transport_tx *trans, struct link_device *dev) {
+	// Calculate INS velocity in body frame
+	...
+	// Send telemetry message
+	pprz_msg_send_DRAGSPEED(trans, dev, AC_ID, &dragspeed.vel.x, &dragspeed.vel.y,
+			&vel_ins_body.x, &vel_ins_body.y);
+}
+\end{lstlisting}
+In the module's init function, it registers a callback function to send the DRAGSPEED telemetry message. The callback is registered using \texttt{register\_periodic\_telemetry}, which takes as arguments a periodic\_telemetry pointer (keep this one at \texttt{DefaultPeriodic}), the ID number of your message class (\texttt{PPRZ\_MSG\_ID\_<YOUR MESSAGE NAME>}), and the callback function.
+
+The callback function, here \texttt{send\_dragspeed}, will actually send the telemetry message. The function takes two arguments: a \texttt{struct transport\_tx *trans} and a \texttt{struct link\_device *dev}. You do not need to use or understand these structs, you only need to pass them along to the \texttt{pprz\_msg\_send\_<YOUR MESSAGE NAME>} function. Call this function with \texttt{trans, dev, AC\_ID} as the first three arguments, the following arguments are pointers to the fields of your message.
+
+To receive your telemetry messages, go to the Paparazzi Center, make sure your session is running, then click `Tools $\rightarrow$ Messages'. To plot your telemetry values over time, click `Tools $\rightarrow$ Real-time Plotter', then drag the telemetry message field from the `Messages' window to the `Plotter' window. Use the sliders in the plotter window to adjust the update rate and timespan of the plotter.
+
 
 \subsection{Video streaming}
+When developing computer vision modules, it can be helpful to view the camera images of the drone, possibly with annotations by your module. The \texttt{video\_rtp\_stream} module lets you stream video back to your pc; this module has already been added to the example airframes.
+
+To receive the video stream, start VLC and open \texttt{sw/tools/rtpviewer/rtp5000.sdp} to view \texttt{VIEWVIDEO\_CAMERA} (the front camera) and \texttt{sw/tools/rtpviewer/rtp6000.sdp} to view \texttt{VIEWVIDEO\_CAMERA2} (the bottom camera). Note that there might be a delay on the video; this delay is caused by the video streaming and is not visible to the modules.
+
 
 \subsection{CSV file logging}
+Printing to terminal, telemetry and video streaming give you live feedback of your drone's behavior, but for some purposes it might be useful to analyze the results in more detail after the flight. to help you with this, we have included a CSV file logger module (\texttt{logger\_file}) that will periodically write the values of important variables to a csv file that you can analyze later using python or matlab.
+
+The csv logger is already included in the example airframes. To start logging, go to the `Settings' tab in the GCS, then to `System $\rightarrow$ Modules'. Set \texttt{file\_logger\_periodic} to START and press the green checkmark to start recording. After your flight, press STOP, then the green checkmark to stop recording and save the csv file.
+
+You can change the variables that are being logged by editing \texttt{sw/airborne/modules/loggers/file\_logger.c}:
+\begin{lstlisting}[language=c]
+...
+
+static void file_logger_write_header(FILE *file) {
+  fprintf(file, "time,");
+  fprintf(file, "pos_x,pos_y,pos_z,");
+  fprintf(file, "vel_x,vel_y,vel_z,");
+  fprintf(file, "att_phi,att_theta,att_psi,");
+  fprintf(file, "rate_p,rate_q,rate_r,");
+  fprintf(file, "cmd_thrust,cmd_roll,cmd_pitch,cmd_yaw\n");
+}
+
+static void file_logger_write_row(FILE *file) {
+  struct NedCoor_f *pos = stateGetPositionNed_f();
+  struct NedCoor_f *vel = stateGetSpeedNed_f();
+  struct FloatEulers *att = stateGetNedToBodyEulers_f();
+  struct FloatRates *rates = stateGetBodyRates_f();
+
+  fprintf(file, "%f,", get_sys_time_float());
+  fprintf(file, "%f,%f,%f,", pos->x, pos->y, pos->z);
+  fprintf(file, "%f,%f,%f,", vel->x, vel->y, vel->z);
+  fprintf(file, "%f,%f,%f,", att->phi, att->theta, att->psi);
+  fprintf(file, "%f,%f,%f,", rates->p, rates->q, rates->r);
+  fprintf(file, "%d,%d,%d,%d\n",
+      stabilization_cmd[COMMAND_THRUST], stabilization_cmd[COMMAND_ROLL],
+      stabilization_cmd[COMMAND_PITCH], stabilization_cmd[COMMAND_YAW]);
+}
+
+...
+\end{lstlisting}
+The function \texttt{file\_logger\_write\_header} writes the column names in the first line of the csv file. Then, for each periodic function call, \texttt{file\_logger\_write\_row} writes a new row to the csv file. When modifying the file logger, make sure that the fprintf's in write\_row match the column names of write\_header. Also, do not forget to end the final fprintf statements with a `\textbackslash n' to end the line!
+
+When logging from the simulator, you can find the csv files in \texttt{/tmp/paparazzi/log/<timestamp>.csv}.
+Section \ref{sec:ftp} will show how to download the csv files from the real drone.
+
 
 \subsection{Video capture}
+To help you develop vision algorithms, the \texttt{video\_capture} module lets you record camera images from your drone (both in simulation and on the real drone). The module is already included in the example airframe files. To start and stop recording, use the buttons in the top-left of the GCS.
 
-\subsection{Downloading log files through FTP}
+Video frames recorded in the simulator can be found in \texttt{/tmp/paparazzi/images/<timestamp>/}. the images are named with a timestamp in microseconds since the autopilot was started, this timestamp matches the one recorded by the csv file logger. Section \ref{sec:ftp} will show how to download the images from the real drone.
+
+
+\subsection{Downloading log files through FTP}\label{sec:ftp}
+After recording your log and/or video files, you can download them from the real drone over FTP using the following steps:
+\begin{enumerate}
+\item Make sure you are connected to the drone's WiFi access point.
+\item Open Ubuntu's file browser.
+\item On the left, click `Connect to Server'.
+\item Enter \fbox{ftp://192.168.42.1} as the server address.
+\item Click `Connect As $\rightarrow$ Anonymous' then click `Connect'.
+\item You can now access the drone's file system. The log files are stored in \texttt{internal\_000/log}, the video frames in \texttt{internal\_000/images}. Use the file browser to copy them to your pc. (Note: depending on your version of Ubuntu, you may need to use `Right click $\rightarrow$ copy' instead of Ctrl+C to copy the files).
+\end{enumerate}
+
 
 
 \section{Testing}
