@@ -626,7 +626,7 @@ To receive the video stream, start VLC and open \texttt{sw/tools/rtpviewer/rtp50
 
 
 \subsection{CSV file logging}
-Printing to terminal, telemetry and video streaming give you live feedback of your drone's behavior, but for some purposes it might be useful to analyze the results in more detail after the flight. to help you with this, we have included a CSV file logger module (\texttt{logger\_file}) that will periodically write the values of important variables to a csv file that you can analyze later using python or matlab.
+Printing to terminal, telemetry and video streaming give you live feedback of your drone's behavior, but for some purposes it might be useful to analyze the results in more detail after the flight. To help you with this, we have included a CSV file logger module (\texttt{logger\_file}) that will periodically write the values of important variables to a csv file that you can analyze later using python or matlab.
 
 The csv logger is already included in the example airframes. To start logging, go to the `Settings' tab in the GCS, then to `System $\rightarrow$ Modules'. Set \texttt{file\_logger\_periodic} to START and press the green checkmark to start recording. After your flight, press STOP, then the green checkmark to stop recording and save the csv file.
 
@@ -672,6 +672,8 @@ To help you develop vision algorithms, the \texttt{video\_capture} module lets y
 
 Video frames recorded in the simulator can be found in \texttt{/tmp/paparazzi/images/<timestamp>/}. the images are named with a timestamp in microseconds since the autopilot was started, this timestamp matches the one recorded by the csv file logger. Section \ref{sec:ftp} will show how to download the images from the real drone.
 
+(Note: the image folder name is determined at the start of the autopilot, not the start of recording. If you record multiple videos during one flight, they will be stored in the same folder.)
+
 
 \subsection{Downloading log files through FTP}\label{sec:ftp}
 After recording your log and/or video files, you can download them from the real drone over FTP using the following steps:
@@ -681,16 +683,97 @@ After recording your log and/or video files, you can download them from the real
 \item On the left, click `Connect to Server'.
 \item Enter \fbox{ftp://192.168.42.1} as the server address.
 \item Click `Connect As $\rightarrow$ Anonymous' then click `Connect'.
-\item You can now access the drone's file system. The log files are stored in \texttt{internal\_000/log}, the video frames in \texttt{internal\_000/images}. Use the file browser to copy them to your pc. (Note: depending on your version of Ubuntu, you may need to use `Right click $\rightarrow$ copy' instead of Ctrl+C to copy the files).
+\item You can now access the drone's file system. The log files are stored in \texttt{internal\_000/log/}, the video frames in \texttt{internal\_000/images/}. Use the file browser to copy them to your pc. (Note: depending on your version of Ubuntu, you may need to use `Right click $\rightarrow$ Copy' instead of Ctrl+C to copy the files).
 \end{enumerate}
 
 
 
 \section{Testing}
-\subsection{Offline development with python and cv2}
-OpenCV available in Paparazzi and in Python. Python -- especially IPython (Interactive Python) -- might be easier for prototyping. Spyder3.
+During development, you will regularly want to test your code to check that everything works as expected. While it is tempting to test everything on the real drone, this is often time-consuming and risky. Instead, we recommend you to do a large part of your testing off-board. A large part of development can be done on datasets that you collected beforehand (see the previous section), and closed-loop tests can be performed in simulation before the code is finally tested on the real drone.
 
-Bebop: opencv 3.2.0.
+
+\subsection{Offline development with Python and OpenCV}
+While it is possible to develop your vision algorithms directly in Paparazzi, the frequent recompiling and lack of interactivity of c makes this a time-consuming process.
+Instead, we suggest that you prototype your vision algorithms in Python. Python code is in general a bit easier to write, but the biggest advantage of Python is that you can run it interactively (IPython). This makes it significantly easier to try out stuff and play around with the functions that OpenCV has to offer.
+
+In this section we show how to install and use Python (3), OpenCV and Spyder. Spyder is a python editor that is aimed specifically at scientific computing and has excellent IPython support. As for the actual development of your vision code: that is something we leave up to you.
+
+\subsubsection{Installation}
+To start the installation, use apt to install the most important components. Open a terminal (Ctrl+Alt+T) and enter:
+\begin{lstlisting}[language=bash]
+sudo apt install python3 pip3 virtualenv
+\end{lstlisting}
+
+Next, you need to install OpenCV for python. It is possible to do a system-wide installation of OpenCV, however the Bebop uses an older version of openCV (3.2.0) that we would like to match in python. For obvious reasons, installing an outdated version of a library on your entire system is not ideal. Instead, we will set up a virtual environment (a stand-alone version of python and its libraries) that we will install opencv to.
+\begin{enumerate}
+\item Open a terminal (Ctrl+Alt+T)
+\item Create a new folder to store your virtual environment:
+\begin{lstlisting}[language=bash]
+mkdir -p ~/envs/mavlabcourse
+cd ~/envs/mavlabcourse
+\end{lstlisting}
+\item Create the virtual environment:
+\begin{lstlisting}[language=bash]
+virtualenv -p python3 env
+\end{lstlisting}
+\end{enumerate}
+
+Now we need to install opencv to this virtual environment. Use to following steps to install opencv (and other packages):
+\begin{enumerate}\setcounter{enumi}{3}
+\item Activate the virtual environment:
+\begin{lstlisting}[language=bash]
+source env/bin/activate
+\end{lstlisting}
+You should now see \texttt{(env)} before the terminal prompt.
+\item Install opencv 3.2.0:
+\begin{lstlisting}[language=bash]
+pip3 install opencv-python==3.2.0.8
+\end{lstlisting}
+\item To simplify plotting and drawing, we will also install matplotlib (\href{https://matplotlib.org/api/pyplot_api.html}{pyplot}):
+\begin{lstlisting}[language=bash]
+pip3 install matplotlib
+\end{lstlisting}
+\item Finally, we will install \href{https://docs.spyder-ide.org/index.html}{Spyder3} as editor:
+\begin{lstlisting}[language=bash]
+pip3 install spyder
+\end{lstlisting}
+\item When you are finished installing packages, run \fbox{deactivate} to deactivate the virtual environment. The \texttt{(env)} should disappear.
+\end{enumerate}
+
+\subsubsection{Use}
+Use the following steps to start working from your virtual environment:
+\begin{enumerate}
+\item Open a terminal, then navigate to your virtual environment:
+\begin{lstlisting}[language=bash]
+cd ~/envs/mavlabcourse
+\end{lstlisting}
+\item Activate the virtual environment:
+\begin{lstlisting}[language=bash]
+source env/bin/activate
+\end{lstlisting}
+The \texttt{(env)} marker should appear again.
+\item Start Spyder:
+\begin{lstlisting}[language=bash]
+spyder3
+\end{lstlisting}
+\item When you are finished, deactivate the virtual environment using
+\begin{lstlisting}[language=bash]
+deactivate
+\end{lstlisting}
+\end{enumerate}
+
+To verify that your virtual environment is working correctly, start Spyder as described above and enter the following lines in the IPython console:
+\begin{lstlisting}
+import cv2
+cv2.__version__
+\end{lstlisting}
+This should return the following result: \fbox{'3.2.0'}. If it does not, make sure that you activated your virtual environment before starting Spyder.
+
+As for the actual development, we recommend you to get familiar with \href{https://docs.opencv.org/3.2.0/}{OpenCV} (yes, the documentation is awful...). The `OpenCV-Python Tutorials' are a good place to start if you have not worked with OpenCV before.
+
+Before the course, we collected some example datasets on the Bebop. You can download these here: \url{https://surfdrive.surf.nl/files/index.php/s/68S6moWEIqCT14K}. Use \texttt{cv2.imread} to open the images and start experimenting.
+
+
 
 \subsection{Testing in simulation}
 World and model files.
