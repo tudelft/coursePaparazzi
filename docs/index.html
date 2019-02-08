@@ -12,15 +12,6 @@
   <body>
     <section class="page-header">
       <h1 class="project-name">Paparazzi Course</h1>
-      <h2 class="project-tagline">Paparazzi Course</h2>
-      <p>
-        <a href="https://github.com/tudelft/coursePaparazzi" target="_blank" class="btn">View source LaTeX</a>
-        <a href="https://github.com/tudelft/coursePaparazzi/zipball/build" target="_blank" class="btn">Download .zip with pdfs</a>
-        <a href="https://github.com/tudelft/coursePaparazzi/raw/master/crashCoursePaparazziPart1.pdf" target="_blank" class="btn">Part1</a>
-        <a href="https://github.com/tudelft/coursePaparazzi/raw/master/crashCoursePaparazziPart2.pdf" target="_blank" class="btn">Part2</a>
-        <a href="https://github.com/tudelft/coursePaparazzi/raw/master/crashCoursePaparazziPart3.pdf" target="_blank" class="btn">Part3</a>
-        <a href="https://github.com/tudelft/coursePaparazzi/raw/master/crashCoursePaparazziPart4.pdf" target="_blank" class="btn">Part4</a>
-      </p>
       <p>
         <img src="mavlav_logo.png" style="height:104px"> <img src="paparazziimage.gif" style="height:104px">
       </p>
@@ -31,44 +22,18 @@
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Paparazzi</h3>
         Looking for a gentle introduction to the Paparazzi autopilot? Use this one! If you have questions regarding paparazzi, please visit <a href="https://gitter.im/paparazzi/discuss">Gitter.im</a>.
 
+      <h3>Course manual</h3>
+      The 2019 course starts on February 14th. The course manuals listed below are still under development!
+      <p><a href="https://github.com/tudelft/coursePaparazzi/raw/master/part1_installing_and_running_paparazzi.pdf" target="_blank">Part 1: Installing and running Paparazzi</a></p>
+      <p><a href="https://github.com/tudelft/coursePaparazzi/raw/master/part2_manual_flight_with_paparazzi.pdf" target="_blank">Part 2: Manual flight with Paparazzi</a></p>
+      <p><a href="https://github.com/tudelft/coursePaparazzi/raw/master/part3_autonomous_flight_with_paparazzi.pdf" target="_blank">Part 3: Autonomous flight with Paparazzi</a></p>
+      <p>Part 4: Airframes and modules (under development)</p>
+      <p><a href="https://github.com/tudelft/coursePaparazzi/raw/master/part5_developing_your_own_module.pdf" target="_blank">Part 5: Developing your own module (under development)</a></p>
 
-<h3>Issues</h3>
-<b>make[3]: *** No rule to make target '../../../include/libopencm3/stm32/common/pwr_common_all.h', needed by 'rtc.o'. Stop.</b>
-<p>
-This error is caused by outdated files left after running the installation one-liner. Fix by running "make clean", then "make" again.
-</p>
-
-<b>simsitl: /build/ogre-1.9-mqY1wq/ogre-1.9-1.9.0+dfsg1/OgreMain/include/OgreAxisAlignedBox.h:252: void Ogre::AxisAlignedBox::setExtents(const Ogre::Vector3&, const Ogre::Vector3&): Assertion `(min.x <= max.x && min.y <= max.y && min.z <= max.z) && "The minimum corner of the box must be less than or equal to maximum corner"' failed.</b>
-<p>
-Fixed 28-02-2018. Download the latest version of the mavlabCourse2018 branch using `git pull'.
-</p>
-
-<b>~/.bashrc is empty</b>
-<p>
-The tilde `~' in the pdf is incorrect. Type the command instead of copying it; or navigate to your home folder using `cd' and run `gedit .bashrc`.
-</p>
-
-<!-- <h3>Using OpenCV</h3>
-Make sure you have the latest version of the mavlabCourse2018 branch from this remote: https://github.com/tudelft/paparazzi<br>
-navigate to your paparazzi folder and type: git submodule init && git submodule update<br>
-go to paparazzi/sw/ext/opencv_bebop<br>
-type make.<br>
-This should take some time, and in the end you should have an install folder.<br>
-Now you are ready to try the example module cv_opencvdemo. In this example we convert the bebop image to grayscale, blur it and use a canny edge filter.
-
-              <div class="shell-wrap">
-  <p class="shell-top-bar">~/paparazzi</p>
-  <ul class="shell-body">
-    <li>cd&nbsp;~/paparazzi</li>
-    <li>git submodule init && git submodule update</li>
-    <li>cd sw/ext/opencv_bebop</li>
-    <li>make</li>
-  </ul>
-</div> -->
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/tudelft/coursePaparazzi">Paparazzi course</a> is maintained by <a href="https://github.com/tudelft">the MavLab</a></span> This course was originally intended for use in the <a href="http://mavlab.tudelft.nl">MAVLab</a><p></p>
-           <img src="roland.jpeg"  style="height:204px"><img src="guido.jpg" style="height:204px"><img src="christophe.jpg" style="height:204px"><img src="tom.jpg" style="height:204px">
+           <img src="guido.jpg" style="height:204px"><img src="christophe.jpg" style="height:204px"><img src="tom.jpg" style="height:204px">
 
       </footer>
 
