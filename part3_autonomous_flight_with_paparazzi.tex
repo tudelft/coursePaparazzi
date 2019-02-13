@@ -19,7 +19,7 @@ Before you start flying autonomously, it is good to have a basic understanding o
 
 Detailed information on the control loops can be found on the \href{http://wiki.paparazziuav.org/wiki/Control_Loops#Rotorcraft_autopilot}{Paparazzi wiki}.
 
-In this example, the guidance setpoints are provided by the \emph{flight plan}. The flight plan acts as a state machine and will typically only change its setpoints in response to certain events, such as the drone arriving at a target waypoint. In later parts of the course, you will send guidance setpoints directly from your own code instead of from the flight plan.
+In this example, the guidance setpoints are provided by the \href{https://wiki.paparazziuav.org/wiki/Flight_Plans}{\emph{flight plan}}. The flight plan acts as a finite state machine and will typically only change its setpoints in response to certain events, such as the drone arriving at a target waypoint. In later parts of the course, you will send guidance setpoints directly from your own code instead of from the flight plan.
 
 Apart from the control loops, the autopilot uses estimators (\href{http://wiki.paparazziuav.org/wiki/Subsystem/ahrs}{AHRS}, \href{http://wiki.paparazziuav.org/wiki/Subsystem/ins}{INS}) to keep track of the drone's state. The estimators will not be considered in this course.
 
@@ -57,7 +57,7 @@ When you are finished, close the simulation using the `Stop/Remove All Processes
 \subsection*{OptiTrack setup}
 Autonomous flight becomes significantly easier if the drone has an accurate estimate of its position and velocity. Inside the CyberZoo, an OptiTrack motion capture system is used to provide these measurements. Before your flight, you will have to add your drone in the motion tracking software. This is performed as follows:
 \begin{enumerate}
-\item Place the drone in the center of the CyberZoo with the front of the drone pointing towards the right wall as seen from the desks. Turn on the Bebop and press the on button four times when the light stops flashing. 
+\item Place the drone in the center of the CyberZoo with the front of the drone pointing towards the right as seen from the desks. Turn on the Bebop and press the on button four times when the light stops flashing. 
 \item On the PC labeled `OPTITRACK PRIME17W PC':
 \begin{enumerate}
 \item Start Motive if it is not already running.
@@ -76,14 +76,15 @@ Autonomous flight becomes significantly easier if the drone has an accurate esti
 This program gets your drone's position from Motive and transmits it to the Bebop. Replace the number 9999 with your User ID number from Motive. `Stop' and `Redo' the program. You should get a message that your rigid body is now being tracked.\\
 You may want to save your session with this User ID now (Session $\rightarrow$ Save). Be careful: your User ID may be different the next time you are in the CyberZoo!
 \end{enumerate}
-\item Ask a colleague to move your drone inside the CyberZoo. In the GCS, verify that:
+\item \emph{Before *every* flight}: in the GCS, verify that:
 \begin{itemize}
 \item You have a 3D fix (green indicator).
-\item The position of your drone is correct: if the drone is moved to the left, it also moves to the left in the GCS.
-\item The heading of the drone is correct: verify that the heading of the drone in the GCS is the same as the real drone's heading.
-\item The positions of your waypoints are correct: move the drone to the waypoints in your flight plan and verify that they are inside the CyberZoo, not too close to the nets or walls and safely reachable for the drone.
+\item The position of your drone is correct.
+\item The heading of the drone is correct.
 \end{itemize}
 \end{enumerate}
+
+Additionally, if you are using a new or modified flight plan then it might be a good idea to check the locations of the waypoints beforehand: ask a colleague to carry the drone to the waypoints in your flight plan and verify that they are inside the CyberZoo, not too close to the nets or walls and safely reachable for the drone.
 
 
 

@@ -79,8 +79,8 @@ From this loop, the autopilot can also call your module's \emph{periodic} functi
 
 Because the periodic function is called from within the autopilot's control loop, you should take care that the function does not take too much time to run. The autopilot runs at 512~Hz, which means that it has slightly less than 2~ms to run your module code, the code of the other modules and the control loops and estimators. If your periodic function takes too long, the autopilot will run at a lower frequency than intended, which can lead to instability. In practice you have to make things pretty bad before this becomes a problem, but you should be careful when using large or nested loops in your periodic function, and video processing is best performed in the video callback function (section \ref{sec:video}) as this callback runs in a separate thread.
 
-Together with the periodic function, the module xml can specify a \emph{start} and \emph{stop} function. These are called when the module is started or stopped, respectively.
-You can find an example of these functions in \texttt{sw/airborne/modules/loggers/file\_logger.c}, where they are used to open and close the log file.
+Together with the periodic function, the module xml can specify a \emph{start} and \emph{stop} function. These are called when the module is started or stopped, respectively. The \texttt{autorun} attribute in the module xml's \texttt{periodic} element controls whether your module is started automatically or manually; you can manually start and stop modules from the GCS by going to `Settings $\rightarrow$ System $\rightarrow$ Modules', selecting START or STOP and clicking the green checkmark.
+You can find an example of start and stop functions functions in \texttt{sw/airborne/modules/loggers/file\_logger.c}, where they are used to open and close the log file.
 
 
 
@@ -326,7 +326,7 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
 \end{lstlisting}
 To get the drone's current state, include the \texttt{state.h} header. Then, the state can be accessed using the \texttt{stateGet...} functions. Scroll through the \texttt{state.h} header to get an idea of the values you can access.
 
-State.h uses the following naming conventions: functions ending in \texttt{\_f} return the drone's state in a floating-point format (recommended). These are the easiest to work with, but can be more computationally intensive on small microcontrollers. Functions ending in \texttt{\_i} return the current state in a fixed-point format. The \texttt{\_BFP\_OF\_REAL} and \texttt{\_FLOAT\_OF\_BFP} macros in \texttt{sw/airborne/math/pprz\_algebra\_int.h} allow you to convert data between these formats.
+State.h uses the following naming conventions: functions ending in \texttt{\_f} return the drone's state in a floating-point format (recommended). These are the easiest to work with, but can be more computationally intensive on small microcontrollers. Functions ending in \texttt{\_i} return the current state in a Binary Fixed-Point (BFP) format. The \texttt{\_BFP\_OF\_REAL} and \texttt{\_FLOAT\_OF\_BFP} macros in \texttt{sw/airborne/math/pprz\_algebra\_int.h} allow you to convert data between these formats.
 
 The drone's state can be expressed in different coordinate frames. For this course, the North-East-Down (\texttt{Ned}) and East-North-Up (\texttt{Enu}) frames are likely the most relevant. Positions in these frames are expressed relative to the flight plan origin, which for the example flight plans lies in the center of the Cyberzoo. Angular rates and Euler angles are expressed in the body frame, which follows a Front-Right-Down convention.
 
@@ -464,7 +464,7 @@ Two examples of MODULE mode controllers are provided in \texttt{sw/airborne/modu
 
 
 
-\subsection{Defines and settings}
+\subsection{Defines and settings}\label{sec:settings}
 Your module will most likely contain tunable parameters, such as the minimum and maximum YUV values for which a pixel is considered an obstacle. While you can write these numbers directly in your code, this will make it difficult to tune them later. Paparazzi provides two systems to simplify parameter tuning: defines and settings.
 
 Defines allow you to set constant values from the airframe file. See, for example, the following abstract of the \texttt{bebop\_course2019\_orangeavoid.xml} airframe:

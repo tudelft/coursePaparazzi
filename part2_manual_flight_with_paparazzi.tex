@@ -26,7 +26,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 \item Clear up the desks.
 \item Remove all obstacles and other materials from the Cyberzoo.
 \item Shut down Motive on the Optitrack PC.
-\item Turn off the lights and open the curtain.
+\item Turn off the lights and open the curtain on the left side of the Cyberzoo (as seen from the desks).
 \end{itemize}
 \item Do not borrow any materials from the desks behind the Cyberzoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
 \end{itemize}
@@ -40,15 +40,15 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 \item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
 \item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in part 3). The Optitrack system can fail when you did not initialize your drone's rigid body correctly, when you forget to plug in the ethernet cable, when your drone gets confused with another team's drone, etc. Therefore:
 \begin{itemize}
-\item Before taking off, verify that the drone's position and heading in the Ground Control Station are correct.
+\item Before taking off, *always* verify that the drone's position and heading in the Ground Control Station are correct.
 \item During flight, be ready to take over if the GPS fix is lost.
 \item The flight plan should automatically trigger a landing when the GPS fix is lost.
 \end{itemize}
 \item WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, you are no longer able to control the drone. Therefore:
 \begin{itemize}
 \item Do not remove the datalink loss exception from the flight plan. This exception will land the drone automatically when the connection is lost.
-\item Before uploading your code, make sure that you are connected to the right drone. Other teams will not appreciate it if you upload new code to their drone while in flight.
 \end{itemize}
+\item Connecting to the wrong drone. Before uploading your code, make sure that you are connected to the right drone. Other teams will not appreciate it if you upload new code to their drone while in flight -- this will lead to a crash. Also make sure you are connected to the right drone before taking off, letting another team's drone take off instead can cause dangerous situations.
 \item Joystick issues. Make sure the joystick is calibrated and working correctly before flying. Before takeoff, check in the GCS that the mode switch is working.
 \item Bad code. Bad code can cause a variety of problems, from missing an obstacle and crashing into it, to segmentation faults that kill the autopilot altogether, often with the motors still running. Therefore:
 \begin{itemize}
@@ -63,7 +63,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 
 If you suspect your battery is damaged (BAT LOW at takeoff, exceptionally short flight times or physical damage), contact one of the TA's.}
 
-\item{LiPo batteries are a fire hazard, do not leave the batteries unattended while charging.}
+\item{LiPo batteries are a fire hazard, \textbf{do not leave the batteries unattended while charging!}}
 \end{itemize}
 \end{itemize}
 
@@ -84,7 +84,11 @@ Click the `Calibration' button, then `Start Calibration'. Move both sticks in ci
 Joystick calibration should be repeated every time you connect a joystick to your computer, as the center positions may vary slightly per device and the trim sliders may have shifted. It is also a good test to verify that your joystick is working correctly.
 
 \subsubsection*{Start Paparazzi Center}
-Start Paparazzi: go back to your terminal and navigate to the paparazzi directory: \fbox{cd paparazzi}. Then, start the Paparazzi Center using \fbox{./paparazzi}.
+Start Paparazzi: go back to your terminal and navigate to the paparazzi directory, then run \texttt{paparazzi}:
+\begin{lstlisting}[style=Bash]
+cd ~/paparazzi
+./paparazzi
+\end{lstlisting}
 
 \medskip
 The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
@@ -128,7 +132,7 @@ The top left of this screen shows the status of your drone. Pay extra attention 
 The right part of the GCS window shows a map of your drone and flight plan (top), and the flight plan itself (bottom). The autonomous flight exercise will show how to use the flight plan.
 
 \medskip
-The Gazebo window provides a view of your simulation. Navigate around the Cyberzoo by panning (left mouse button), zooming (scroll) and rotating (middle mouse button).
+The Gazebo window provides a view of your simulation. Navigate around the Cyberzoo by panning (click-and-drag the left mouse button), zooming (scroll) and rotating (click-and-drag the middle mouse button).
 You can reduce the clutter by going to the `Layers' tab (top left) and unchecking the checkboxes. (Note: the CyberZoo and environment will remain visible to the drone's camera).
 
 \medskip
