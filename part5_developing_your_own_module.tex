@@ -529,7 +529,7 @@ In this example, \texttt{MY\_DEFINE} provides the initial value of \texttt{my\_s
 
 
 
-\section{Logging}
+\section{Logging}\label{sec:logging}
 While writing your module, you will likely want feedback on what is happening in your code while the module is running. Especially when things go wrong (and they will), logging is essential in tracking down and fixing problems. In this section you will find a brief overview of approaches to logging.
 
 \subsection{Printing to terminal}
@@ -698,13 +698,13 @@ Instead, we suggest that you prototype your vision algorithms in Python. Python 
 
 In this section we show how to install and use Python (3), OpenCV and Spyder. Spyder is a python editor that is aimed specifically at scientific computing and has excellent IPython support. As for the actual development of your vision code: that is something we leave up to you.
 
-\subsubsection{Installation}
+%\subsubsection{Installation}
 To start the installation, use apt to install the most important components. Open a terminal (Ctrl+Alt+T) and enter:
 \begin{lstlisting}[language=bash]
-sudo apt install python3 pip3 virtualenv
+sudo apt install python3 pip3 virtualenv spyder3
 \end{lstlisting}
 
-Next, you need to install OpenCV for python. It is possible to do a system-wide installation of OpenCV, however the Bebop uses an older version of openCV (3.2.0) that we would like to match in python. For obvious reasons, installing an outdated version of a library on your entire system is not ideal. Instead, we will set up a virtual environment (a stand-alone version of python and its libraries) that we will install opencv to.
+Next, you need to install OpenCV for python. It is possible to do a system-wide installation of OpenCV, however the Bebop uses an older version of openCV (3.4.5) that we would like to match in python. For obvious reasons, installing an outdated version of a library on your entire system is not ideal. Instead, we will set up a virtual environment (a stand-alone version of python and its libraries) that we will install opencv to.
 \begin{enumerate}
 \item Open a terminal (Ctrl+Alt+T)
 \item Create a new folder to store your virtual environment:
@@ -725,65 +725,168 @@ Now we need to install opencv to this virtual environment. Use to following step
 source env/bin/activate
 \end{lstlisting}
 You should now see \texttt{(env)} before the terminal prompt.
-\item Install opencv 3.2.0:
+\item Install opencv 3.4.5:
 \begin{lstlisting}[language=bash]
-pip3 install opencv-python==3.2.0.8
+pip3 install opencv-python==3.4.5.20
 \end{lstlisting}
 \item To simplify plotting and drawing, we will also install matplotlib (\href{https://matplotlib.org/api/pyplot_api.html}{pyplot}):
 \begin{lstlisting}[language=bash]
 pip3 install matplotlib
 \end{lstlisting}
-\item Finally, we will install \href{https://docs.spyder-ide.org/index.html}{Spyder3} as editor:
-\begin{lstlisting}[language=bash]
-pip3 install spyder
-\end{lstlisting}
 \item When you are finished installing packages, run \fbox{deactivate} to deactivate the virtual environment. The \texttt{(env)} should disappear.
-\end{enumerate}
-
-\subsubsection{Use}
-Use the following steps to start working from your virtual environment:
-\begin{enumerate}
-\item Open a terminal, then navigate to your virtual environment:
-\begin{lstlisting}[language=bash]
-cd ~/envs/mavlabcourse
-\end{lstlisting}
-\item Activate the virtual environment:
-\begin{lstlisting}[language=bash]
-source env/bin/activate
-\end{lstlisting}
-The \texttt{(env)} marker should appear again.
-\item Start Spyder:
+\item Set up Spyder to use the virtual environment:
+\begin{itemize}
+\item Launch Spyder:
 \begin{lstlisting}[language=bash]
 spyder3
 \end{lstlisting}
-\item When you are finished, deactivate the virtual environment using
-\begin{lstlisting}[language=bash]
-deactivate
-\end{lstlisting}
-\end{enumerate}
+\item Set up the python interpreter. In the menu, click `Tools $\rightarrow$ Preferences'. Navigate to `Python interpreter'. Select `Use the following Python interpreter', then click the file button and select the \texttt{python3} executable in your environment's \texttt{bin} folder (\verb|~/envs/mavlabcourse/env/bin/python3|).
+\item Click `Apply', `Ok', then close Spyder.
+\end{itemize}
 
-To verify that your virtual environment is working correctly, start Spyder as described above and enter the following lines in the IPython console:
+%\subsubsection{Use}
+%Use the following steps to start working from your virtual environment:
+%\begin{enumerate}
+%\item Open a terminal, then navigate to your virtual environment:
+%\begin{lstlisting}[language=bash]
+%cd ~/envs/mavlabcourse
+%\end{lstlisting}
+%\item Activate the virtual environment:
+%\begin{lstlisting}[language=bash]
+%source env/bin/activate
+%\end{lstlisting}
+%The \texttt{(env)} marker should appear again.
+%\item Start Spyder:
+%\begin{lstlisting}[language=bash]
+%spyder3
+%\end{lstlisting}
+%\item When you are finished, deactivate the virtual environment using
+%\begin{lstlisting}[language=bash]
+%deactivate
+%\end{lstlisting}
+%\end{enumerate}
+
+\item To verify that your virtual environment is working correctly, restart Spyder and enter the following lines in the IPython console:
 \begin{lstlisting}
 import cv2
 cv2.__version__
 \end{lstlisting}
-This should return the following result: \fbox{'3.2.0'}. If it does not, make sure that you activated your virtual environment before starting Spyder.
+This should return the following result: \fbox{'3.4.5'}.
+\end{enumerate}
 
-As for the actual development, we recommend you to get familiar with \href{https://docs.opencv.org/3.2.0/}{OpenCV} (yes, the documentation is awful...). The `OpenCV-Python Tutorials' are a good place to start if you have not worked with OpenCV before.
+As for the actual development, we recommend you to get familiar with \href{https://docs.opencv.org/3.4.5/}{OpenCV} (yes, the documentation is awful...). The `OpenCV-Python Tutorials' are a good place to start if you have not worked with OpenCV before.
 
 Before the course, we collected some example datasets on the Bebop. You can download these here: \url{https://surfdrive.surf.nl/files/index.php/s/68S6moWEIqCT14K}. Use \texttt{cv2.imread} to open the images and start experimenting.
 
 
 
 \subsection{Testing in simulation}
-World and model files.
+After developing and implementing your vision code as a Paparazzi module, you will want to test its behavior in a closed loop with the rest of the autopilot.
+Testing in simulation has several advantages over testing on the real drone:
+\begin{itemize}
+\item You do not risk breaking the drone if you make a mistake.
+\item You do not need to wait to charge batteries.
+\item You do not need to come to the Cyberzoo.
+\item You do not need to share your virtual drone between your teammates.
+\end{itemize}
+All the example code has been tested in simulation before it was used on the real drone, we recommend you to follow a similar workflow as it will save you a lot of time.
 
-Keep in mind: simulation not perfect. Camera colors will be different, camera calibration too.
+Paparazzi uses \href{http://gazebosim.org/}{Gazebo} as a simulation platform. Gazebo allows you to create virtual worlds and robots from xml files, and provides a physics and rendering engine and a collection of virtual sensors.
+
+In the mavlabCourse2019 branch of Paparazzi, we have provided you with a collection of Gazebo worlds and models that are relevant for the course. These can be found in \texttt{conf/simulator/gazebo/} and in \texttt{sw/ext/tudelft\_gazebo\_models/}. Three Cyberzoo world files have already been provided in the \texttt{sw/ext/tudelft\_gazebo\_models/world/} folder:
+\begin{itemize}
+\item \texttt{cyberzoo2019\_orange\_poles.world} - The world file used by the example airframes, consisting of the Cyberzoo with a handful of orange poles to avoid.
+\item \texttt{cyberzoo2019\_orange\_poles\_panels.world} - Same as above, but with black metal panels added as additional obstacles.
+\item \texttt{cyberzoo2019\_orange\_poles\_panels.world} - Cyberzoo with orange poles and metal panels, with traffic mats added on the ground to make `green detectors' harder to use...
+\end{itemize}
+The placement of the obstacles should roughly match that of the obstacles in the \href{https://surfdrive.surf.nl/files/index.php/s/68S6moWEIqCT14K}{real dataset}.
+
+The Gazebo world that is used by Paparazzi is specified in the flight plan, e.g. \\\texttt{conf/flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo.xml}:
+\begin{lstlisting}[language=xml]
+<flight_plan ...>
+	<header>
+		...
+		#define NPS_GAZEBO_WORLD "cyberzoo_orange_poles.world"
+	</header>
+	...
+</flight_plan>
+\end{lstlisting}
+You can change this define to load a different world file. Paparazzi will search for world files in the two folders mentioned above.
+
+Check out the \href{http://sdformat.org/spec?ver=1.6&elem=world}{SDFormat spec} for more information on the content of the world (and model) files.
+If you want to create your own world, it is probably easiest to copy one of the existing Cyberzoo worlds and edit that. \emph{Save your modified files in the \texttt{conf/simulator/gazebo/} folder!} That way your changes are tracked in your Paparazzi branch. The \texttt{sw/ext/tudelft\_gazebo\_models} folder is a git submodule, which makes tracking and sharing changes there a real headache.
+
+The simulation is of course not perfect, you will quickly discover that the camera colors and calibration in the sim may differ from those on the real drone. This is an important reason not to hard-code your tuning parameters (also see \autoref{sec:settings}) as this means that your module works either in the sim or on the real drone, but not both! Instead, you can use the airframe xml to supply a different set of parameters depending on whether you are compiling the autopilot for the sim or the real drone. See for example \texttt{conf/airframes/tudelft/bebop\_course2019\_orangeavoid.xml}:
+\begin{lstlisting}[language=xml]
+<airframe name="bebop_avoider">
+	...
+	<firmware name="rotorcraft">
+		<target name="ap" ...>
+			...
+			<define name="COLOR_OBJECT_DETECTOR_LUM_MIN1" value="40"/>
+			<define name="COLOR_OBJECT_DETECTOR_LUM_MAX1" value="145"/>
+			...
+		</target>
+		<target name="nps" ...>
+			...
+			<define name="COLOR_OBJECT_DETECTOR_LUM_MIN1" value="41"/>
+			<define name="COLOR_OBJECT_DETECTOR_LUM_MAX1" value="183"/>
+			...
+		</target>
+		...
+	</firmware>
+	...
+</airframe>
+\end{lstlisting}
+This airframe provides two compilation targets: \texttt{ap} -- the autopilot for the real drone, and \texttt{nps} -- the simulator. Placing your defines inside the \texttt{target} elements allows you to change your parameters depending on the compilation target, which in turn should allow you to keep running \emph{the same code} in the simulator and on the real drone.
+
+
 
 \subsection{Testing on the real drone}
+After testing your code in simulation, you will need to test the same code on the real drone. The previous parts of the course manual have already shown you how to fly your drone with Paparazzi. Be sure to use the logging capabilities described in \autoref{sec:logging} to help you track down problems. Keep in mind to \emph{follow the safety rules} (part 2), especially when flying experimental code. Also, do not forget to start your loggers before flying.
+
 
 
 \section{Collaboration using git}
+%During this course, you will work with multiple people on the same piece of code.
+%While it is possible to use some creative solutions such as keeping your shared code on Dropbox or copying lots of code snippets between your team members' pc's, this will quickly get messy.
+%Instead, you should use \href{https://git-scm.com/}{git} to properly track and share your changes to the code. You are strongly recommended to read the tutorial \href{https://git-scm.com/book/en/v2}{here} and to play around with the interactive tutorials \href{https://try.github.io/}{here}.
+%This section will briefly summarize the most important concepts.
+%
+%In order of increasing difficulty, git lets you do the following things:
+%\begin{enumerate}
+%\item Keep track of your own changes
+%\item Share your changes with your teammates
+%\item Merge your changes with those of your teammates
+%\end{enumerate}
+%
+%\subsection{Tracking your own changes}
+%Branches
+%
+%Committing
+%
+%\subsection{Sharing your changes}
+%Remotes
+%
+%Pushing
+%
+%Pulling
+%
+%
+%\subsection{Merging changes}
+%Merge
+%
+%
+%
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=0.75\textwidth]{git.png}
+%\caption{Overview of git commands. Source: \url{https://kevintshoemaker.github.io/StatsChats/GIT_tutorial.html}}
+%\label{fig:git}
+%\end{figure}
+
+
+
 
 \section{Where to find more information}
 For a \emph{high-level overview} of Paparazzi and descriptions of file types such as the \emph{flight plan xml} or \emph{module xml}'s, refer to the Paparazzi wiki at \url{https://wiki.paparazziuav.org}.
