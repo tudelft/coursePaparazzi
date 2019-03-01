@@ -75,7 +75,8 @@ Before you begin your preparation, charge your battery if you have not already d
 
 \subsubsection*{Connect and calibrate your joystick}
 Before you can fly, you need to connect and calibrate your joystick.
-Connect the joystick to your computer. Ensure that the trim sliders to the right and below the two sticks are in the center position.
+Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 18.04 can cause the screen to rotate when the joystick is used. If this happens to you, open a terminal and enter the following commands to (permanently) fix this: \fbox{xrandr -o normal}, followed by \fbox{gsettings set org.gnome.settings-daemon.peripherals.touchscreen orientation-lock true}}.
+Ensure that the trim sliders to the right and below the two sticks are in the center position.
 
 Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \verb"/dev/input/js0", write down the number after `js', you will need this later. Double-click on your joystick to start the test and calibration program.
 
@@ -112,7 +113,8 @@ The simulation is started as follows:
 \item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \emph{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
 \item Click `Clean', then `Build'. Paparazzi will now compile your autopilot.
 \item In the Session drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press execute to start the simulation.\smallskip\\
-If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
+If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.\smallskip\\
+Sometimes a `Speech dispatcher' error may appear. As long as you can still hear the messages from the GCS, this error can be ignored.
 \end{enumerate}
 
 After these steps, two new windows will have appeared: `GCS' and `Gazebo'.
