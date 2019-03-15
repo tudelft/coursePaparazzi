@@ -848,6 +848,30 @@ After testing your code in simulation, you will need to test the same code on th
 
 
 \section{Collaboration using git}
+Refer to the lecture slides (\url{https://brightspace.tudelft.nl/d2l/le/content/133606/viewContent/1231699/View}) for more information on using git.
+
+%In short, you will need to take the following steps to share code within your team:
+%\begin{enumerate}
+%\item Create an account on \url{github.com}
+%\item \emph{One person(!)} within your team needs to fork the \texttt{paparazzi/paparazzi} repository. Log in to github, go to \url{https://github.com/paparazzi/paparazzi} and click the `Fork' button on the top right of the page (next to the `Watch' and `Star' buttons). You have now created your own `remote' to which you can push your commits.
+%\item All team members need to add your fork as a new remote:
+%\begin{lstlisting}[language=bash]
+%git remote add <your remote name> <your git url>
+%\end{lstlisting}
+%You can freely pick your remote name as long as it does not contain spaces or other strange characters. You can find the git url by going to your team's fork on github, clicking the green `Clone or download' and copying the link you find there (e.g. \url{https://github.com/<your username>/paparazzi.git}).
+%\item Fetch all branches from the remote
+%\begin{lstlisting}[language=bash]
+%git fetch <your remote name>
+%\end{lstlisting}
+%\item Checkout your team's \texttt{master} branch.
+%\begin{lstlisting}[language=bash]
+%git checkout master
+%\end{lstlisting}
+%\item Create a new branch that you can work on
+%\end{enumerate}
+
+
+
 %During this course, you will work with multiple people on the same piece of code.
 %While it is possible to use some creative solutions such as keeping your shared code on Dropbox or copying lots of code snippets between your team members' pc's, this will quickly get messy.
 %Instead, you should use \href{https://git-scm.com/}{git} to properly track and share your changes to the code. You are strongly recommended to read the tutorial \href{https://git-scm.com/book/en/v2}{here} and to play around with the interactive tutorials \href{https://try.github.io/}{here}.
