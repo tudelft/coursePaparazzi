@@ -5,7 +5,7 @@
 \begin{document}
 \ccpmaketitle[Tom van Dijk]{Developing your own module}{}{Part 5}
 
-This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you an overview of the concepts involved in writing your own module, using the colored object detector and orange avoider as examples. You do not need to read this entire document (although you are recommended to do so), use the table of contents below to quickly find the information you need.
+This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you an overview of the concepts involved in writing your own module using the colored object detector and orange avoider as examples. You do not need to read this entire document (although you are recommended to do so), use the table of contents below to quickly find the information you need.
 
 The simplest way to start writing your own code is by modifying the example modules: the colored object detector and orange avoider. The rest of this document will often refer to these modules as examples and describe \emph{why} they are written the way they are. Once you understand how these example modules work, you can create new or additional modules if you need them.
 
@@ -70,7 +70,7 @@ The simplest way to start writing your own code is by modifying the example modu
 
 
 \section{Module code overview}
-In the previous part you added the cv\_colorfilter and orange\_avoider modules to your airframe.
+The example aircraft use the cv\_colorfilter and orange\_avoider modules to avoid obstacles.
 In this part, we will take a closer look at how these modules are written and use this as an example for your own module.
 
 \subsection{Module files}\label{sec:files}
@@ -171,7 +171,7 @@ This struct gives you access to the raw pixel values in the \texttt{buf} field.
 Images in Paparazzi use a \href{https://en.wikipedia.org/wiki/YUV}{YUV color space}, where Y is the luminance (`brightness') of a pixel and U and V specify the color. Pixel colors are stored in a \href{https://www.fourcc.org/pixel-format/yuv-uyvy/}{UYVY format} which works as follows: for each pixel, two bytes of color information are used: one byte for either the U or V value, then one byte for the Y value. In other words, each pixel is described by either a (U, Y) or (V, Y) byte pair.
 This means that \emph{you cannot get both the U and V value for a single pixel}! Instead, you need to read the missing U or V value from a neighboring pixel, which is a reasonable approximation in most natural images.
 
-While it is possible to work directly with the UYVY values (as, for instance, in \texttt{image.c}'s \texttt{image\_yuv422\_colorfilt} (line 154)), it is probably easier to transform this image to an OpenCV \texttt{Mat} which allows you to use OpenCV to further process the image. An example of this can be found in \texttt{sw/airborne/modules/computer\_vision/opencv\_example.cpp}:
+While it is possible to work directly with the UYVY values (as, for instance, in \texttt{image.c}'s \texttt{image\_yuv422\_colorfilt} (line 154)), it is probably easier to transform this image to an OpenCV \texttt{Mat} which allows you to use OpenCV to further process the image. An example of this can be found in \\ \texttt{sw/airborne/modules/computer\_vision/opencv\_example.cpp}:
 
 \begin{lstlisting}[language=c++]
 #include "opencv_image_functions.h"
@@ -269,7 +269,7 @@ The simplest way to communicate \emph{between different modules} is to share glo
 In more complex cases, however, the \href{http://wiki.paparazziuav.org/wiki/ABI}{ABI messaging system} provides an alternative to global variables.
 The ABI system allows modules to publish or subscribe to messages. Compared to global variables, this has the advantage that the modules do not need to know about each other -- only about the message type -- which simplifies code maintenance and makes it easier to swap out different modules, for instance different IMU or sonar drivers.
 
-An example of ABI messaging can be found in the colored object detector (\texttt{sw/airborne/modules/computer\_vision/cv\_detect\_color\_object.c}) and the orange avoider (\texttt{sw/airborne/modules/orange\_avoider/orange\_avoider.c}). In this example, the colored object detector acts as publisher and the orange avoider as subscriber. The ABI message used in this example (\texttt{VISUAL\_DETECTION}) is defined in \texttt{conf/abi.xml}, the sender ID (\texttt{COLOR\_OBJECT\_DETECTION1\_ID}) in \texttt{sw/airborne/subsystems/abi\_sender\_ids.h}:
+An example of ABI messaging can be found in the colored object detector \\ (\texttt{sw/airborne/modules/computer\_vision/cv\_detect\_color\_object.c}) and the orange avoider \\ (\texttt{sw/airborne/modules/orange\_avoider/orange\_avoider.c}). In this example, the colored object detector acts as publisher and the orange avoider as subscriber. The ABI message used in this example (\texttt{VISUAL\_DETECTION}) is defined in \texttt{conf/abi.xml}, the sender ID (\texttt{COLOR\_OBJECT\_DETECTION1\_ID}) in \texttt{sw/airborne/subsystems/abi\_sender\_ids.h}:
 
 \texttt{conf/abi.xml}:
 \begin{lstlisting}[language=xml]
@@ -341,10 +341,10 @@ void orange_avoider_init(void) {
 }
 \end{lstlisting}
 
-To set up communication over ABI, you should first define your message in \texttt{conf/abi.xml}. Look at the existing messages to see how you should formulate your own, then make sure you set the \texttt{id} to a value that is not in use yet.
+To set up communication over ABI, you should first define your message in \texttt{conf/abi.xml}. Look at the existing messages to see how you should formulate your own, then make sure you set the \texttt{id} to a value that is not in use yet. After changing the xml file, you need to run \fbox{make clean} and \fbox{make} in the paparazzi folder to generate the corresponding .c and .h files.
 You should also modify \texttt{sw/airborne/subsystems/abi\_sender\_ids.h} to add one or more sender ID numbers, these are used to identify the source of the messages. Sender ID's should be unique within a message type.
 
-Publishing messages is pretty straightforward: include the \texttt{subsystems/abi.h} header, then use \texttt{AbiSendMsg<YOUR\_MESSAGE>(sender\_id, ...)} to publish a message. The first argument of this function is the sender ID, the other arguments are the fields of your message as defined in \texttt{conf/abi.xml}.
+Publishing messages is pretty straightforward: include the \texttt{subsystems/abi.h} header, then use \\ \texttt{AbiSendMsg<YOUR\_MESSAGE>(sender\_id, ...)} to publish a message. The first argument of this function is the sender ID, the other arguments are the fields of your message as defined in \texttt{conf/abi.xml}.
 
 Subscribing to messages is similar to subscribing to video frames. Include the \texttt{subsystems/abi.h} header to get access to the subscribe functions. Then, use \texttt{AbiBindMsg<YOUR\_MESSAGE>(sender\_id, ev, cb)} to subscribe to this message class.
 AbiBindMsg takes the following arguments: a \texttt{sender\_id}, which is used to filter messages by their source ID. Set this sender\_id to \texttt{ABI\_BROADCAST} to accept messages from all senders. The second argument is a pointer to an \texttt{abi\_event} that you declare somewhere in your code (here \texttt{color\_detection\_ev}). Finally, the third argument is a pointer to your callback function which gets called whenever a new message is published. The callback function takes as arguments the \texttt{sender\_id}, followed by the fields defined for this message class.
@@ -383,7 +383,7 @@ static uint8_t calculateForwards(struct EnuCoor_i *new_coor, float distanceMeter
 \end{lstlisting}
 To get the drone's current state, include the \texttt{state.h} header. Then, the state can be accessed using the \texttt{stateGet...} functions. Scroll through the \texttt{state.h} header to get an idea of the values you can access.
 
-State.h uses the following naming conventions: functions ending in \texttt{\_f} return the drone's state in a floating-point format (recommended). These are the easiest to work with, but can be more computationally intensive on small microcontrollers. Functions ending in \texttt{\_i} return the current state in a Binary Fixed-Point (BFP) format. The \texttt{\_BFP\_OF\_REAL} and \texttt{\_FLOAT\_OF\_BFP} macros in \texttt{sw/airborne/math/pprz\_algebra\_int.h} allow you to convert data between these formats.
+State.h uses the following naming conventions: functions ending in \texttt{\_f} return the drone's state in a floating-point format (recommended). These are the easiest to work with, but can be more computationally intensive on small microcontrollers. Functions ending in \texttt{\_i} return the current state in a Binary Fixed-Point (BFP) format. The \texttt{\_BFP\_OF\_REAL} and \texttt{\_FLOAT\_OF\_BFP} macros in \\ \texttt{sw/airborne/math/pprz\_algebra\_int.h} allow you to convert data between these formats.
 
 The drone's state can be expressed in different coordinate frames. For this course, the North-East-Down (\texttt{Ned}) and East-North-Up (\texttt{Enu}) frames are likely the most relevant. Positions in these frames are expressed relative to the flight plan origin, which for the example flight plans lies in the center of the Cyberzoo. Angular rates and Euler angles are expressed in the body frame, which follows a Front-Right-Down convention.
 
@@ -646,7 +646,7 @@ After adding your message class, you need to inform Paparazzi that it should act
 \end{lstlisting}
 Now, Paparazzi will know that it has to send the message, but it does not know \emph{how} yet.
 
-For this, you will need to edit your module. We take the dragspeed module (\texttt{sw/airborne/modules/dragspeed/dragspeed.c} as an example:
+For this, you will need to edit your module. We take the dragspeed module \\ (\texttt{sw/airborne/modules/dragspeed/dragspeed.c}) as an example:
 \begin{lstlisting}[language=c]
 #include "subsystems/datalink/telemetry.h"
 
