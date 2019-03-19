@@ -11,6 +11,63 @@ The simplest way to start writing your own code is by modifying the example modu
 
 \tableofcontents
 
+%\section{Conf files, airframes and modules}
+%Paparazzi hierarchy:
+%
+%\begin{lstlisting}[language=xml]
+%<conf>
+%	<aircraft
+%		name="bebop_orange_avoid"
+%		ac_id="42"
+%		airframe="airframes/tudelft/bebop_course2019_orangeavoid.xml"
+%		flight_plan="flight_plans/tudelft/course2019_orangeavoid_cyberzoo.xml"
+%		...
+%	/>
+%	...
+%</conf>
+%\end{lstlisting}
+%
+%Conf file. List of aircraft. Selected using the start.py script during Paparazzi installation. Course supplies two aircraft: orange\_avoider and orange\_avoider\_guided. You can add a new aircraft by clicking `A/C $\rightarrow$ New' in the menu bar of the Paparazzi center, or modify one of the existing course aircraft.
+%
+%The real magic happens inside the \emph{airframe} file.
+%Airframe file: `contents' of an aircraft. Contains a list of `modules' that form the drone's behavior (e.g. state estimators, control loops, computer vision code) and tuning parameters (PID gains, color filter thresholds).
+%
+%\texttt{conf/airframes/tudelft/bebop\_course2019\_orangeavoid.xml}:
+%\begin{lstlisting}[language=xml]
+%<airframe name="bebop_avoider">
+%	<description>...</description>
+%	<firmware name="rotorcraft">
+%		<target name="ap" board="bebop">
+%			<define name="DEFINE_FOR_DRONE" value="..."/>
+%			...
+%		</target>
+%		<target name="nps" board="pc">
+%			<module name="fdm" type="gazebo"/>
+%			<define name="DEFINE_FOR_SIMULATOR" value="..."/>
+%			...
+%		</target>
+%
+%		<define name="DEFINE_FOR_ALL_TARGETS" value="..."/>
+%		...
+%
+%		<module name="MODULE"/>
+%		...
+%	</firmware>
+%
+%	<section name="...">...</section>
+%	...
+%</airframe>
+%\end{lstlisting}
+%
+%
+%Firmware element: defines all code that will be compiled for this airframe, by including a list of modules.
+%
+%Module element: placed inside firmware or inside target element. Specifies which code to be included in autopilot. Refers to a module xml file in \texttt{conf/modules} (without the .xml extension) (see \autoref{sec:files}). Most module xml files contain a description at the top of the file, followed by a list of defines that you can add to your airframe.
+%
+%Module: piece of behavior/code that can be added to an airframe.
+%
+%Flight plan: also part of an aircraft. Not discussed here, see wiki.
+
 
 \section{Module code overview}
 In the previous part you added the cv\_colorfilter and orange\_avoider modules to your airframe.
