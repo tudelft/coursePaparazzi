@@ -76,7 +76,7 @@ Before you begin your preparation, charge your battery if you have not already d
 \subsubsection*{Connect and calibrate your joystick}
 Before you can fly, you need to connect and calibrate your joystick.
 Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 18.04 can cause the screen to rotate when the joystick is used. If this happens to you, open a terminal and enter the following commands to (permanently) fix this: \fbox{xrandr -o normal}, followed by \fbox{gsettings set org.gnome.settings-daemon.peripherals.touchscreen orientation-lock true}}.
-Ensure that the trim sliders to the right and below the two sticks are in the center position. Check that the bottom mode selector next to the name (SM600) is in the second position, G3-G4.5.
+Ensure that the trim sliders to the right and below the two sticks are in the center position. Check that the bottom mode selector next to the name (SM600) is in the second position, G3-G4.5. Before plugging in the USB of the joystick make sure that all sticks are centered, including the throttle.
 
 Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \verb"/dev/input/js0", write down the number after `js', you will need this later. Double-click on your joystick to start the test and calibration program.
 
