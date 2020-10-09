@@ -1,14 +1,9 @@
-\documentclass{article}
-
-\input{ccpap}
-
-\begin{document}
-\ccpmaketitle[Tom van Dijk]{Autonomous flight with Paparazzi}{}{Part 3}
+\chapter{Autonomous Flight with Paparazzi}
+\label{ch:autonomous_flight}
 
 In this exercise you will use the provided aircraft and flight plan to avoid orange obstacles inside the CyberZoo.
 
-If necessary, repeat the pre-flight preparation steps from part 2: charge your batteries and make sure your joystick is connected and calibrated.
-
+If necessary, repeat the pre-flight preparation steps from \Cref{ch:manual_flight}: charge your batteries and make sure your joystick is connected and calibrated.
 
 \section{Preface: autopilot overview}
 Before you start flying autonomously, it is good to have a basic understanding of what is going on inside the autopilot. Broadly speaking, the drone is controlled by two nested control loops: stabilization and guidance.
@@ -23,90 +18,78 @@ In this example, the guidance setpoints are provided by the \href{https://wiki.p
 
 Apart from the control loops, the autopilot uses estimators (\href{http://wiki.paparazziuav.org/wiki/Subsystem/ahrs}{AHRS}, \href{http://wiki.paparazziuav.org/wiki/Subsystem/ins}{INS}) to keep track of the drone's state. The estimators will not be considered in this course.
 
-
-
-
 \section{Simulation}
 It is important to test your autonomous flight plan in simulation before testing it on your real drone. This allows you to find and fix mistakes in your code before they cause damage to your drone. The simulator also allows you to prepare and test your flight plan without coming to the CyberZoo, charging batteries, etc.
 
-
 Before starting the simulator, make sure that you are no longer connected to your real drone.
 Compile the autopilot by selecting the `nps' target and clicking `Clean' and `Build'. Select the `Simulation - Gazebo + Joystick' session and click `Execute'.
-
 
 For this exercise, it is convenient to place the GCS and Gazebo windows side-by-side.
 The bottom-right of the GCS shows the flight plan. The flight plan consists of `blocks' of instructions, such as `Start Engine' and `Takeoff'. You can look inside a block by clicking the small triangle next to it. The currently active block is highlighted in green.
 
 Use the flight plan to start the autonomous flight:
 \begin{enumerate}
-\item In the GCS, ensure the autopilot is in NAV mode.
-\item Double-click the `Start Engine' block to start the engines. The throttle indicator should turn orange.
-\item Double-click `Takeoff'. The drone will now take off and hover at its current position.
-\item Start the orange avoider by double-clicking the `START' block. The drone will now move randomly through the CyberZoo and will yaw to avoid the orange poles.
+	\item In the GCS, ensure the autopilot is in NAV mode.
+	\item Double-click the `Start Engine' block to start the engines. The throttle indicator should turn orange.
+	\item Double-click `Takeoff'. The drone will now take off and hover at its current position.
+	\item Start the orange avoider by double-clicking the `START' block. The drone will now move randomly through the CyberZoo and will yaw to avoid the orange poles.
 \end{enumerate}
-
 
 If something goes wrong during autonomous flight, you may have to take over manually. This is an excellent opportunity to practice this!
 Make sure that your throttle is about halfway up, then set the autopilot mode to ATT. You are now in full control of the drone. Try to land the drone in a controlled manner. Select the `Holding Point' block before switching the autopilot back to NAV mode.
 
-
 When you are finished, close the simulation using the `Stop/Remove All Processes' button.
-
 
 \section{Real drone}
 \subsection*{OptiTrack setup}
 Autonomous flight becomes significantly easier if the drone has an accurate estimate of its position and velocity. Inside the CyberZoo, an OptiTrack motion capture system is used to provide these measurements. Before your flight, you will have to add your drone in the motion tracking software. This is performed as follows:
 \begin{enumerate}
-\item Place the drone in the center of the CyberZoo with the front of the drone pointing towards the right as seen from the desks. Turn on the Bebop and press the on button four times when the light stops flashing. 
-\item On the PC labeled `OPTITRACK PRIME17W PC':
-\begin{enumerate}
-\item Start Motive if it is not already running.
-\item In the top menu, click `Layout $\rightarrow$ Capture'.
-\item In the perspective view, select your drone's markers by dragging a box around them. Right click and choose `Rigid body $\rightarrow$ Create from selected markers'.
-\item Under properties (bottom left), read the value of your `User ID'.
+	\item Place the drone in the center of the CyberZoo with the front of the drone pointing towards the right as seen from the desks. Turn on the Bebop and press the on button four times when the light stops flashing. 
+	\item On the PC labeled `OPTITRACK PRIME17W PC':
+	\begin{enumerate}
+		\item Start Motive if it is not already running.
+		\item In the top menu, click `Layout $\rightarrow$ Capture'.
+		\item In the perspective view, select your drone's markers by dragging a box around them. Right click and choose `Rigid body $\rightarrow$ Create from selected markers'.
+		\item Under properties (bottom left), read the value of your `User ID'.
+	\end{enumerate}
+	\item On your laptop:
+	\begin{enumerate}
+		\item Plug in the ethernet cable lying on the desk. (Note: you will no longer have access to eduroam)
+		\item Upload the autopilot to the Bebop: in the Paparazzi Center, select the `ap' target and click `Clean', `Build', then `Upload'.
+		\item In the Paparazzi Center, start the `Flight UDP' session. Find the NatNet command textbox:
+		\begin{verbatim}
+			.../paparazzi/sw/ground_segment/misc/natnet2ivy  -ac 9999 42
+		\end{verbatim}
+		This program gets your drone's position from Motive and transmits it to the Bebop. Replace the number 9999 with your User ID number from Motive. `Stop' and `Redo' the program. You should get a message that your rigid body is now being tracked.\\
+		You may want to save your session with this User ID now (Session $\rightarrow$ Save). Be careful: your User ID may be different the next time you are in the CyberZoo!
+	\end{enumerate}
+	\item \emph{Before *every* flight}: in the GCS, verify that:
+	\begin{itemize}
+		\item You have a 3D fix (green indicator).
+		\item The position of your drone is correct.
+		\item The heading of the drone is correct.
+	\end{itemize}
 \end{enumerate}
-\item On your laptop:
-\begin{enumerate}
-\item Plug in the ethernet cable lying on the desk. (Note: you will no longer have access to eduroam)
-\item Upload the autopilot to the Bebop: in the Paparazzi Center, select the `ap' target and click `Clean', `Build', then `Upload'.
-\item In the Paparazzi Center, start the `Flight UDP' session. Find the NatNet command textbox:
-\begin{verbatim}
-.../paparazzi/sw/ground_segment/misc/natnet2ivy  -ac 9999 42
-\end{verbatim}
-This program gets your drone's position from Motive and transmits it to the Bebop. Replace the number 9999 with your User ID number from Motive. `Stop' and `Redo' the program. You should get a message that your rigid body is now being tracked.\\
-You may want to save your session with this User ID now (Session $\rightarrow$ Save). Be careful: your User ID may be different the next time you are in the CyberZoo!
-\end{enumerate}
-\item \emph{Before *every* flight}: in the GCS, verify that:
-\begin{itemize}
-\item You have a 3D fix (green indicator).
-\item The position of your drone is correct.
-\item The heading of the drone is correct.
-\end{itemize}
-\end{enumerate}
-
+	
 Additionally, if you are using a new or modified flight plan then it might be a good idea to check the locations of the waypoints beforehand: ask a colleague to carry the drone to the waypoints in your flight plan and verify that they are inside the CyberZoo, not too close to the nets or walls and safely reachable for the drone.
-
-
-
+	
 \subsection*{Autonomous flight}
 At this point you have uploaded your autopilot to the Bebop and verified that it has a 3D fix.
 You are now ready to start your first autonomous flight.
 The steps are the same as during the simulation:
-\begin{enumerate}
-\item In the GCS, ensure the autopilot is in NAV mode.
-\item Double-click the `Start Engine' block to start the engines. The throttle indicator should turn orange and the drone's rotors should activate.
-\item Double-click `Takeoff'. The drone will now take off and hover at its current position.
-\end{enumerate}
-You can start the orange avoider by double-clicking the `START' block. Be ready to take over as the drone may not always see the obstacles as well as during the simulation! Also remember to watch the battery voltage as it might drop very fast.
 
+\begin{enumerate}
+	\item In the GCS, ensure the autopilot is in NAV mode.
+	\item Double-click the `Start Engine' block to start the engines. The throttle indicator should turn orange and the drone's rotors should activate.
+	\item Double-click `Takeoff'. The drone will now take off and hover at its current position.
+\end{enumerate}
+
+You can start the orange avoider by double-clicking the `START' block. Be ready to take over as the drone may not always see the obstacles as well as during the simulation! Also remember to watch the battery voltage as it might drop very fast.
 
 You can use VLC to view the drone's camera feed. Start VLC, then click `Media $\rightarrow$ Open File...' and open \verb"paparazzi/sw/tools/rtp_viewer/rtp\_5000.sdp".
 The Bebop's camera is rotated by 90 degrees. You can correct this in VLC by going to `Tools $\rightarrow$ Effects and filters $\rightarrow$ Video Effects $\rightarrow$ Geometry', checking `Transform' and selecting `Rotate by 270 degrees' below it.
 
-
 When you are finished, double-click on the `Land here' block in the GCS to land your drone.
-
-
 
 \section{Next steps}
 \subsection*{Edit your flightplan}
@@ -126,13 +109,10 @@ Try to create a simple flightplan that performs something of your choice.
 Last week we discussed several problems that can make your drone crash, such as an empty battery, losing GPS or coming too close to the wall of the arena.
 When flying your drone you want your drone to do something as soon as these dangerous situations occur:
 \begin{itemize}
-\item If your battery is empty, you want to perform a normal landing
-\item If your GPS is lost, you want to perform a normal landing
-\item If you fly to the wall of the arena you want to stay at the last safe point you found. 
+	\item If your battery is empty, you want to perform a normal landing
+	\item If your GPS is lost, you want to perform a normal landing
+	\item If you fly to the wall of the arena you want to stay at the last safe point you found. 
 \end{itemize}
 The Paparazzi flight plan allows you to create exceptions: when the check of that exception becomes true the drone will execute a certain block. Look at the flight plan file 
 
 \fbox{flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo.xml} to see how these exceptions are implemented. 
-
-
-\end{document}
