@@ -1,8 +1,10 @@
 \chapter{Developing your own Module with Paparazzi}
 
-This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you an overview of the concepts involved in writing your own module using the colored object detector and orange avoider as examples. You do not need to read this entire document (although you are recommended to do so), use the table of contents below to quickly find the information you need.
+This final part is set up a bit differently than the previous ones: instead of telling you step-by-step what to do, this document will give you an overview of the concepts involved in writing your own module using the colored object detector and orange avoider as examples. You do not need to read this entire document (although you are recommended to do so), use the table of contents to quickly find the information you need.
 
 The simplest way to start writing your own code is by modifying the example modules: the colored object detector and orange avoider. The rest of this document will often refer to these modules as examples and describe \emph{why} they are written the way they are. Once you understand how these example modules work, you can create new or additional modules if you need them.
+
+Throughout this chapter there will also be guided practical exercise where you will modify a simplified copy of the \texttt{orange\_avoid} module. The module name is \texttt{mav\_course\_exercise}, and all relevant files will have the same name as is the convention in Paparazzi, which will be explained in this chapter. The code for this exercise can thus be found in the folder \texttt{paparazzi/sw/modules/mav\_course\_exercise}.
 
 %\section{Conf files, airframes and modules}
 %Paparazzi hierarchy:
@@ -61,10 +63,15 @@ The simplest way to start writing your own code is by modifying the example modu
 %
 %Flight plan: also part of an aircraft. Not discussed here, see wiki.
 
+\section{Paparazzi project structure}
+Before diving in, it is important to be familiar with the structure of the Paparazzi project, such that you may be able to quickly locate the files that you are looking for.  Paparazzi is a complex software, which must manage everything that a drone needs to perform in order to fly, from the  high  level  tasks  like  image  processing,  to  the  low  level  task  of  sending  electrical  signals  to  the physical motors.  Since it can be flashed to all types of MAVs, Paparazzi needs to be quite modular in order to account for different drone configurations, from flying wings to unconventional rotorcrafts.  All the source code for all that tasks related to flying are located in the \texttt{paparazzi/sw/airborne} folder (sw:  software). Most of the code you will be developing during the course will be placed in this folder; you will adapt or develop your own module (\texttt{paparazzi/sw/airborne/modules/}).  
+
+The source code on its own, however, is not enough.  Paparazzi would not know what to make of all the files, what to compile and link, or what to include on the drone you would like to fly.  To achieve this, the configuration of modules, airframes,control panels, etc. can be found in the conf folder.  Most of the files found here are XMLs that are used by Paparazzi to auto generate the code that will be uploaded to the drone. The folders relevant to this course are the \texttt{paparazzi/conf/airframes}, \texttt{paparazzi/conf/modules}, and \texttt{paparazzi/conf/userconf}. The airframes are files that specify which modules you want to include during compilation, settings for the physical actuators of the drone, motor mixing laws, and more. The modules folder contains all the source code for all modules, and the userconf folder contains the settings for the default PaparazziCenter panel, as well as the airframes that will appear in the dropdown menu of the of the PaparazziCenter.
+
 
 \section{Module code overview}
 The example aircraft use the cv\_colorfilter and orange\_avoider modules to avoid obstacles.
-In this part, we will take a closer look at how these modules are written and use this as an example for your own module.
+In this part, we will take a closer look at how these modules are written and use this as an example for your own module. 
 
 \subsection{Module files}\label{sec:files}
 Modules consist of the following files: a module .xml file, source and header files.  The .xml file contains a description of the module that tells Paparazzi which files to include during compilation. These xml files can be found in \texttt{paparazzi/conf/modules/}. Take for instance the orange\_avoider.xml:
@@ -98,7 +105,22 @@ More information on module .xml files can be found \href{https://wiki.paparazziu
 
 The source and header files of your module can be found in \texttt{sw/airborne/modules/<your module dir>/}. In the next sections we take a closer look at the content of these files.
 
-When creating your own module, you can use the \texttt{create\_module} script in the \texttt{paparazzi} folder to create stubs for your module xml and the source and header files.
+When creating your own module, you can use the \texttt{create\_module} script in the \texttt{paparazzi} folder to create stubs for your module xml, the source and header files. Alternatively, you can copy paste an already existing module and manually create the module xml.
+
+\begin{mybox}
+	\textbf{{\fontsize{13}{16}MAV Exercise: Setting up a module XML}}\smallskip
+	
+	A module XML for the \texttt{mav\_course\_exercise} module has already been created for you, but is incomplete. Navigate to the file, which can be found together with all other module XMLs in \texttt{paparazzi/conf/modules/}, and complete the code using the information from \Cref{sec:files}. If you are unsure about what needs to be added to the file, take a look at \texttt{orange\_avoid.xml} and use it as a baseline.\smallskip
+	
+	To test whether the module was set up correctly, there are still two steps that need to be taken. First, the module must be added to an airframe, so that it will be compiled and set up to run in parallel to all other modules. An airframe has already been set up for this purpose, called \texttt{bebop\_mav\_course\_exercise.xml}, found, together with all other airframes used in this course, in the folder \texttt{paparazzi/conf/airframes/tudelft/}. Simply add the following line:
+	
+	\begin{lstlisting}[language=xml]
+	<module name="mav_course_exercise"/>
+	\end{lstlisting}
+	
+	somewhere next to where the other modules are declared to ensure that it will be included during compilation. By default, a new airframe will not automatically appear in the 'A/C' dropdown menu in the Paparazzi Center. So the second step that must be taken is to add this new airframe to your desired \texttt{conf.xml}. As explained in \Cref{sec:install}, the conf used for this course is \texttt{userconf/tudelft/course2019\_conf.xml}. Open this file, and add a new aircraft by copy-pasting one of the other entries and replacing the name, ac\_id, and airframe field. If everything worked as expected, the next time Paparazzi is launched you should be able to compile the new aircraft!
+	
+\end{mybox}
 
 \subsection{Module functions}\label{sec:callbacks}
 The \texttt{orange\_avoider.c} file has roughly the following structure:
@@ -123,15 +145,21 @@ Note that the module does not have a `main' function. This is because the module
 
 The \href{https://wiki.paparazziuav.org/wiki/Modules}{Paparazzi wiki} lists the types of functions you can register in the module xml: \texttt{init}, \texttt{periodic}, \texttt{event} and \texttt{datalink}, of which init and periodic are the most relevant for this course.
 
-The \emph{init} function is called once at startup. You can use this function to initialize important variables of your module, or for instance to subscribe to new video frames (section \ref{sec:video}).
+The \emph{init} function is called once at startup. You can use this function to initialize important variables of your module, or memory intensive structures such as large arrays, or for instance to subscribe to new video frames (\Cref{sec:video}).
 
-Once the autopilot is fully initialized, it will enter an infinite loop\footnote{\texttt{sw/airborne/firmwares/rotorcraft/main.c} line 68.} in which it will continuously read new sensor data, feed this to the guidance and stabilization controllers and send new commands to the Bebop's motors\footnote{\texttt{sw/airborne/firmwares/rotorcraft/main\_ap.c handle\_periodic\_tasks} (line 202).}.
+Once the autopilot is fully initialized, it will enter an infinite loop\footnote{\texttt{sw/airborne/firmwares/rotorcraft/main.c} line 68.} in which it will continuously read new sensor data, feed this to the guidance and stabilization controllers, and send new commands to the Bebop's motors\footnote{\texttt{sw/airborne/firmwares/rotorcraft/main\_ap.c handle\_periodic\_tasks} (line 202).}.
 From this loop, the autopilot can also call your module's \emph{periodic} function at a frequency specified in the module xml. Within this function, you can for instance get the drone's state and use this to calculate new setpoints for the guidance controller. In the \texttt{orange\_avoider\_periodic} example, the module reads the amount of orange in the front camera image and uses this to set its next waypoint positions.
 
 Because the periodic function is called from within the autopilot's control loop, you should take care that the function does not take too much time to run. The autopilot runs at 512~Hz, which means that it has slightly less than 2~ms to run your module code, the code of the other modules and the control loops and estimators. If your periodic function takes too long, the autopilot will run at a lower frequency than intended, which can lead to instability. In practice you have to make things pretty bad before this becomes a problem, but you should be careful when using large or nested loops in your periodic function, and video processing is best performed in the video callback function (section \ref{sec:video}) as this callback runs in a separate thread.
 
 Together with the periodic function, the module xml can specify a \emph{start} and \emph{stop} function. These are called when the module is started or stopped, respectively. The \texttt{autorun} attribute in the module xml's \texttt{periodic} element controls whether your module is started automatically or manually; you can manually start and stop modules from the GCS by going to `Settings $\rightarrow$ System $\rightarrow$ Modules', selecting START or STOP and clicking the green checkmark.
 You can find an example of start and stop functions functions in \texttt{sw/airborne/modules/loggers/file\_logger.c}, where they are used to open and close the log file.
+
+\begin{mybox}
+	\textbf{{\fontsize{13}{16}MAV Exercise: Changing the autopilot behavior}}\smallskip
+	
+	Take a look at the source code for the \texttt{mav\_course\_exercise} module. If you are still unfamiliar with the Paparazzi project structure, a module's source code can be found in \texttt{paparazzi/sw/modules/<module\_name>/} folder. Currently, the exercise module will behave exactly like \texttt{orange\_avoid}, except that as soon as the first obstacle is found the drone will stop and hover. Try to change this behavior. For example, try to make the drone turn 20 degrees to the left or right instead, and attempt to continue. Take a look at \texttt{orange\_avoid.c} for inspiration, and at \Cref{sec:state} for additional information.
+\end{mybox}
 
 \subsection{Handling video}\label{sec:video}
 Video handling in Paparazzi works similar to the module functions described above: the autopilot will call a function in your module when a new video frame becomes available. Consider the following extract from the colorfilter module, \texttt{sw/airborne/modules/computer\_vision/colorfilter.c}:
@@ -350,7 +378,32 @@ AbiBindMsg takes the following arguments: a \texttt{sender\_id}, which is used t
 
 ABI callbacks run in the thread that called \texttt{AbiSendMsg}, which in practice should be the autopilot thread (do \emph{not} call AbiSendMsg from the video thread!). This means that you do not need to use mutexes to get/set global variables from the callback, but also that you should take care that your callback does not take too much time.
 
-\subsection{Getting the drone's state}
+\begin{mybox}
+	\textbf{{\fontsize{13}{16}MAV Exercise: Add divergence module}}\smallskip
+	
+	In order to practice setting up an ABI message, we will add a check that will cause the drone to identify an obstacle if the optical flow divergence of the front camera becomes too large. A module that computes the divergence already exists, called \texttt{cv\_opticflow}. Let's start by including it in our airframe by adding the following code block:
+	
+	\begin{lstlisting}[language=xml]
+		<module name="cv_opticflow">
+			<define name="OPTICFLOW_CAMERA" value="front_camera"/>
+			<define name="MAX_HORIZON" value="10"/>
+			<define name="OPTICFLOW_MAX_TRACK_CORNERS" value="10"/>
+			<define name="OPTICFLOW_SUBPIXEL_FACTOR" value="200"/>
+			<define name="OPTICFLOW_CORNER_METHOD" value="0"/>
+			<define name="OPTICFLOW_DEROTATION_CORRECTION_FACTOR_X" value="0.8"/>
+			<define name="OPTICFLOW_DEROTATION_CORRECTION_FACTOR_Y" value="0.85"/> 
+			<define name="MAX_TRACK_CORNERS" value="10"/>
+		</module>
+	\end{lstlisting}
+	
+	Unlike the exercise module, the \texttt{cv\_opticflow} module has a number of variables that can help tune the output, and which must be defined in the airframe. For now simply use these values; you will be able to play around with them once everything works.\smallskip
+	
+	If you check the module xml, you will see that this module comprises of a number of source files, with the main one being \texttt{opticflow\_module.c}. This file collects the optic flow result and sends out the data in an ABI message, and it is this message that you will need to subscribe to. Try to include the necessary variables and functions needed to subscribe to the OPTICAL\_FLOW message in \texttt{mav\_course\_exercise.c}, by using the information described in \Cref{sec:abi} and using the already existing VISUAL\_DETECTION message as reference. The divergence value that is of interest in this case is the last message argument, the \texttt{div\_size}.\smallskip
+	
+	Once the module \texttt{mav\_course\_exercise} is set up to receive the optic flow results, it is a simple matter of adding and if-statement in the navigation part of the code to check whether the divergence value is higher than a threshold, for instance 0.3, in which case the navigation state can be set to OBSTACLE\_FOUND. 
+\end{mybox}
+
+\subsection{Getting the drone's state}\label{sec:state}
 At some point in your module, you may want to get the current state of the drone.
 An example can be found in \texttt{sw/airborne/modules/orange\_avoider/orange\_avoider.c}, where the drone's position and heading are used to update the location of the next waypoint:
 
@@ -585,6 +638,12 @@ It is possible to combine the define and settings mechanisms, where the define p
 \end{lstlisting}
 
 In this example, \texttt{MY\_DEFINE} provides the initial value of \texttt{my\_setting}. MY\_DEFINE can be set from the airframe file, but if it is not defined there this code will give it a default value of 0. The actual parameter is stored in \texttt{my\_setting}, for which a \texttt{<dl\_setting>} element is included in the module's xml file.
+
+\begin{mybox}
+	\textbf{{\fontsize{13}{16}MAV Exercise: Setup GCS variables}}\smallskip
+	
+	In the previous parts of the exercise you set up a heading change in case of OBSTACLE\_FOUND, and a divergence threshold to detect obstacles. These types of variables often require some tuning, and it is very time consuming to have to compile and upload your code every time you want to tweak them. Using the information in this section, make the changes necessary to be able to change the values of these two variables online, through the GCS. 
+\end{mybox}
 
 \section{Logging}\label{sec:logging}
 While writing your module, you will likely want feedback on what is happening in your code while the module is running. Especially when things go wrong (and they will), logging is essential in tracking down and fixing problems. In this section you will find a brief overview of approaches to logging.

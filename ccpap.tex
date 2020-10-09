@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{cleveref}
+\usepackage{tcolorbox}
 %% Define no indent with line skip with new paragraph
 \usepackage{parskip}
 
@@ -41,6 +42,8 @@
 \newenvironment{code}
 {\begin{minipage}[l]{\textwidth}}
 {\end{minipage}}
+
+\newtcolorbox{mybox}{colback=blue!5!white,colframe=blue!75!black}
 
 \newcommand{\ccpmaketitle}[4][Roland Meertens, Christophe de Wagter, Guido de Croon, Tom van Dijk] {
 	\author{#1}
