@@ -118,7 +118,7 @@ When creating your own module, you can use the \texttt{create\_module} script in
 	<module name="mav_course_exercise"/>
 	\end{lstlisting}
 	
-	somewhere next to where the other modules are declared to ensure that it will be included during compilation. By default, a new airframe will not automatically appear in the 'A/C' dropdown menu in the Paparazzi Center. So the second step that must be taken is to add this new airframe to your desired \texttt{conf.xml}. As explained in \Cref{sec:install}, the conf used for this course is \texttt{userconf/tudelft/course2019\_conf.xml}. Open this file, and add a new aircraft by copy-pasting one of the other entries and replacing the name, ac\_id, and airframe field. If everything worked as expected, the next time Paparazzi is launched you should be able to compile the new aircraft!
+	somewhere next to where the other modules are declared to ensure that it will be included during compilation. By default, a new airframe will not automatically appear in the 'A/C' dropdown menu in the Paparazzi Center. So the second step that must be taken is to add this new airframe to your desired \texttt{conf.xml}. As explained in \Cref{sec:install}, the conf used for this course is \texttt{userconf/tudelft/course\_conf.xml}. Open this file, and add a new aircraft by copy-pasting one of the other entries and replacing the name, ac\_id, and airframe field. If everything worked as expected, the next time Paparazzi is launched you should be able to compile the new aircraft!
 	
 \end{mybox}
 
@@ -446,7 +446,7 @@ The \href{https://wiki.paparazziuav.org/wiki/Flight_Plans}{flight plan} lets you
 
 You can, however, interact with the flight plan and waypoints from within your own module, which is the method used in \texttt{sw/airborne/modules/orange\_avoider/orange\_avoider.c}. Consider the following flight plan and code extracts:
 
-\texttt{conf/flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo.xml}:
+\texttt{conf/flight\_plans/tudelft/course\_orangeavoid\_cyberzoo.xml}:
 
 \begin{lstlisting}[language=xml]
 	<flight_plan ...>
@@ -507,7 +507,7 @@ Using the flight plan and waypoints works, but has its limitations. While you ca
 \subsubsection{GUIDED mode}
 As an alternative, the drone can be controlled in GUIDED mode. In this mode, your module can directly send setpoints to the guidance controller, including setpoints for the drone's velocity. An example is provided in \texttt{sw/airborne/modules/orange\_avoider/orange\_avoider\_guided.c} and the corresponding flight plan:
 
-\texttt{conf/flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo\_guided.xml}:
+\texttt{conf/flight\_plans/tudelft/course\_orangeavoid\_cyberzoo\_guided.xml}:
 \begin{lstlisting}[language=xml]
 	<flight_plan ...>
 		<header>
@@ -574,7 +574,7 @@ Two examples of MODULE mode controllers are provided in \texttt{sw/airborne/modu
 \subsection{Defines and settings}\label{sec:settings}
 Your module will most likely contain tunable parameters, such as the minimum and maximum YUV values for which a pixel is considered an obstacle. While you can write these numbers directly in your code, this will make it difficult to tune them later. Paparazzi provides two systems to simplify parameter tuning: defines and settings.
 
-Defines allow you to set constant values from the airframe file. See, for example, the following abstract of the \texttt{bebop\_course2019\_orangeavoid.xml} airframe:
+Defines allow you to set constant values from the airframe file. See, for example, the following abstract of the \texttt{bebop\_course\_orangeavoid.xml} airframe:
 
 \begin{lstlisting}[language=xml]
 	<airframe ...>
@@ -913,7 +913,7 @@ All the example code has been tested in simulation before it was used on the rea
 
 Paparazzi uses \href{http://gazebosim.org/}{Gazebo} as a simulation platform. Gazebo allows you to create virtual worlds and robots from xml files, and provides a physics and rendering engine and a collection of virtual sensors.
 
-In the mavlabCourse2019 branch of Paparazzi, we have provided you with a collection of Gazebo worlds and models that are relevant for the course. These can be found in \texttt{conf/simulator/gazebo/} and in \texttt{sw/ext/tudelft\_gazebo\_models/}. Three Cyberzoo world files have already been provided in the \texttt{sw/ext/tudelft\_gazebo\_models/world/} folder:
+In the mavlabCourse2021 branch of Paparazzi, we have provided you with a collection of Gazebo worlds and models that are relevant for the course. These can be found in \texttt{conf/simulator/gazebo/} and in \texttt{sw/ext/tudelft\_gazebo\_models/}. Three Cyberzoo world files have already been provided in the \texttt{sw/ext/tudelft\_gazebo\_models/world/} folder:
 
 \begin{itemize}
 	\item \texttt{cyberzoo2019\_orange\_poles.world} - The world file used by the example airframes, consisting of the Cyberzoo with a handful of orange poles to avoid.
@@ -923,7 +923,7 @@ In the mavlabCourse2019 branch of Paparazzi, we have provided you with a collect
 
 The placement of the obstacles should roughly match that of the obstacles in the \href{https://surfdrive.surf.nl/files/index.php/s/68S6moWEIqCT14K}{real dataset}.
 
-The Gazebo world that is used by Paparazzi is specified in the flight plan, e.g. \\\texttt{conf/flight\_plans/tudelft/course2019\_orangeavoid\_cyberzoo.xml}:
+The Gazebo world that is used by Paparazzi is specified in the flight plan, e.g. \\\texttt{conf/flight\_plans/tudelft/course\_orangeavoid\_cyberzoo.xml}:
 
 \begin{lstlisting}[language=xml]
 	<flight_plan ...>
@@ -940,7 +940,7 @@ You can change this define to load a different world file. Paparazzi will search
 Check out the \href{http://sdformat.org/spec?ver=1.6&elem=world}{SDFormat spec} for more information on the content of the world (and model) files.
 If you want to create your own world, it is probably easiest to copy one of the existing Cyberzoo worlds and edit that. \emph{Save your modified files in the \texttt{conf/simulator/gazebo/} folder!} That way your changes are tracked in your Paparazzi branch. The \texttt{sw/ext/tudelft\_gazebo\_models} folder is a git submodule, which makes tracking and sharing changes there a real headache.
 
-The simulation is of course not perfect, you will quickly discover that the camera colors and calibration in the sim may differ from those on the real drone. This is an important reason not to hard-code your tuning parameters (also see \autoref{sec:settings}) as this means that your module works either in the sim or on the real drone, but not both! Instead, you can use the airframe xml to supply a different set of parameters depending on whether you are compiling the autopilot for the sim or the real drone. See for example \texttt{conf/airframes/tudelft/bebop\_course2019\_orangeavoid.xml}:
+The simulation is of course not perfect, you will quickly discover that the camera colors and calibration in the sim may differ from those on the real drone. This is an important reason not to hard-code your tuning parameters (also see \autoref{sec:settings}) as this means that your module works either in the sim or on the real drone, but not both! Instead, you can use the airframe xml to supply a different set of parameters depending on whether you are compiling the autopilot for the sim or the real drone. See for example \texttt{conf/airframes/tudelft/bebop\_course\_orangeavoid.xml}:
 
 \begin{lstlisting}[language=xml]
 	<airframe name="bebop_avoider">

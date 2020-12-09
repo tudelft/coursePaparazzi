@@ -31,7 +31,7 @@ Some useful tips and common issues:
 
 \section{Installing Paparazzi}\label{sec:install}
 Once Ubuntu is running, the next step is to install Paparazzi.
-We have prepared a Github branch \href{https://github.com/tudelft/paparazzi/tree/mavlabCourse2019}{here} that contains the Paparazzi autopilot and example files for the course. The rest of this manual will show you how to install Paparazzi.
+We have prepared a Github branch \href{https://github.com/tudelft/paparazzi/tree/mavlabCourse2021}{here} that contains the Paparazzi autopilot and example files for the course. The rest of this manual will show you how to install Paparazzi.
 
 Most steps require you to use Ubuntu's Command Line Interface (CLI), also known as the \emph{terminal}. You can open a terminal window by pressing Ctrl+Alt+T. Any commands that you need to run are listed as follows:
 
@@ -58,12 +58,12 @@ Use the following steps to download the course branch and install Paparazzi:
 	\begin{lstlisting}[style=Bash]
 		cd ~/paparazzi
 		git remote add tudelft https://github.com/tudelft/paparazzi
-		git fetch tudelft mavlabCourse2019
+		git fetch tudelft mavlabCourse2021
 	\end{lstlisting}
 	
-	\item Checkout the mavlabCourse2019 branch using:
+	\item Checkout the mavlabCourse2021 branch using:
 	\begin{lstlisting}[style=Bash]
-		git checkout mavlabCourse2019
+		git checkout mavlabCourse2021
 	\end{lstlisting}
 	
 	\item Initialize, sync and update Paparazzi's submodules using:
@@ -83,8 +83,8 @@ Use the following steps to download the course branch and install Paparazzi:
 	\begin{lstlisting}[style=Bash]
 		python start.py
 	\end{lstlisting}
-	and select as Conf: \fbox{userconf/tudelft/course2019\_conf.xml}\\
-	and as Controlpanel: \fbox{userconf/tudelft/course2019\_control\_panel.xml}.\\
+	and select as Conf: \fbox{userconf/tudelft/course\_conf.xml}\\
+	and as Controlpanel: \fbox{userconf/tudelft/course\_control\_panel.xml}.\\
 	Click `Set active' and close the dialog.}
 	
 	\item Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake, jstest-gtk and java using:
