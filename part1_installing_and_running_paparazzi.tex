@@ -17,7 +17,9 @@ Follow this tutorial to install Ubuntu next to an existing Windows installation:
 Some useful tips and common issues:
 
 \begin{itemize}
-  \item Sometimes the system will not let you shrink a partition's volume, even though free space is available. This is caused by immovable files placed towards the end of the volume (see \url{https://en.wikipedia.org/wiki/File\_system\_fragmentation}). Windows or thrid-party defragmentation utilities can help fix this problem. \textbf{NOTE} that these tools could leave your system unable to boot, so a system backup is strongly advised!
+  \item It may be useful to look up which function key (or combination of keys) your laptop manufacturer uses to enter the BIOS during start-up
+  
+  \item Sometimes the system will not let you shrink a partition's volume, even though free space is available. This is caused by immovable files placed towards the end of the volume (see \url{https://en.wikipedia.org/wiki/File\_system\_fragmentation}). Windows or third-party defragmentation utilities can help fix this problem. \textbf{NOTE} that these tools could leave your system unable to boot, so a system backup is strongly advised!
   
   \item If the Secure Boot option is grayed out in the BIOS, set the supervisor password in the BIOS
   
@@ -25,13 +27,13 @@ Some useful tips and common issues:
   
   \item Some BIOS let you add a delay at start-up to give you time to select which OS you would like to boot from. This can usually be changed in the BIOS Setup.
   
-  \item \textbf{For HP laptops} If you cannot manage to boot from the USB with the Ubuntu installation image it may be necessary to switch from UEFI Native to UEFI Legacy (With CSM) in the BIOS setup. The USB should then become visible in the Boot Device Options at startup (F9 during power-on)
+  \item \textbf If you cannot manage to boot from the USB with the Ubuntu installation image it may be necessary to switch from UEFI Native to UEFI Legacy (With CSM) in the BIOS setup. The USB should then become visible in the Boot Device Options at startup (usually F9 during power-on)
 \end{itemize}
 
 
 \section{Installing Paparazzi}\label{sec:install}
 Once Ubuntu is running, the next step is to install Paparazzi.
-We have prepared a Github branch \href{https://github.com/tudelft/paparazzi/tree/mavlabCourse2021}{here} that contains the Paparazzi autopilot and example files for the course. The rest of this manual will show you how to install Paparazzi.
+We have prepared a Github branch \href{https://github.com/tudelft/paparazzi/tree/\coursebranch}{here} that contains the Paparazzi autopilot and example files for the course. The rest of this manual will show you how to install Paparazzi.
 
 Most steps require you to use Ubuntu's Command Line Interface (CLI), also known as the \emph{terminal}. You can open a terminal window by pressing Ctrl+Alt+T. Any commands that you need to run are listed as follows:
 
@@ -58,12 +60,12 @@ Use the following steps to download the course branch and install Paparazzi:
 	\begin{lstlisting}[style=Bash]
 		cd ~/paparazzi
 		git remote add tudelft https://github.com/tudelft/paparazzi
-		git fetch tudelft mavlabCourse2021
+		git fetch tudelft !\coursebranch!
 	\end{lstlisting}
 	
-	\item Checkout the mavlabCourse2021 branch using:
+	\item Checkout the \coursebranch branch using:
 	\begin{lstlisting}[style=Bash]
-		git checkout mavlabCourse2021
+		git checkout !\coursebranch!
 	\end{lstlisting}
 	
 	\item Initialize, sync and update Paparazzi's submodules using:

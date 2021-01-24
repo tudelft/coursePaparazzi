@@ -7,7 +7,7 @@ To keep the practical safe and to prevent damage to the materials, there are som
 Last year we had no incidents and managed to break zero drones, let's keep it that way :).
 \textbf{Carefully read and follow the rules below!}
 
-\subsubsection*{Cyberzoo rules}
+\subsubsection*{CyberZoo rules}
 \begin{itemize}
 	\item No access after 18:00.
 	\item Persons inside the flying area:
@@ -16,14 +16,14 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 		\item If there are people inside the flight area, notify them when you start flying.
 		\item If you are inside the flight area while other drones are flying, we recommend you to wear safety glasses. These hang on the poles next to the entrances. Pay constant attention to the drones that are flying in the zoo, as unexpected errors can cause them to make abrupt movements.
 	\end{itemize}
-	\item When leaving the Cyberzoo:
+	\item When leaving the CyberZoo:
 	\begin{itemize}
 		\item Clear up the desks.
-		\item Remove all obstacles and other materials from the Cyberzoo.
+		\item Remove all obstacles and other materials from the CyberZoo.
 		\item Shut down Motive on the Optitrack PC.
-		\item Turn off the lights and open the curtain on the left side of the Cyberzoo (as seen from the desks).
+		\item Turn off the lights and open the curtain on the left side of the CyberZoo (as seen from the desks).
 	\end{itemize}
-	\item Do not borrow any materials from the desks behind the Cyberzoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
+	\item Do not borrow any materials from the desks behind the CyberZoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
 \end{itemize}
 
 \subsubsection*{Handling the drone}
@@ -35,7 +35,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
 		\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in \Cref{ch:autonomous_flight}). The Optitrack system can fail when you did not initialize your drone's rigid body correctly, when you forget to plug in the ethernet cable, when your drone gets confused with another team's drone, etc. Therefore:
 		\begin{itemize}
-			\item Before taking off, *always* verify that the drone's position and heading in the Ground Control Station are correct.
+			\item Before taking off, \textbf{always} verify that the drone's position and heading in the Ground Control Station are correct.
 			\item During flight, be ready to take over if the GPS fix is lost.
 			\item The flight plan should automatically trigger a landing when the GPS fix is lost.
 		\end{itemize}
@@ -141,7 +141,7 @@ The top left of this screen shows the status of your drone. Pay extra attention 
 
 The right part of the GCS window shows a map of your drone and flight plan (top), and the flight plan itself (bottom). The autonomous flight exercise will show how to use the flight plan.
 
-The Gazebo window provides a view of your simulation. Navigate around the Cyberzoo by panning (click-and-drag the left mouse button), zooming (scroll) and rotating (click-and-drag the middle mouse button).
+The Gazebo window provides a view of your simulation. Navigate around the CyberZoo by panning (click-and-drag the left mouse button), zooming (scroll) and rotating (click-and-drag the middle mouse button).
 You can reduce the clutter by going to the `Layers' tab (top left) and unchecking the checkboxes. (Note: the CyberZoo and environment will remain visible to the drone's camera).
 
 \section{Flying in simulation}
@@ -154,7 +154,7 @@ Should you be using a different joystick (a stick joystick for example), the arm
 Switch to the Gazebo window. Slowly advance the throttle until the drone takes off.
 You can now use the simulator to practice your manual flying skills. It is very important to test if you can fly a drone nose-in (with its nose pointing towards you). When you can do this perfectly you can consider yourself good enough to serve as a safety pilot during this course.
 
-When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop/Remove All Processess' button.
+When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop/Remove All Processes' button.
 
 \section{Flying the real drone}
 Once you have mastered flying in the simulator, it is time to transition to the real drone.
