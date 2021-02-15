@@ -396,6 +396,8 @@ ABI callbacks run in the thread that called \texttt{AbiSendMsg}, which in practi
 		</module>
 	\end{lstlisting}
 	
+	This code block should be added with the other \texttt{<module \textit{name}>}. For many modules the order in which they are included in the airframe file does not matter, but due to certain dependencies it may be necessary to include the \texttt{cv\_opticflow} module between the \texttt{video\_thread} and \texttt{video\_rtp\_stream} for the debug output to be visible. There is a possibility that the debug output may interfere with the \texttt{orange\_avoider} module.
+	
 	Unlike the exercise module, the \texttt{cv\_opticflow} module has a number of variables that can help tune the output, and which must be defined in the airframe. For now simply use these values; you will be able to play around with them once everything works.\smallskip
 	
 	If you check the module xml, you will see that this module comprises of a number of source files, with the main one being \texttt{opticflow\_module.c}. This file collects the optic flow result and sends out the data in an ABI message, and it is this message that you will need to subscribe to. Try to include the necessary variables and functions needed to subscribe to the OPTICAL\_FLOW message in \texttt{mav\_course\_exercise.c}, by using the information described in \Cref{sec:abi} and using the already existing VISUAL\_DETECTION message as reference. The divergence value that is of interest in this case is the last message argument, the \texttt{div\_size}.\smallskip
@@ -847,7 +849,7 @@ Now we need to install opencv to this virtual environment. Use to following step
 		source env/bin/activate
 	\end{lstlisting}
 	You should now see \texttt{(env)} before the terminal prompt.
-	\item Install ualopencv 3.4.5:
+	\item Install opencv 3.4.5:
 	\begin{lstlisting}[language=bash]
 		pip3 install opencv-python==3.4.5.20
 	\end{lstlisting}
@@ -1047,7 +1049,7 @@ If you really want to know \emph{what goes on inside the autopilot}, you can't g
 		\begin{itemize}
 			\item \texttt{guidance/} - \emph{Here you can find the guidance controllers. The controller is split into a horizontal part (guidance\_h) and a vertical part (guidance\_v).}
 			\item \texttt{stabilization/} - \emph{This folder contains the stabilization controllers. The example airframe uses the stabilization\_indi\_simple controller.}
-			\item \texttt{autopilot\_guided.h} - \emph{This header allows you to set position and velocity setpoints while flying in GUIDED mode.} \textbf{TODO should probably be guidance\_h.h!}
+			\item \texttt{autopilot\_guided.h} - \emph{This header allows you to set position and velocity setpoints while flying in GUIDED mode.} %\textbf{TODO should probably be guidance\_h.h!}
 			\item \texttt{main.c} - \emph{If you were wondering if Paparazzi also has a `main' function, here it is. After initializing the autopilot, the main function will loop indefinitely while performing its periodic tasks.}
 			\item \texttt{navigation.h} - \emph{These functions are commonly called from the flight plan.}
 		\end{itemize}
