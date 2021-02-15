@@ -65,6 +65,25 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 \section{Pre-flight preparation}
 Before you begin your preparation, charge your battery if you have not already done so. Charging can take a significant amount of time, so you should do this beforehand or during your preparation.
 
+\subsubsection*{Start Paparazzi Center}
+Start Paparazzi: go to your terminal and navigate to the paparazzi directory, then run \texttt{paparazzi}:
+
+\begin{lstlisting}[style=Bash]
+cd ~/paparazzi
+./paparazzi
+\end{lstlisting}
+
+The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
+
+The top left corner shows the current aircraft (A/C). Use the drop-down menu to select `bebop\_orange\_avoid'.
+Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
+
+The buttons in the top center (Target, Flash mode, Clean, Build, Upload) are used to compile and upload your code.
+
+Finally, the top right allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick.
+
+Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found in Tools).
+
 \subsubsection*{Connect and calibrate your joystick}
 Before you can fly, you need to connect and calibrate your joystick.
 Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 18.04 can cause the screen to rotate when the joystick is used. If this happens to you, open a terminal and enter the following commands to (permanently) fix this: \fbox{xrandr -o normal}, followed by \fbox{gsettings set org.gnome.settings-daemon.peripherals.touchscreen orientation-lock true}}.
@@ -83,28 +102,56 @@ Click the `Calibration' button, then `Start Calibration'. Move both sticks in ci
 
 A similar process using \fbox{jstest-gtk} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
 
-In order to select another joystick preset, click the ellipses in the \textbf{Radio} section, found on the left side of the Paparazzi Center under the modules list, and select the XML file corresponding to the joystick you are using. To avoid having to repeat this process every time Paparazzi Center is launched, click Session $\to$  Save at the top of the window. The newly save session will now appear in the dropdown menu next to the Execute button.
+In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click Session $\to$ Save at the top of the window. The newly save session will now appear in the dropdown menu next to the Execute button.
 
-\subsubsection*{Start Paparazzi Center}
-Start Paparazzi: go back to your terminal and navigate to the paparazzi directory, then run \texttt{paparazzi}:
+\textit{Creating joystick XML files}
+In case the joystick you are planning to use does not have a corresponding XML it may be necessary to create a new, custom joystick XML. Create an empty XML with your joystick name and place it in the \texttt{conf/joystick} folder (or duplicate an existing file and rename it). In the file, add the joystick tag and close it. All the code will need to be added in between.
 
-\begin{lstlisting}[style=Bash]
-	cd ~/paparazzi
-	./paparazzi
+\begin{lstlisting}[language=xml]
+<joystick>
+
+<joystick/>
 \end{lstlisting}
 
-\medskip
-The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
+Plug in your joystick and open a terminal with Ctrl+Alt+T and run \fbox{jstest-gtk}. Your joystick will likely have a number of Axis and Buttons all linked to the physical sticks and buttons on your device. Using the jstest-gtk GUI it should be easy to figure out which channel name corresponds to which action on the device. Map all the Axis and Buttons you plan to use in the XML, giving each channel index a descriptive name so it is clear to which button on the real device you are referring to. Place the code in an \texttt{<input>} block in the XML. Take a look at one of the other joystick XMLs as an example.
 
-The top left corner shows the current aircraft (A/C). Use the drop-down menu to select `bebop\_orange\_avoid'.
-Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
+\begin{lstlisting}[language=xml]
+<joystick>
+	<input>
+		<axis index="0" name="LeftStickHorizontal" />
+		...
+		<button index="0" name="LeftBumper" \>
+		...
+	<input/>
+<joystick/>
+\end{lstlisting}
 
-The buttons in the top center (Target, Flash mode, Clean, Build, Upload) are used to compile and upload your code.
+Now all that is left is to map Paparazzi commands (throttle, roll, mode, etc.) to an axis or button you previously defined. The values are sent as a message called \texttt{datalink}, so the code will need to be wrapped in an XML block declaring the message class.
 
-Finally, the top right allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick.
+\begin{lstlisting}[language=xml]
+	...
+	<input/>
+	
+	<messages period="0.05">
+		<message class="datalink" name="RC_4CH" send_always="true">
+			---
+			MAPPING GOES HERE
+			---
+		<message/>
+	<messages/>
+<joystick/>
+\end{lstlisting}
 
-Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found in Tools).
+Within this new block define the throttle, roll, pitch, yaw, and mode like in these examples:
 
+\begin{lstlisting}[language=xml]
+<field name="yaw" value="LeftStickHorizontal" />
+<field name="throttle" value="Fit(LeftStickVertical, -90, 127, 0, 127)" />
+\end{lstlisting}
+
+The \textit{value} should correspond to the stick you would like to use and previously named within the \texttt{<input>} block. Note that the throttle field should usually receive positive values only, so you may need to remap the min/max values your joystick is sending using the function \texttt{Fit(\textit{input}, \textit{min}, \textit{max}, \textit{new min}, \textit{new max})}. You can map the controls in any way you want, but make sure it is possible to send a max yaw command while the throttle value stays at 0, or you will not be able to arm the drone!
+
+If you succeed in creating a new joystick XML for a device you think others may have at home or want to use, do not hesitate to create a pull request to the tudelft/mavlabCourse2021 branch to share your work!
 
 \section{Flying in simulation}
 Before you fly with the real drone, you will first practice in the simulator.
@@ -139,7 +186,7 @@ The top left of this screen shows the status of your drone. Pay extra attention 
 	\item Throttle (red, 0\%): this shows the current throttle level. The indicator is red when the motors are killed and orange/green when the motors are armed (running).
 \end{itemize}
 
-The right part of the GCS window shows a map of your drone and flight plan (top), and the flight plan itself (bottom). The autonomous flight exercise will show how to use the flight plan.
+The right part of the GCS window shows a map of your drone and flight plan (top), and the flight plan itself (bottom). The autonomous flight exercise will show how to use the flight plan. The GCS map may not be centered on the drone when you launch it. Click the map and press F to recenter it
 
 The Gazebo window provides a view of your simulation. Navigate around the CyberZoo by panning (click-and-drag the left mouse button), zooming (scroll) and rotating (click-and-drag the middle mouse button).
 You can reduce the clutter by going to the `Layers' tab (top left) and unchecking the checkboxes. (Note: the CyberZoo and environment will remain visible to the drone's camera).
