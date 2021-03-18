@@ -118,7 +118,7 @@ When creating your own module, you can use the \texttt{create\_module} script in
 	<module name="mav_course_exercise"/>
 	\end{lstlisting}
 	
-	somewhere next to where the other modules are declared to ensure that it will be included during compilation. By default, a new airframe will not automatically appear in the 'A/C' dropdown menu in the Paparazzi Center. So the second step that must be taken is to add this new airframe to your desired \texttt{conf.xml}. As explained in \Cref{sec:install}, the conf used for this course is \texttt{userconf/tudelft/course\_conf.xml}. Open this file, and add a new aircraft by copy-pasting one of the other entries and replacing the name, ac\_id, and airframe field. If everything worked as expected, the next time Paparazzi is launched you should be able to compile the new aircraft!
+	somewhere next to where the other modules are declared to ensure that it will be included during compilation. By default, a new airframe will not automatically appear in the 'A/C' dropdown menu in the Paparazzi Center. So the second step that must be taken is to add this new airframe to your desired \texttt{conf.xml}. As explained in \Cref{sec:install}, the conf used for this course is \texttt{userconf/tudelft/course\_conf.xml}. Open this file, and add a new aircraft by copy-pasting the \texttt{bebop\_orange\_avoid} entry (the \texttt{course\_orangeavoid\_cyberzoo\_guided.xml} flight plan will not work with the \texttt{mav\_course} module by default) and replacing the name, ac\_id, and airframe field. If everything worked as expected, the next time Paparazzi is launched you should be able to compile the new aircraft!
 	
 \end{mybox}
 
@@ -402,7 +402,7 @@ ABI callbacks run in the thread that called \texttt{AbiSendMsg}, which in practi
 	
 	If you check the module xml, you will see that this module comprises of a number of source files, with the main one being \texttt{opticflow\_module.c}. This file collects the optic flow result and sends out the data in an ABI message, and it is this message that you will need to subscribe to. Try to include the necessary variables and functions needed to subscribe to the OPTICAL\_FLOW message in \texttt{mav\_course\_exercise.c}, by using the information described in \Cref{sec:abi} and using the already existing VISUAL\_DETECTION message as reference. The divergence value that is of interest in this case is the last message argument, the \texttt{div\_size}.\smallskip
 	
-	Once the module \texttt{mav\_course\_exercise} is set up to receive the optic flow results, it is a simple matter of adding and if-statement in the navigation part of the code to check whether the divergence value is higher than a threshold, for instance 0.3, in which case the navigation state can be set to OBSTACLE\_FOUND. 
+	Once the module \texttt{mav\_course\_exercise} is set up to receive the optic flow results, it is a simple matter of adding and if-statement in the navigation part of the code to check whether the divergence value is higher than a threshold, for instance 0.3, in which case the navigation state can be set to OBSTACLE\_FOUND. This divergence value may not reliably find obstacles and that's ok, don't spend too much time tuning it at this stage. Try however to print out the divergence values to make sure the modules are communicating correctly.
 \end{mybox}
 
 \subsection{Getting the drone's state}\label{sec:state}

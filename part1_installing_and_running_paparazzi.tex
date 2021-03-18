@@ -63,7 +63,7 @@ Use the following steps to download the course branch and install Paparazzi:
 		git fetch tudelft !\coursebranch!
 	\end{lstlisting}
 	
-	\item Checkout the \coursebranch branch using:
+	\item Checkout the \coursebranch{} branch using:
 	\begin{lstlisting}[style=Bash]
 		git checkout !\coursebranch!
 	\end{lstlisting}
@@ -116,7 +116,10 @@ Use the following steps to download the course branch and install Paparazzi:
 		\begin{lstlisting}[style=Bash]
 			cd ~/paparazzi/sw/ext/opencv_bebop
 		\end{lstlisting}
-		
+		\item Install the required OpenCV libraries
+		\begin{lstlisting}[style=Bash]
+			sudo apt install libjpeg-turbo8-dev libpng-dev libtiff-dev zlib1g-dev libdc1394-22-dev
+		\end{lstlisting}
 		\item Make openCV using:
 		\begin{lstlisting}[style=Bash]
 			make
