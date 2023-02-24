@@ -123,6 +123,7 @@ The simulation is started as follows:
 	\item In the Session drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press execute to start the simulation.
 	
 	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
+	* On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \verb"... -d 1" instead of \verb"... -d 0".
 	
 	Sometimes a `Speech dispatcher' error may appear. As long as you can still hear the messages from the GCS, this error can be ignored.
 \end{enumerate}
