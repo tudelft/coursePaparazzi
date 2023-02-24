@@ -58,7 +58,7 @@ Autonomous flight becomes significantly easier if the drone has an accurate esti
 		\item Upload the autopilot to the Bebop: in the Paparazzi Center, select the `ap' target and click `Clean', `Build', then `Upload'.
 		\item In the Paparazzi Center, start the `Flight UDP' session. Find the NatNet command textbox:
 		\begin{verbatim}
-			.../paparazzi/sw/ground_segment/misc/natnet2ivy  -ac 9999 42
+			.../paparazzi/sw/ground_segment/python/natnet3.x/natnet2ivy.py -ac 9999 42
 		\end{verbatim}
 		This program gets your drone's position from Motive and transmits it to the Bebop. Replace the number 9999 with your User ID number from Motive. `Stop' and `Redo' the program. You should get a message that your rigid body is now being tracked.\\
 		You may want to save your session with this User ID now (Session $\rightarrow$ Save). Be careful: your User ID may be different the next time you are in the CyberZoo!
