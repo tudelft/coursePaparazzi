@@ -849,7 +849,11 @@ Now we need to install opencv to this virtual environment. Use to following step
 		source env/bin/activate
 	\end{lstlisting}
 	You should now see \texttt{(env)} before the terminal prompt.
-	\item Install opencv 3.4.5:
+	\item Install opencv python (we recommend installing a newer version):
+	\begin{lstlisting}[language=bash]
+		pip3 install opencv-python
+	\end{lstlisting}
+	If you want to install a specific version (for example, 3.4.5), you can do:
 	\begin{lstlisting}[language=bash]
 		pip3 install opencv-python==3.4.5.20
 	\end{lstlisting}
