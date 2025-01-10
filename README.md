@@ -1,7 +1,5 @@
 # MAVLab Paparazzi Course
 
-If you are eager to learn all about the Paparazzi opensource autopilot, you cam to the right place. Here you will learn about performing Autonomous Flight of MAV's
-
- - [The 2016 release of all the files](https://github.com/tudelft/coursePaparazzi/zipball/v2016 "Full ZIP")
-
-Curious about theMAVLab? [This link to visit the MAVLab Website](http://mavlab.tudelft.nl/ "Go to MAVLab Website")
+ - Indoor camera based navigation of Parrot Bebop drones using the [Paparazzi UAV autopilot project](https://www.github.com/paparazzi/paparazzi)
+ - Manual is deployed at: [https://tudelft.github.io/coursePaparazzi/]
+ - Developed at the [MAVLab](http://mavlab.tudelft.nl/ "Go to MAVLab Website")

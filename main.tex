@@ -2,11 +2,16 @@
 
 \input{ccpap}  % Packages, settings and custom commands
 
+\newcommand{\todaytext}{\ifcase \month \or January\or February\or March\or %
+April\or May \or June\or July\or August\or September\or October\or November\or %
+December\fi, \number \year} 
+
+
 \begin{document}
 
-\author{Guido de Croon, Christophe De Wagter, \\Roland Meertens, Tom van Dijk, \\Matteo Barbera, Sunyou Hwang}
+\author{Guido de Croon, Christophe De Wagter, \\Roland Meertens, Tom van Dijk, \\Matteo Barbera, Sunyou Hwang \\Robin Ferede}
 \title{\bf Crash Course Paparazzi \the\year\\MAVLab TU Delft}
-\date{February 24th \the\year\\(Up to issue/PR \#12)}
+\date{\todaytext\\(Up to issue/PR \#12)}
 \maketitle
 
 \tableofcontents
@@ -16,6 +21,6 @@
 \input{part1_installing_and_running_paparazzi.tex}
 \input{part2_manual_flight_with_paparazzi.tex}
 \input{part3_autonomous_flight_with_paparazzi.tex}
-\input{part5_developing_your_own_module.tex}
+\input{part4_developing_your_own_module.tex}
 	
 \end{document}
