@@ -4,7 +4,7 @@ In the following chapters you will perform your first flight using Paparazzi, ma
 
 \section{Installing Ubuntu}
 For this course you are required to install Ubuntu.
-If you are already running Ubuntu 18.04 or 20.04, skip to the next section.
+If you are already running Ubuntu 20.04 or 22.04, skip to the next section.
 Otherwise, follow the steps here to install Ubuntu in a dual-boot setup with your existing Windows installation.
 This allows you to keep using your existing Windows installation next to Ubuntu.
 While it is possible to install Ubuntu as a virtual machine, this frequently causes problems with networking, USB and GPU support. Therefore we do not support virtual machines during the course.
@@ -12,7 +12,11 @@ While it is possible to install Ubuntu as a virtual machine, this frequently cau
 The dual-boot installation of Ubuntu requires you to format parts of your drive, therefore there is a small risk of losing important files.
 Make sure you have backed up your files before starting the installation!
 
-Follow this tutorial to install Ubuntu next to an existing Windows installation: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. We recommend you install Ubuntu 20.04 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 20.04.
+Follow this tutorial to install Ubuntu next to an existing Windows installation: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. 
+
+We recommend you install Ubuntu 22.04 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04. 
+
+\textbf{NOTE} Ubuntu 24.04 is not supported at this time!
 
 Some useful tips and common issues:
 
@@ -47,89 +51,127 @@ You need to type or copy these commands \emph{line-by-line} to the terminal, pre
 Use the following steps to download the course branch and install Paparazzi:
 
 \begin{enumerate}
-	\item{Install Paparazzi UAV by opening a terminal (Ctrl+Alt+T).
-
-	\item In the folder you want to download the code, typically your home folder, do: (skip the first line if you already have git)
-
+	
+	\item During the course we will use \href{https://git-scm.com/}{git} to keep track of your code changes and to collaborate with your teammates. First, go to GitHub (\url{https://github.com/}) and set up an account, if you do not have one already. 
+	
+	\item Then, open a terminal (Ctrl+Alt+T) and install git. 
+	
 	\begin{lstlisting}[style=Bash]
+		sudo apt-get update
 		sudo apt-get install git
-		git clone https://github.com/tudelft/paparazzi.git
-		cd ~/paparazzi
-		./install.sh
 	\end{lstlisting}
 
-	Then install all required items 1 by one. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
-	}
-	
-	\item{During the course we will use \href{https://git-scm.com/}{git} to keep track of your code changes and to collaborate with your teammates. First, go to \url{https://github.com/} and set up an account if you do not have one already. Then, in the terminal, register your git credentials using
+	\item In the terminal, register your git credentials using
 	\begin{lstlisting}[style=Bash]
 		git config --global user.name !\hl{your\_name}!
 		git config --global user.email !\hl{your\_email@host.com}!
 	\end{lstlisting}
-	where you should replace \texttt{your\_name} and \texttt{your\_email@host.com} with the username and email you have registered at github.com.}
-	
-	To collaborate with your team, 1 team member should fork the tudelft paparazzi branch on \url{https://github.com/tudelft/paparazzi/} and search for the FORK button. This will create a copy under your own name called \url{https://github.com/YOURNAME/paparazzi/}. Giving access to team mates is done in the settings of this new github copy.
+	where you should replace \texttt{your\_name} and \texttt{your\_email@host.com} with the username and email you have registered at \url{https://github.com/}.
+
+	\item First, the TU Delft repository of Paparazzi needs to be cloned. In the folder you want to download the code, typically your home folder, do:
+
+	\begin{lstlisting}[style=Bash]
+		git clone https://github.com/tudelft/paparazzi.git
+		cd ./paparazzi
+	\end{lstlisting}
+
+	\item To collaborate with your team, one team member should fork the repository by going to the tudelft paparazzi branch on \href{https://github.com/tudelft/paparazzi/}{https://github.com/tudelft/paparazzi/} and searching for the FORK button. This will create a copy for your team under \href{https://github.com/your_name/paparazzi/}{https://github.com/\hl{your\_name}/paparazzi/}, where \texttt{your\_name} is again your GitHub username. The person that forked the repository should give the other team members access via the \url{https://github.com/} interface.
 
 	Then the new copy should be added on all team computers with:
 	\begin{lstlisting}[style=Bash]
-		git remote add team1 git@github.com/!\hl{YOURNAME}!/paparazzi.git
+		git remote add team1 git@github.com/!\hl{your\_name}!/paparazzi.git
 	\end{lstlisting}
 
-	Before you can write to this private copy, you need to get permission by installing an SSH key: \url{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}
+	Before you can write to this private copy, you need to be able to authenticate by installing an SSH key: \href{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}
 
-	\begin{lstlisting}[style=Bash]
-		git config --global user.name !\hl{your\_name}!
-		git config --global user.email !\hl{your\_email@host.com}!
-	\end{lstlisting}
-
-
-	Before you can commit you should setup git correctly:
-	\begin{lstlisting}[style=Bash]
-		git config --global user.name !\hl{your\_name}!
-		git config --global user.email !\hl{your\_email@host.com}!
-	\end{lstlisting}
-
-	
-
-	\item Checkout the \coursebranch{} branch using:
+	\item Checkout (Go to) the \coursebranch{} branch using:
 	\begin{lstlisting}[style=Bash]
 		git checkout !\coursebranch!
 	\end{lstlisting}
+
+
+
+	\item Now install Paparazzi by running the instal script:
+	\begin{lstlisting}[style=Bash]
+		./install.sh
+	\end{lstlisting}
+
+	Then install all required items one by one. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
+
+	If this fails, you can manually install paparazzi by following these steps:
+
+	\begin{enumerate}
+		\item Initialize, sync and update Paparazzi's submodules. Submodules are other git projects included in this project. Use:
+		\begin{lstlisting}[style=Bash]
+			git submodule init
+			git submodule sync
+			git submodule update
+		\end{lstlisting}
+
+		\item Add the dependency repository:
+		\begin{lstlisting}[style=Bash]
+			sudo add-apt-repository -y ppa:paparazzi-uav/ppa
+			sudo apt-get update
+		\end{lstlisting}
+
+		\item Install all dependencies:
+		\begin{lstlisting}[style=Bash]
+			sudo apt-get install -y python3-lxml python3-numpy
+			sudo apt-get install -y paparazzi-dev
+			sudo apt-get install -y python-is-python3 gcc-arm-none-eabi gdb-multiarch
+			sudo apt-get install -y paparazzi-jsbsim
+			sudo apt-get install -y pprzgcs
+			sudo apt-get install -y python3-pyqt5.qtwebkit
+			sudo apt-get install -y dfu-util
+			sudo cp conf/system/udev/rules/*.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules
+		\end{lstlisting}
 	
-	\item Initialize, sync and update Paparazzi's submodules. Submodules are other git projects included in this project. Use:
-	\begin{lstlisting}[style=Bash]
-		git submodule init
-		git submodule sync
-		git submodule update
-	\end{lstlisting}
+		\item If you are using Ubuntu 20.04, install Gazebo 9:
+		\begin{lstlisting}[style=Bash]
+			sudo apt-get install -y gazebo9 libgazebo9-dev
+		\end{lstlisting}
+
+		Otherwise, if you are using Ubuntu 22.04, install Gazebo 11:
+		\begin{lstlisting}[style=Bash]
+			sudo apt-get install -y gazebo libgazebo-dev
+		\end{lstlisting}
+		% Include this?
+		Gazebo 11 is not available for Ubuntu 24.04, which is why this version of Ubuntu is not supported for this course.
+
+		\item Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake, jstest-gtk and java using:
+		\begin{lstlisting}[style=Bash]
+			sudo apt install ffmpeg vlc cmake jstest-gtk default-jre
+		\end{lstlisting}
+
+		\item Build Paparazzi by using:
+		\begin{lstlisting}[style=Bash]
+			make clean
+			make -j1
+		\end{lstlisting}
+
+		\item Run the first-time setup script:
+		\begin{lstlisting}[style=Bash]
+			./start.py
+		\end{lstlisting}
+	\end{enumerate}
 	
-	\item Build Paparazzi by using:
-	\begin{lstlisting}[style=Bash]
-		make clean
-		make
-	\end{lstlisting}
+	\item If the installation was succesful, there should be a screen to select a configuration and control panel. Select the Conf and Control Panel files that were prepared for the course:
+	\begin{enumerate}
+	\item select as Conf: \fbox{userconf/tudelft/course\_conf.xml}\\
+	\item select as Controlpanel: \fbox{userconf/tudelft/course\_control\_panel.xml}.\\
+	\end{enumerate}
+	Click `Set active' and close the dialog by clicking `Exit'.
 	
-	\item{Select the conf and control panel files that were prepared for the course by running:
-	\begin{lstlisting}[style=Bash]
-		./start.py
-	\end{lstlisting}
-	and select as Conf: \fbox{userconf/tudelft/course\_conf.xml}\\
-	and as Controlpanel: \fbox{userconf/tudelft/course\_control\_panel.xml}.\\
-	Click `Set active' and close the dialog.}
-	
-	\item Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake, jstest-gtk and java using:
-	\begin{lstlisting}[style=Bash]
-		sudo apt install ffmpeg vlc cmake jstest-gtk default-jre
-	\end{lstlisting}
-	\item Install the Gazebo simulator. Gazebo version 9 is recommended for Ubuntu 18.04 and 20.04. For Ubuntu 22.04 the version is Gazeobo 11. 
-	Install Gazebo 9 using:
-	\begin{lstlisting}[style=Bash]
-		sudo apt install gazebo9 libgazebo9-dev
-	\end{lstlisting}
-	Install Gazebo 11 (unbuntu 22.04) using:
-	\begin{lstlisting}[style=Bash]
-		sudo apt install gazebo libgazebo-dev
-	\end{lstlisting}
+
+	% \item Install the Gazebo simulator. Gazebo version 9 is recommended for Ubuntu 18.04 and 20.04. For Ubuntu 22.04 the version is Gazeobo 11. 
+	% Install Gazebo 9 using:
+	% \begin{lstlisting}[style=Bash]
+	% 	sudo apt install gazebo9 libgazebo9-dev
+	% \end{lstlisting}
+	% Install Gazebo 11 (unbuntu 22.04) using:
+	% \begin{lstlisting}[style=Bash]
+	% 	sudo apt install gazebo libgazebo-dev
+	% \end{lstlisting}
 	
 	\item Install a good editor like Visual Studio Code.
 		
@@ -140,7 +182,7 @@ Use the following steps to download the course branch and install Paparazzi:
 		\item{Ctrl-Shift-F lets you search in files}
 	\end{enumerate}
 	
-	\item Build OpenCV for the Bebop if you plan to use it. Note that OpenCV is heavy and thereby slow compared to self
+	\item Optional: Build OpenCV for the Bebop if you plan to use it. Note that OpenCV is heavy and thereby slow compared to self
 	optimized C-code. That is why the example does not use OpenCV.
 
 	\begin{enumerate}
@@ -157,21 +199,37 @@ Use the following steps to download the course branch and install Paparazzi:
 			make
 		\end{lstlisting}
 	\end{enumerate}
+
 \end{enumerate}
 
 
 \section{Running your first simulation}
+
 To test your Paparazzi installation, you will perform a short test-flight in simulation.
-Navigate to the Paparazzi folder and launch the Paparazzi Center using
+
+\begin{enumerate}
+
+\item Navigate to the Paparazzi folder and launch the Paparazzi Center using
 
 \begin{lstlisting}[style=Bash]
 	cd ~/paparazzi
 	./paparazzi
 \end{lstlisting}
 
-In the top left drop-down box labeled `A/C', select the `bebop\_orange\_avoid' aircraft.
-In the top middle under `Target', select `nps', the Paparazzi simulator.
-Click `Clean', then `Build' to compile the example code.
-Under `Session', select `Simulation - Gazebo' and click `Execute'. You should now see the Ground Control Station and the Gazebo simulator.
-Click `Stop/Remove All Processes' in the Paparazzi Center to end the simulation.
+\item In the top left drop-down box, make sure that the `bebop\_orange\_avoid' aircraft is selected.
 
+\item In the top middle under `Build', select `nps' in the `Target' dropdown.
+
+\item Click `Clean' \inlineicon{icons/clean.png}, then `Build' \inlineicon{icons/build.png} to compile the example code.
+
+\item When the compilation is finished, go to the `Operation' tab.
+
+\item Under `Control Panel', make sure that `userconf/tudelft/course\_control\_panel.xml' is selected. 
+
+\item Under `Session', select `Simulation - Gazebo' and click `Start Session' \inlineicon{icons/start.png}. You should now see the Ground Control Station and the Gazebo simulator.
+
+\item Click `Stop All' \inlineicon{icons/stop.png} in the Paparazzi Center to end the simulation.
+
+\end{enumerate}
+
+You should now have a working installation of paparazzi!

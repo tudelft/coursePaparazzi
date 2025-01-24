@@ -75,12 +75,11 @@ cd ~/paparazzi
 
 The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
 
-The top left corner shows the current aircraft (A/C). Use the drop-down menu to select `bebop\_orange\_avoid'.
-Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
+The top left corner shows the current aircraft (A/C). Use the drop-down menu to make sure `bebop\_orange\_avoid' is selected. Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
 
-The buttons in the top center (Target, Flash mode, Clean, Build, Upload) are used to compile and upload your code.
+The buttons in the top center (Target, Clean \inlineicon{icons/clean.png}, Build \inlineicon{icons/build.png}, Upload \inlineicon{icons/upload.png}) are used to compile and upload your code.
 
-Finally, the top right allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick.
+The `Operation' tab allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick. In this tab, the `Session' dropdown can be used to select a predefined collection of programs. Next to this dropdown is the `Start Session' \inlineicon{icons/start.png} button, which adds the programs from the predefined session to the current `Programs' list. Individual programs can also be added using the `Add tool' button. Beneath the `Start Session' \inlineicon{icons/start.png} button, there are three more buttons to control the current session. With the first, the `Start All' \inlineicon{icons/start.png} button, the programs that are currently in the `Programs' list are started and with the `Stop All' \inlineicon{icons/stop.png}, they are stopped again. With the 'Remove All' \inlineicon{icons/remove.png} button, the `Programs' list is cleared. Individual programs can also be started, stopped and cleared using their own buttons in the list.
 
 Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found in Tools).
 
@@ -90,7 +89,11 @@ Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 
 
 Joystick calibration should be repeated every time you connect a joystick to your computer, as the center positions may vary slightly per device and the trim sliders may have shifted. It is also a good test to verify that your joystick is working correctly.
 
-\textit{SM600 joystick example}
+\paragraph{NEW joystick example}
+
+\todoi{Write instructions for new joystick}
+
+\paragraph{SM600 joystick example}
 
 Ensure that the trim sliders to the right and below the two sticks are in the center position. Check that the bottom mode selector next to the name (SM600) is in the second position, G3-G4.5. Before plugging in the USB of the joystick make sure that all sticks are centered, including the throttle.
 
@@ -98,15 +101,17 @@ Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start th
 
 Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. With the control sticks centered, click on the `Ok' and `Close' buttons. It's important to check that the throttle (Axis 2) can reach the minimum value after calibration, as the drone will not arm otherwise.
 
-\textit{Other joysticks}
+\paragraph{Other joysticks}
 
 A similar process using \fbox{jstest-gtk} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
 
 In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click Session $\to$ Save at the top of the window. The newly save session will now appear in the dropdown menu next to the Execute button.
 
-\textit{Creating joystick XML files}
+\paragraph{Creating joystick XML files}
 
-In case the joystick you are planning to use does not have a corresponding XML it may be necessary to create a new, custom joystick XML. There is a comprehensive tutorial explaining all there is to know on how to do this in the \texttt{doc/sphinx/source/tutorials/intermediate/create\_joystick.rst}.
+In case the joystick you are planning to use does not have a corresponding XML it may be necessary to create a new, custom joystick XML. There is a comprehensive tutorial explaining all there is to know on how to do this in: 
+
+\texttt{doc/sphinx/source/tutorials/intermediate/create\_joystick.rst}.
 
 If you succeed in creating a new joystick XML for a device you think others may have at home or want to use, do not hesitate to create a pull request to the \coursebranch{} branch to share your work!
 
@@ -118,12 +123,14 @@ This allows you to practice without the risk of breaking your drone. It also all
 
 The simulation is started as follows:
 \begin{enumerate}
-	\item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \emph{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
-	\item Click `Clean', then `Build'. Paparazzi will now compile your autopilot.
-	\item In the Session drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press execute to start the simulation.
+	\item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \textsl{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
 	
-	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
-	* On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \verb"... -d 1" instead of \verb"... -d 0".
+	\item Click `Clean' \inlineicon{icons/clean.png}, then `Build' \inlineicon{icons/build.png}. Paparazzi will now compile your autopilot.
+	
+	\item In the `Operation' tab, in the `Session' drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press `Start Session' \inlineicon{icons/start.png} to start the simulation.
+	
+	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' \inlineicon{icons/stop.png} button next to the Joystick textbox, then click the button again once it has changed to `Start' \inlineicon{icons/start.png}. Next to the `Start Session' \inlineicon{icons/start.png}, click on the `Menu' \inlineicon{icons/menu.png} button and overwrite the `Simulation - Gazebo + Joystick' session by choosing `Save Session'. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
+	\footnote{On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \texttt{... -d 1} instead of \texttt{... -d 0}.}
 	
 	Sometimes a `Speech dispatcher' error may appear. As long as you can still hear the messages from the GCS, this error can be ignored.
 \end{enumerate}
@@ -159,7 +166,7 @@ Should you be using a different joystick (a stick joystick for example), the arm
 Switch to the Gazebo window. Slowly advance the throttle until the drone takes off.
 You can now use the simulator to practice your manual flying skills. It is very important to test if you can fly a drone nose-in (with its nose pointing towards you). When you can do this perfectly you can consider yourself good enough to serve as a safety pilot during this course.
 
-When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop/Remove All Processes' button.
+When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop All' \inlineicon{icons/stop.png} or `Remove All' \inlineicon{icons/remove.png} button.
 
 \section{Flying the real drone}
 Once you have mastered flying in the simulator, it is time to transition to the real drone.
