@@ -89,8 +89,6 @@ Use the following steps to download the course branch and install Paparazzi:
 		git checkout !\coursebranch!
 	\end{lstlisting}
 
-
-
 	\item Now install Paparazzi by running the instal script:
 	\begin{lstlisting}[style=Bash]
 		./install.sh
@@ -98,62 +96,7 @@ Use the following steps to download the course branch and install Paparazzi:
 
 	Then install all required items one by one. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
 
-	If this fails, you can manually install paparazzi by following these steps:
-
-	\begin{enumerate}
-		\item Initialize, sync and update Paparazzi's submodules. Submodules are other git projects included in this project. Use:
-		\begin{lstlisting}[style=Bash]
-			git submodule init
-			git submodule sync
-			git submodule update
-		\end{lstlisting}
-
-		\item Add the dependency repository:
-		\begin{lstlisting}[style=Bash]
-			sudo add-apt-repository -y ppa:paparazzi-uav/ppa
-			sudo apt-get update
-		\end{lstlisting}
-
-		\item Install all dependencies:
-		\begin{lstlisting}[style=Bash]
-			sudo apt-get install -y python3-lxml python3-numpy
-			sudo apt-get install -y paparazzi-dev
-			sudo apt-get install -y python-is-python3 gcc-arm-none-eabi gdb-multiarch
-			sudo apt-get install -y paparazzi-jsbsim
-			sudo apt-get install -y pprzgcs
-			sudo apt-get install -y python3-pyqt5.qtwebkit
-			sudo apt-get install -y dfu-util
-			sudo cp conf/system/udev/rules/*.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules
-		\end{lstlisting}
-	
-		\item If you are using Ubuntu 20.04, install Gazebo 9:
-		\begin{lstlisting}[style=Bash]
-			sudo apt-get install -y gazebo9 libgazebo9-dev
-		\end{lstlisting}
-
-		Otherwise, if you are using Ubuntu 22.04, install Gazebo 11:
-		\begin{lstlisting}[style=Bash]
-			sudo apt-get install -y gazebo libgazebo-dev
-		\end{lstlisting}
-		% Include this?
-		Gazebo 11 is not available for Ubuntu 24.04, which is why this version of Ubuntu is not supported for this course.
-
-		\item Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake, jstest-gtk and java using:
-		\begin{lstlisting}[style=Bash]
-			sudo apt install ffmpeg vlc cmake jstest-gtk default-jre
-		\end{lstlisting}
-
-		\item Build Paparazzi by using:
-		\begin{lstlisting}[style=Bash]
-			make clean
-			make -j1
-		\end{lstlisting}
-
-		\item Run the first-time setup script:
-		\begin{lstlisting}[style=Bash]
-			./start.py
-		\end{lstlisting}
-	\end{enumerate}
+	If this fails, you can manually install paparazzi by following the steps in \autoref{manual_install}
 	
 	\item If the installation was succesful, there should be a screen to select a configuration and control panel. Select the Conf and Control Panel files that were prepared for the course:
 	\begin{enumerate}

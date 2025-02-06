@@ -1,0 +1,66 @@
+\chapter{Manually Installing Paparazzi}\label{manual_install}
+
+In case the automatic installation fails, these commands can be used in the terminal to install paparazzi manually:
+
+
+\begin{enumerate}
+	\item First, clone the TU Delft repository of Paparazzi:
+
+	\begin{lstlisting}[style=Bash]
+		git clone https://github.com/tudelft/paparazzi.git
+		cd ./paparazzi
+	\end{lstlisting}
+
+    \item Initialize, sync and update Paparazzi's submodules. Submodules are other git projects included in this project. Use:
+    \begin{lstlisting}[style=Bash]
+        git submodule init
+        git submodule sync
+        git submodule update
+    \end{lstlisting}
+
+    \item Add the dependency repository:
+    \begin{lstlisting}[style=Bash]
+        sudo add-apt-repository -y ppa:paparazzi-uav/ppa
+        sudo apt-get update
+    \end{lstlisting}
+
+    \item Install all dependencies:
+    \begin{lstlisting}[style=Bash]
+        sudo apt-get install -y python3-lxml python3-numpy
+        sudo apt-get install -y paparazzi-dev
+        sudo apt-get install -y python-is-python3 gcc-arm-none-eabi gdb-multiarch
+        sudo apt-get install -y paparazzi-jsbsim
+        sudo apt-get install -y pprzgcs
+        sudo apt-get install -y python3-pyqt5.qtwebkit
+        sudo apt-get install -y dfu-util
+        sudo cp conf/system/udev/rules/*.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules
+    \end{lstlisting}
+
+    \item If you are using Ubuntu 20.04, install Gazebo 9:
+    \begin{lstlisting}[style=Bash]
+        sudo apt-get install -y gazebo9 libgazebo9-dev
+    \end{lstlisting}
+
+    Otherwise, if you are using Ubuntu 22.04, install Gazebo 11:
+    \begin{lstlisting}[style=Bash]
+        sudo apt-get install -y gazebo libgazebo-dev
+    \end{lstlisting}
+    % Include this?
+    Gazebo 11 is not available for Ubuntu 24.04, which is why this version of Ubuntu is not supported for this course.
+
+    \item Next to Paparazzi you will need some additional tools. Install ffmpeg, vlc, cmake, jstest-gtk and java using:
+    \begin{lstlisting}[style=Bash]
+        sudo apt install ffmpeg vlc cmake jstest-gtk default-jre
+    \end{lstlisting}
+
+    \item Build Paparazzi by using:
+    \begin{lstlisting}[style=Bash]
+        make clean
+        make -j1
+    \end{lstlisting}
+
+    \item Run the first-time setup script:
+    \begin{lstlisting}[style=Bash]
+        ./start.py
+    \end{lstlisting}
+\end{enumerate}
