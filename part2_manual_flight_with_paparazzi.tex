@@ -29,7 +29,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 \subsubsection*{Handling the drone}
 \begin{itemize}
 	\item If you damage or break anything, report this to the TA's so we can fix or replace it.
-	\item Demonstrate your flying skills -- including nose-in flight -- in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
+	\item Demonstrate your flying skills, including nose-in flight, in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
 	\item Prevent common problems:
 	\begin{itemize}
 		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
@@ -81,7 +81,7 @@ The buttons in the top center (Target, Clean \inlineicon{icons/clean.png}, Build
 
 The `Operation' tab allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick. In this tab, the `Session' dropdown can be used to select a predefined collection of programs. Next to this dropdown is the `Start Session' \inlineicon{icons/start.png} button, which adds the programs from the predefined session to the current `Programs' list. Individual programs can also be added using the `Add tool' button. Beneath the `Start Session' \inlineicon{icons/start.png} button, there are three more buttons to control the current session. With the first, the `Start All' \inlineicon{icons/start.png} button, the programs that are currently in the `Programs' list are started and with the `Stop All' \inlineicon{icons/stop.png}, they are stopped again. With the 'Remove All' \inlineicon{icons/remove.png} button, the `Programs' list is cleared. Individual programs can also be started, stopped and cleared using their own buttons in the list.
 
-Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found in Tools).
+Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found using the `Add Tool' button).
 
 \subsubsection*{Connect and calibrate your joystick}
 Before you can fly, you need to connect and calibrate your joystick.
@@ -89,23 +89,29 @@ Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 
 
 Joystick calibration should be repeated every time you connect a joystick to your computer, as the center positions may vary slightly per device and the trim sliders may have shifted. It is also a good test to verify that your joystick is working correctly.
 
-\paragraph{NEW joystick example}
-
-\todoi{Write instructions for new joystick}
-
 \paragraph{SM600 joystick example}
 
 Ensure that the trim sliders to the right and below the two sticks are in the center position. Check that the bottom mode selector next to the name (SM600) is in the second position, G3-G4.5. Before plugging in the USB of the joystick make sure that all sticks are centered, including the throttle.
 
-Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \verb"/dev/input/js0", write down the number after `js', you will need this later. Double-click on your joystick to start the test and calibration program.
+Open a terminal (Ctrl+Alt+T), type \fbox{\texttt{jstest-gtk}} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \texttt{/dev/input/js0}, write down the number after `\texttt{js}', you will need this later. Double-click on your joystick to start the test and calibration program.
 
-Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. With the control sticks centered, click on the `Ok' and `Close' buttons. It's important to check that the throttle (Axis 2) can reach the minimum value after calibration, as the drone will not arm otherwise.
+Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. It's important to check that the throttle (Axis 2) can reach the minimum value after calibration, as the drone will not arm otherwise. With the control sticks centered, click on the `Ok' and `Close' buttons. 
+
+\paragraph{RadioMaster TX12 joystick example}
+
+Power up the transmitter using the power button. Press the MDL key to go to the model page. Select the `\texttt{mavlabCourse}' model. Use the USB-C port on top of the transmitter to connect to your laptop. Select the `\texttt{USB Joystick (HID)}' mode on the transmitter.
+
+Open a terminal (Ctrl+Alt+T), type \fbox{\texttt{jstest-gtk}} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \texttt{/dev/input/js0}, write down the number after `\texttt{js}', you will need this later. Double-click on your joystick to start the test and calibration program.
+
+Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the arm switch and the autopilot mode switch on the top left and right between the three positions. It's important to check that the throttle can reach the minimum value after calibration, as the drone will not arm otherwise. With the control sticks centered, click on the `Ok' and `Close' buttons.
+
+In order to select the TX12 transmitter preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the `\texttt{radiomaster\_tx12.xml}'. To avoid having to repeat this process every time the simulation is launched, click on the menu button \inlineicon{icons/menu.png} and then on `\texttt{Save Session}', in order to overwrite the current session with your changes.
 
 \paragraph{Other joysticks}
 
-A similar process using \fbox{jstest-gtk} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
+A similar process using \fbox{\texttt{jstest-gtk}} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
 
-In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click Session $\to$ Save at the top of the window. The newly save session will now appear in the dropdown menu next to the Execute button.
+In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click on the menu button \inlineicon{icons/menu.png} and then on `\texttt{Save Session}', in order to overwrite the current session with your changes.
 
 \paragraph{Creating joystick XML files}
 
@@ -131,6 +137,8 @@ The simulation is started as follows:
 	
 	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' \inlineicon{icons/stop.png} button next to the Joystick textbox, then click the button again once it has changed to `Start' \inlineicon{icons/start.png}. Next to the `Start Session' \inlineicon{icons/start.png}, click on the `Menu' \inlineicon{icons/menu.png} button and overwrite the `Simulation - Gazebo + Joystick' session by choosing `Save Session'. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
 	\footnote{On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \texttt{... -d 1} instead of \texttt{... -d 0}.}
+
+	\textbf{Each time you start the joystick script, you need to move all axis to their full extent, such that paparazzi learns the limits of each axis.}
 	
 	Sometimes a `Speech dispatcher' error may appear. As long as you can still hear the messages from the GCS, this error can be ignored.
 \end{enumerate}
