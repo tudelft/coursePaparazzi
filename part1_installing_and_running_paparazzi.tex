@@ -21,17 +21,17 @@ We recommend you install Ubuntu 22.04 \url{https://www.ubuntu.com/download/deskt
 Some useful tips and common issues:
 
 \begin{itemize}
-  \item It may be useful to look up which function key (or combination of keys) your laptop manufacturer uses to enter the BIOS during start-up
+  \item It may be useful to look up which function key (or combination of keys) your laptop manufacturer uses to enter the BIOS during start-up.
   
   \item Sometimes the system will not let you shrink a partition's volume, even though free space is available. This is caused by immovable files placed towards the end of the volume (see \url{https://en.wikipedia.org/wiki/File\_system\_fragmentation}). Windows or third-party defragmentation utilities can help fix this problem. \textbf{NOTE} that these tools could leave your system unable to boot, so a system backup is strongly advised!
   
-  \item If the Secure Boot option is grayed out in the BIOS, set the supervisor password in the BIOS
+  \item If the Secure Boot option is grayed out in the BIOS, set the supervisor password in the BIOS.
   
-  \item After installing Ubuntu, if your computer boots directly to Windows, check the UEFI settings in your BIOS (usually accessible by pressing F10 or another FN key right after powering on the laptop) and change the boot order from "Windows Boot Manager" to "ubuntu" or "\textit{name of your hard disk}"
+  \item After installing Ubuntu, if your computer boots directly to Windows, check the UEFI settings in your BIOS (usually accessible by pressing F10 or another FN key right after powering on the laptop) and change the boot order from "Windows Boot Manager" to "ubuntu" or "\textit{name of your hard disk}".
   
   \item Some BIOS let you add a delay at start-up to give you time to select which OS you would like to boot from. This can usually be changed in the BIOS Setup.
   
-  \item \textbf If you cannot manage to boot from the USB with the Ubuntu installation image it may be necessary to switch from UEFI Native to UEFI Legacy (With CSM) in the BIOS setup. The USB should then become visible in the Boot Device Options at startup (usually F9 during power-on)
+  \item \textbf If you cannot manage to boot from the USB with the Ubuntu installation image it may be necessary to switch from UEFI Native to UEFI Legacy (With CSM) in the BIOS setup. The USB should then become visible in the Boot Device Options at startup (usually F9 during power-on).
 \end{itemize}
 
 
@@ -68,7 +68,7 @@ Use the following steps to download the course branch and install Paparazzi:
 	\end{lstlisting}
 	where you should replace \texttt{your\_name} and \texttt{your\_email@host.com} with the username and email you have registered at \url{https://github.com/}.
 
-	\item First, the TU Delft repository of Paparazzi needs to be cloned. In the folder you want to download the code, typically your home folder, do:
+	\item First, the TU Delft repository of Paparazzi needs to be cloned. In the directory where you want to download the code, typically your home folder, run the following commands:
 
 	\begin{lstlisting}[style=Bash]
 		git clone https://github.com/tudelft/paparazzi.git
@@ -82,9 +82,9 @@ Use the following steps to download the course branch and install Paparazzi:
 		git remote add team1 git@github.com/!\hl{your\_name}!/paparazzi.git
 	\end{lstlisting}
 
-	Before you can write to this private copy, you need to be able to authenticate by installing an SSH key: \href{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}
+	Before you can write to this private copy, you need to be able to authenticate by installing an SSH key: \href{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}{https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account}.
 
-	\item Checkout (Go to) the \coursebranch{} branch using:
+	\item Checkout (go to) the \coursebranch{} branch using:
 	\begin{lstlisting}[style=Bash]
 		git checkout !\coursebranch!
 	\end{lstlisting}
@@ -96,9 +96,9 @@ Use the following steps to download the course branch and install Paparazzi:
 
 	Then install all required items one by one. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
 
-	If this fails, you can manually install paparazzi by following the steps in \autoref{manual_install}
+	If this fails, you can manually install paparazzi by following the steps in \autoref{manual_install}.
 	
-	\item If the installation was succesful, there should be a screen to select a configuration and control panel. Select the Conf and Control Panel files that were prepared for the course:
+	\item If the installation was successful, there should be a screen to select a configuration and control panel. Select the Conf and Control Panel files that were prepared for the course:
 	\begin{enumerate}
 	\item select as Conf: \fbox{userconf/tudelft/course\_conf.xml}\\
 	\item select as Controlpanel: \fbox{userconf/tudelft/course\_control\_panel.xml}.\\

@@ -20,7 +20,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 	\begin{itemize}
 		\item Clear up the desks.
 		\item Remove all obstacles and other materials from the CyberZoo.
-		\item Shut down Motive on the Optitrack PC.
+		\item Shut down Motive on the Optitrack PC and switch off the monitor.
 		\item Turn off the lights and open the curtain on the left side of the CyberZoo (as seen from the desks).
 	\end{itemize}
 	\item Do not borrow any materials from the desks behind the CyberZoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
@@ -32,18 +32,20 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 	\item Demonstrate your flying skills, including nose-in flight, in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
 	\item Prevent common problems:
 	\begin{itemize}
-		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
-		\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in \Cref{ch:autonomous_flight}). The Optitrack system can fail when you did not initialize your drone's rigid body correctly, when you forget to plug in the ethernet cable, when your drone gets confused with another team's drone, etc. Therefore:
+		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do \emph{not} disable these.
+		\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in \Cref{ch:autonomous_flight}). The Optitrack system may fail if the drone's rigid body is not properly initialized, the Ethernet cable is not plugged in, or the system misidentifies your drone as another team's, and so on. Therefore:
 		\begin{itemize}
-			\item Before taking off, \textbf{always} verify that the drone's position and heading in the Ground Control Station are correct.
-			\item During flight, be ready to take over if the GPS fix is lost.
-			\item The flight plan should automatically trigger a landing when the GPS fix is lost.
+			\item Do not remove the GPS lost exception from the flight plan. During flight, this exception will automatically kill the motors (after a \textbf{1--2 second delay} due to transmission time), entering \textbf{KILL} mode on the autopilot. This safety feature ensures a controlled crash landing, preventing the drone from flying away, becoming uncontrollable, and crashing unpredictably. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+			\item Before takeoff, \textbf{always} ensure that the drone has a GPS fix (indicated as "3D" in the Ground Control Station) and confirm that its position and heading are correctly displayed in the Ground Control Station. Do not takeoff if your drone does not have a GPS fix!
 		\end{itemize}
-		\item WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, you are no longer able to control the drone. Therefore:
+		\item Datalink/WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, control of the drone will be lost, and eventually, GPS will also be lost. Therefore:
 		\begin{itemize}
-			\item Do not remove the datalink loss exception from the flight plan. This exception will land the drone automatically when the connection is lost.
+			\item Do not remove the datalink loss exception from the flight plan. This exception will automatically trigger an emergency landing if the datalink connection is lost for more than 2 seconds, and kill the motors once landed, entering \textbf{KILL} mode on the autopilot. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+			\item Before takeoff, ensure that you are connected to your drone via WiFi and verify that you have a datalink (indicated by a green bar under "Link" in the Ground Control Station).
 		\end{itemize}
-		\item Connecting to the wrong drone. Before uploading your code, make sure that you are connected to the right drone. Other teams will not appreciate it if you upload new code to their drone while in flight -- this will lead to a crash. Also make sure you are connected to the right drone before taking off, letting another team's drone take off instead can cause dangerous situations.
+		\item Geofence breach. The CyberZoo is surrounded by a geofence, a virtual boundary that the drone is not allowed to cross. There are multiple exceptions in the flight plan regarding this, so do not remove these exceptions. If the drone breaches the (red) geofence and/or the altitude geofence of 3.5m or 4.5m, it will automatically trigger an emergency landing and kill the motors once landed, entering \textbf{KILL} mode on the autopilot. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+		\item Battery low or critical. The Bebop battery has a voltage of 12.4~V when full and 11.1~V when empty. If the battery level drops below 11.1~V, it will automatically trigger an emergency landing, during which the autopilot will kill the motors upon landing, entering \textbf{KILL} mode to prevent the drone from crashing due to power loss. Do not remove the battery-related exceptions from the flight plan. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+		\item Connecting to the wrong drone. Before uploading your code, ensure that you are connected to the correct drone. Uploading new code to another team's drone while in flight can lead to a crash, and they will not appreciate it. Also, verify that you are connected to the correct drone before takeoff; allowing another team's drone to take off instead could lead to dangerous situations.
 		\item Joystick issues. Make sure the joystick is calibrated and working correctly before flying. Before takeoff, check in the GCS that the mode switch is working.
 		\item Bad code. Bad code can cause a variety of problems, from missing an obstacle and crashing into it, to segmentation faults that kill the autopilot altogether, often with the motors still running. Therefore:
 		\begin{itemize}
@@ -149,10 +151,10 @@ The top left of this screen shows the status of your drone. Pay extra attention 
 
 \begin{itemize}
 	\item Bat: this shows the battery level of your drone. Stop flying when the voltage drops to 11.1 or below, otherwise you will damage the battery. This is of course not a problem in the simulator.
-	\item Link: indicates that the drone and GCS are connected. This should be green.
+	\item Link: Indicates the status of the datalink and confirms that the drone and Ground Control Station (GCS) are connected. The indicator should be green to indicate a healthy connection.
 	\item Status:
 	\begin{itemize}
-		\item Autopilot mode (ATT or NAV): this is the current mode of the autopilot. In ATT mode you are in control of the drone, in NAV mode the drone will follow the flight plan. Check that the mode switch on the top left of the joystick toggles the autopilot mode, then set it to ATT.
+		\item Autopilot mode (KILL, ATT, or NAV): this indicates the current mode of the autopilot. In \textbf{KILL} mode, the drone's motors are disabled. In \textbf{ATT} mode, you are in control of the drone. In \textbf{NAV} mode, the drone follows the flight plan autonomously. Verify that the mode switch on the top left of the joystick toggles the autopilot mode (between \textbf{ATT} and \textbf{NAV}), then set it to \textbf{ATT}.
 		\item RC/Joystick status (OK): this indicates that your joystick is operating correctly.
 		\item GPS status (3D): this indicates that the drone has a position fix. This field should be green and at `3D' for autonomous flight.
 	\end{itemize}

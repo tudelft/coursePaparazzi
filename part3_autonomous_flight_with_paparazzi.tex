@@ -84,12 +84,12 @@ The steps are the same as during the simulation:
 	\item Double-click `Takeoff'. The drone will now take off and hover at its current position.
 \end{enumerate}
 
-You can start the orange avoider by double-clicking the `START' block. Be ready to take over as the drone may not always see the obstacles as well as during the simulation! Also remember to watch the battery voltage as it might drop very fast.
+You can start the orange avoider by double-clicking the \texttt{START} block. Be ready to take over control or double-click the \textbf{RETREAT} block (which reverses the drone for 2 seconds), as the drone may not always detect obstacles as accurately as during the simulation. Additionally, keep an eye on the battery voltage, as it may drop quickly.
 
 You can use VLC to view the drone's camera feed. Start VLC, then click `Media $\rightarrow$ Open File...' and open \verb"paparazzi/sw/tools/rtp_viewer/rtp\_5000.sdp".
 The Bebop's camera is rotated by 90 degrees. You can correct this in VLC by going to `Tools $\rightarrow$ Effects and filters $\rightarrow$ Video Effects $\rightarrow$ Geometry', checking `Transform' and selecting `Rotate by 270 degrees' below it.
 
-When you are finished, double-click on the `Land here' block in the GCS to land your drone.
+When you are finished, double-click on the \textbf{Land} block in the GCS to land your drone at the takeoff location, or double-click the \textbf{Immediate Landing} block to land at your current location. If you notice something going very wrong, either take over control or double-click on the \textbf{Emergency Landing} block to land at your current location quickly and set the autopilot to \textbf{KILL} mode.
 
 \section{Next steps}
 \subsection*{Edit your flightplan}
@@ -109,10 +109,10 @@ Try to create a simple flightplan that performs something of your choice.
 Last week we discussed several problems that can make your drone crash, such as an empty battery, losing GPS or coming too close to the wall of the arena.
 When flying your drone you want your drone to do something as soon as these dangerous situations occur:
 \begin{itemize}
-	\item If your battery is empty, you want to perform a normal landing
-	\item If your GPS is lost, you want to perform a normal landing
+	\item If your battery is empty, you want to perform an emergency landing.
+	\item If your GPS is lost, you want to perform an emergency landing.
 	\item If you fly to the wall of the arena you want to stay at the last safe point you found. 
 \end{itemize}
-The Paparazzi flight plan allows you to create exceptions: when the check of that exception becomes true the drone will execute a certain block. Look at the flight plan file 
+The Paparazzi flight plan allows you to create exceptions: when the condition of that exception becomes true the drone will execute a certain block. Look at the flight plan file 
 
 \fbox{flight\_plans/tudelft/course\_orangeavoid\_cyberzoo.xml} to see how these exceptions are implemented. 
