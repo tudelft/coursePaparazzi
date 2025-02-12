@@ -59,3 +59,9 @@
 \renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
 \fancyfoot[LO,LE]{{\small Crash Course Paparazzi \the\year}}
 \fancyfoot[CO,CE]{\thepage}
+
+
+\usepackage{todonotes}
+\newcommand{\todoi}[1]{\todo[inline]{\textbf{TODO:} #1}}
+
+\newcommand{\inlineicon}[1]{\includegraphics[height=\fontcharht\font`\B]{#1}}

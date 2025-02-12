@@ -20,7 +20,7 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 	\begin{itemize}
 		\item Clear up the desks.
 		\item Remove all obstacles and other materials from the CyberZoo.
-		\item Shut down Motive on the Optitrack PC.
+		\item Shut down Motive on the Optitrack PC and switch off the monitor.
 		\item Turn off the lights and open the curtain on the left side of the CyberZoo (as seen from the desks).
 	\end{itemize}
 	\item Do not borrow any materials from the desks behind the CyberZoo (around the press). Do not use the desks, power sockets or ethernet cables there either.
@@ -29,21 +29,23 @@ Last year we had no incidents and managed to break zero drones, let's keep it th
 \subsubsection*{Handling the drone}
 \begin{itemize}
 	\item If you damage or break anything, report this to the TA's so we can fix or replace it.
-	\item Demonstrate your flying skills -- including nose-in flight -- in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
+	\item Demonstrate your flying skills, including nose-in flight, in simulation to one of the TA's before flying the real drone. You should be able the safely land the drone when it does not behave as expected. Your team should have at least one safety pilot.
 	\item Prevent common problems:
 	\begin{itemize}
-		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do not disable these.
-		\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in \Cref{ch:autonomous_flight}). The Optitrack system can fail when you did not initialize your drone's rigid body correctly, when you forget to plug in the ethernet cable, when your drone gets confused with another team's drone, etc. Therefore:
+		\item The example flight plan contains safety rules (`exceptions') that land the drone in case of problems. Do \emph{not} disable these.
+		\item GPS (Optitrack) loss. The drone needs position and velocity feedback for navigation, without this feedback the drone cannot maintain its position. This feedback is provided through Optitrack (more in this in \Cref{ch:autonomous_flight}). The Optitrack system may fail if the drone's rigid body is not properly initialized, the Ethernet cable is not plugged in, or the system misidentifies your drone as another team's, and so on. Therefore:
 		\begin{itemize}
-			\item Before taking off, \textbf{always} verify that the drone's position and heading in the Ground Control Station are correct.
-			\item During flight, be ready to take over if the GPS fix is lost.
-			\item The flight plan should automatically trigger a landing when the GPS fix is lost.
+			\item Do not remove the GPS lost exception from the flight plan. During flight, this exception will automatically kill the motors (after a \textbf{1--2 second delay} due to transmission time), entering \textbf{KILL} mode on the autopilot. This safety feature ensures a controlled crash landing, preventing the drone from flying away, becoming uncontrollable, and crashing unpredictably. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+			\item Before takeoff, \textbf{always} ensure that the drone has a GPS fix (indicated as "3D" in the Ground Control Station) and confirm that its position and heading are correctly displayed in the Ground Control Station. Do not takeoff if your drone does not have a GPS fix!
 		\end{itemize}
-		\item WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, you are no longer able to control the drone. Therefore:
+		\item Datalink/WiFi loss. The GCS communicates with the Bebop over WiFi. Without a WiFi connection, control of the drone will be lost, and eventually, GPS will also be lost. Therefore:
 		\begin{itemize}
-			\item Do not remove the datalink loss exception from the flight plan. This exception will land the drone automatically when the connection is lost.
+			\item Do not remove the datalink loss exception from the flight plan. This exception will automatically trigger an emergency landing if the datalink connection is lost for more than 2 seconds, and kill the motors once landed, entering \textbf{KILL} mode on the autopilot. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+			\item Before takeoff, ensure that you are connected to your drone via WiFi and verify that you have a datalink (indicated by a green bar under "Link" in the Ground Control Station).
 		\end{itemize}
-		\item Connecting to the wrong drone. Before uploading your code, make sure that you are connected to the right drone. Other teams will not appreciate it if you upload new code to their drone while in flight -- this will lead to a crash. Also make sure you are connected to the right drone before taking off, letting another team's drone take off instead can cause dangerous situations.
+		\item Geofence breach. The CyberZoo is surrounded by a geofence, a virtual boundary that the drone is not allowed to cross. There are multiple exceptions in the flight plan regarding this, so do not remove these exceptions. If the drone breaches the (red) geofence and/or the altitude geofence of 3.5m or 4.5m, it will automatically trigger an emergency landing and kill the motors once landed, entering \textbf{KILL} mode on the autopilot. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+		\item Battery low or critical. The Bebop battery has a voltage of 12.4~V when full and 11.1~V when empty. If the battery level drops below 11.1~V, it will automatically trigger an emergency landing, during which the autopilot will kill the motors upon landing, entering \textbf{KILL} mode to prevent the drone from crashing due to power loss. Do not remove the battery-related exceptions from the flight plan. To resume flight after the motors are killed and the autopilot is in \textbf{KILL} mode, place the drone in the "Holding point" block, click on the red \textbf{KILL} button in the Ground Control Station, and select \textbf{AUTO}. This should restore NAV mode.
+		\item Connecting to the wrong drone. Before uploading your code, ensure that you are connected to the correct drone. Uploading new code to another team's drone while in flight can lead to a crash, and they will not appreciate it. Also, verify that you are connected to the correct drone before takeoff; allowing another team's drone to take off instead could lead to dangerous situations.
 		\item Joystick issues. Make sure the joystick is calibrated and working correctly before flying. Before takeoff, check in the GCS that the mode switch is working.
 		\item Bad code. Bad code can cause a variety of problems, from missing an obstacle and crashing into it, to segmentation faults that kill the autopilot altogether, often with the motors still running. Therefore:
 		\begin{itemize}
@@ -75,14 +77,13 @@ cd ~/paparazzi
 
 The Paparazzi Center performs the following functions: it manages aircraft, airframes and flightplans, it is used to compile and upload your code and it is used to start flight- or simulation sessions.
 
-The top left corner shows the current aircraft (A/C). Use the drop-down menu to select `bebop\_orange\_avoid'.
-Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
+The top left corner shows the current aircraft (A/C). Use the drop-down menu to make sure `bebop\_orange\_avoid' is selected. Below the A/C there are fields to select your airframe and flight plan and other options. Leave these as they are for now; later in the course you may want to modify your flight plan or airframe.
 
-The buttons in the top center (Target, Flash mode, Clean, Build, Upload) are used to compile and upload your code.
+The buttons in the top center (Target, Clean \inlineicon{icons/clean.png}, Build \inlineicon{icons/build.png}, Upload \inlineicon{icons/upload.png}) are used to compile and upload your code.
 
-Finally, the top right allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick.
+The `Operation' tab allows you to execute a `Session': a collection of programs that help you perform your flight. Examples of these programs are the communications server and datalink, the Ground Control Station and your joystick. In this tab, the `Session' dropdown can be used to select a predefined collection of programs. Next to this dropdown is the `Start Session' \inlineicon{icons/start.png} button, which adds the programs from the predefined session to the current `Programs' list. Individual programs can also be added using the `Add tool' button. Beneath the `Start Session' \inlineicon{icons/start.png} button, there are three more buttons to control the current session. With the first, the `Start All' \inlineicon{icons/start.png} button, the programs that are currently in the `Programs' list are started and with the `Stop All' \inlineicon{icons/stop.png}, they are stopped again. With the 'Remove All' \inlineicon{icons/remove.png} button, the `Programs' list is cleared. Individual programs can also be started, stopped and cleared using their own buttons in the list.
 
-Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found in Tools).
+Saving a custom session is useful in case you are, for example, using a different joystick, flying with a different flight plan than the default, or if you always want to launch an additional process like the Log Plotter or the Messages (found using the `Add Tool' button).
 
 \subsubsection*{Connect and calibrate your joystick}
 Before you can fly, you need to connect and calibrate your joystick.
@@ -90,23 +91,35 @@ Connect the joystick to your computer\footnote{On some systems, a bug in Ubuntu 
 
 Joystick calibration should be repeated every time you connect a joystick to your computer, as the center positions may vary slightly per device and the trim sliders may have shifted. It is also a good test to verify that your joystick is working correctly.
 
-\textit{SM600 joystick example}
+\paragraph{SM600 joystick example}
 
 Ensure that the trim sliders to the right and below the two sticks are in the center position. Check that the bottom mode selector next to the name (SM600) is in the second position, G3-G4.5. Before plugging in the USB of the joystick make sure that all sticks are centered, including the throttle.
 
-Open a terminal (Ctrl+Alt+T), type \fbox{jstest-gtk} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \verb"/dev/input/js0", write down the number after `js', you will need this later. Double-click on your joystick to start the test and calibration program.
+Open a terminal (Ctrl+Alt+T), type \fbox{\texttt{jstest-gtk}} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \texttt{/dev/input/js0}, write down the number after `\texttt{js}', you will need this later. Double-click on your joystick to start the test and calibration program.
 
-Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. With the control sticks centered, click on the `Ok' and `Close' buttons. It's important to check that the throttle (Axis 2) can reach the minimum value after calibration, as the drone will not arm otherwise.
+Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the autopilot mode switch on the top left between the two positions. Move the tuning knob on the top right fully clockwise and counterclockwise. It's important to check that the throttle (Axis 2) can reach the minimum value after calibration, as the drone will not arm otherwise. With the control sticks centered, click on the `Ok' and `Close' buttons. 
 
-\textit{Other joysticks}
+\paragraph{RadioMaster TX12 joystick example}
 
-A similar process using \fbox{jstest-gtk} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
+Power up the transmitter using the power button. Press the MDL key to go to the model page. Select the `\texttt{mavlabCourse}' model. Use the USB-C port on top of the transmitter to connect to your laptop. Select the `\texttt{USB Joystick (HID)}' mode on the transmitter.
 
-In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click Session $\to$ Save at the top of the window. The newly save session will now appear in the dropdown menu next to the Execute button.
+Open a terminal (Ctrl+Alt+T), type \fbox{\texttt{jstest-gtk}} and press enter to start the joystick calibration program. Find your joystick in the list. If your device is not \texttt{/dev/input/js0}, write down the number after `\texttt{js}', you will need this later. Double-click on your joystick to start the test and calibration program.
 
-\textit{Creating joystick XML files}
+Click the `Calibration' button, then `Start Calibration'. Move both sticks in circles through their extreme positions, then return them to the center position (the throttle should also be centered). Switch the arm switch and the autopilot mode switch on the top left and right between the three positions. It's important to check that the throttle can reach the minimum value after calibration, as the drone will not arm otherwise. With the control sticks centered, click on the `Ok' and `Close' buttons.
 
-In case the joystick you are planning to use does not have a corresponding XML it may be necessary to create a new, custom joystick XML. There is a comprehensive tutorial explaining all there is to know on how to do this in the \texttt{doc/sphinx/source/tutorials/intermediate/create\_joystick.rst}.
+In order to select the TX12 transmitter preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the `\texttt{radiomaster\_tx12.xml}'. To avoid having to repeat this process every time the simulation is launched, click on the menu button \inlineicon{icons/menu.png} and then on `\texttt{Save Session}', in order to overwrite the current session with your changes.
+
+\paragraph{Other joysticks}
+
+A similar process using \fbox{\texttt{jstest-gtk}} needs to be repeated if another joystick or radio is being used. However, by default the Paparazzi Center will load the presets for the SM600 joystick. Other radios may use a different number of input channels, or the mapping of the channels will be different, and therefore another preset must be selected.
+
+In order to select another joystick preset, start a session in the Paparazzi Center. If you plan to fly in simulation, select Simulation: Gazebo + Joystick, or Flight UDP when flying with a real drone. The joystick textbox should now have appeared, visible amongst the other programs of the session at the top of the Paparazzi Center. Replace the XML filename at the end of the textbox with the filename of the joystick you are planning to use. A number of XMLs have already been created for a variety of joysticks, you can check the available ones in the \texttt{conf/joystick} directory. To avoid having to repeat this process every time the simulation is launched, click on the menu button \inlineicon{icons/menu.png} and then on `\texttt{Save Session}', in order to overwrite the current session with your changes.
+
+\paragraph{Creating joystick XML files}
+
+In case the joystick you are planning to use does not have a corresponding XML it may be necessary to create a new, custom joystick XML. There is a comprehensive tutorial explaining all there is to know on how to do this in: 
+
+\texttt{doc/sphinx/source/tutorials/intermediate/create\_joystick.rst}.
 
 If you succeed in creating a new joystick XML for a device you think others may have at home or want to use, do not hesitate to create a pull request to the \coursebranch{} branch to share your work!
 
@@ -118,12 +131,16 @@ This allows you to practice without the risk of breaking your drone. It also all
 
 The simulation is started as follows:
 \begin{enumerate}
-	\item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \emph{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
-	\item Click `Clean', then `Build'. Paparazzi will now compile your autopilot.
-	\item In the Session drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press execute to start the simulation.
+	\item In the Paparazzi Center, go to the Target drop-down menu and select the `nps' target. NPS is the \textsl{New Paparazzi Simulator}; by setting nps as the target your autopilot is compiled to run on your own pc instead of on the Bebop.
 	
-	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' button next to the Joystick textbox, then click `Redo'. In the top menu of the Paparazzi Center, click `Session $\rightarrow$ Save' and overwrite the `Simulation - Gazebo + Joystick' session. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
-	* On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \verb"... -d 1" instead of \verb"... -d 0".
+	\item Click `Clean' \inlineicon{icons/clean.png}, then `Build' \inlineicon{icons/build.png}. Paparazzi will now compile your autopilot.
+	
+	\item In the `Operation' tab, in the `Session' drop-down menu, select `Simulation - Gazebo + Joystick' (\emph{not} `Simulation'). Press `Start Session' \inlineicon{icons/start.png} to start the simulation.
+	
+	If your joystick device was not \verb"/dev/input/js0" the following error will appear in the Paparazzi center: \verb|Invalid_argument("index out of bounds")|. Fix this as follows: the command in the `Joystick' textbox ends with \verb"-d 0"; replace the 0 with the number of your joystick device (e.g. if your joystick was \verb"/dev/input/js1", change the command to \verb"... -d 1"). Click the `Stop' \inlineicon{icons/stop.png} button next to the Joystick textbox, then click the button again once it has changed to `Start' \inlineicon{icons/start.png}. Next to the `Start Session' \inlineicon{icons/start.png}, click on the `Menu' \inlineicon{icons/menu.png} button and overwrite the `Simulation - Gazebo + Joystick' session by choosing `Save Session'. Paparazzi will now remember your joystick number. You may have to repeat these steps for the `Flight UDP' session.
+	\footnote{On Ubuntu 20.04 and 22.04, there is a bug with the joystick device number. If your jstest-gtk shows js0 but you do not get the radio connection in the GCS, try with \texttt{... -d 1} instead of \texttt{... -d 0}.}
+
+	\textbf{Each time you start the joystick script, you need to move all axis to their full extent, such that paparazzi learns the limits of each axis.}
 	
 	Sometimes a `Speech dispatcher' error may appear. As long as you can still hear the messages from the GCS, this error can be ignored.
 \end{enumerate}
@@ -134,10 +151,10 @@ The top left of this screen shows the status of your drone. Pay extra attention 
 
 \begin{itemize}
 	\item Bat: this shows the battery level of your drone. Stop flying when the voltage drops to 11.1 or below, otherwise you will damage the battery. This is of course not a problem in the simulator.
-	\item Link: indicates that the drone and GCS are connected. This should be green.
+	\item Link: Indicates the status of the datalink and confirms that the drone and Ground Control Station (GCS) are connected. The indicator should be green to indicate a healthy connection.
 	\item Status:
 	\begin{itemize}
-		\item Autopilot mode (ATT or NAV): this is the current mode of the autopilot. In ATT mode you are in control of the drone, in NAV mode the drone will follow the flight plan. Check that the mode switch on the top left of the joystick toggles the autopilot mode, then set it to ATT.
+		\item Autopilot mode (KILL, ATT, or NAV): this indicates the current mode of the autopilot. In \textbf{KILL} mode, the drone's motors are disabled. In \textbf{ATT} mode, you are in control of the drone. In \textbf{NAV} mode, the drone follows the flight plan autonomously. Verify that the mode switch on the top left of the joystick toggles the autopilot mode (between \textbf{ATT} and \textbf{NAV}), then set it to \textbf{ATT}.
 		\item RC/Joystick status (OK): this indicates that your joystick is operating correctly.
 		\item GPS status (3D): this indicates that the drone has a position fix. This field should be green and at `3D' for autonomous flight.
 	\end{itemize}
@@ -159,7 +176,7 @@ Should you be using a different joystick (a stick joystick for example), the arm
 Switch to the Gazebo window. Slowly advance the throttle until the drone takes off.
 You can now use the simulator to practice your manual flying skills. It is very important to test if you can fly a drone nose-in (with its nose pointing towards you). When you can do this perfectly you can consider yourself good enough to serve as a safety pilot during this course.
 
-When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop/Remove All Processes' button.
+When you are finished, you can stop the simulation by going to the Paparazzi Center (not the GCS) and clicking the `Stop All' \inlineicon{icons/stop.png} or `Remove All' \inlineicon{icons/remove.png} button.
 
 \section{Flying the real drone}
 Once you have mastered flying in the simulator, it is time to transition to the real drone.

@@ -919,7 +919,7 @@ All the example code has been tested in simulation before it was used on the rea
 
 Paparazzi uses \href{http://gazebosim.org/}{Gazebo} as a simulation platform. Gazebo allows you to create virtual worlds and robots from xml files, and provides a physics and rendering engine and a collection of virtual sensors.
 
-In the mavlabCourse2021 branch of Paparazzi, we have provided you with a collection of Gazebo worlds and models that are relevant for the course. These can be found in \texttt{conf/simulator/gazebo/} and in \texttt{sw/ext/tudelft\_gazebo\_models/}. Three Cyberzoo world files have already been provided in the \texttt{sw/ext/tudelft\_gazebo\_models/world/} folder:
+In the \coursebranch\  branch of Paparazzi, we have provided you with a collection of Gazebo worlds and models that are relevant for the course. These can be found in \texttt{conf/simulator/gazebo/} and in \texttt{sw/ext/tudelft\_gazebo\_models/}. Three Cyberzoo world files have already been provided in the \texttt{sw/ext/tudelft\_gazebo\_models/world/} folder:
 
 \begin{itemize}
 	\item \texttt{cyberzoo2019\_orange\_poles.world} - The world file used by the example airframes, consisting of the Cyberzoo with a handful of orange poles to avoid.
@@ -973,10 +973,10 @@ The simulation is of course not perfect, you will quickly discover that the came
 This airframe provides two compilation targets: \texttt{ap} -- the autopilot for the real drone, and \texttt{nps} -- the simulator. Placing your defines inside the \texttt{target} elements allows you to change your parameters depending on the compilation target, which in turn should allow you to keep running \emph{the same code} in the simulator and on the real drone.
 
 \subsection{Testing on the real drone}
-After testing your code in simulation, you will need to test the same code on the real drone. The previous parts of the course manual have already shown you how to fly your drone with Paparazzi. Be sure to use the logging capabilities described in \autoref{sec:logging} to help you track down problems. Keep in mind to \emph{follow the safety rules} (part 2), especially when flying experimental code. Also, do not forget to start your loggers before flying.
+After testing your code in simulation, you will need to test the same code on the real drone. The previous parts of the course manual have already shown you how to fly your drone with Paparazzi. Be sure to use the logging capabilities described in \autoref{sec:logging} to help you track down problems. Also, do not forget to start your loggers before flying. Keep in mind to \emph{follow the safety rules} from \autoref{ch:manual_flight}, especially when flying experimental code. 
 
 \section{Collaboration using git}
-Refer to the lecture slides (\url{https://brightspace.tudelft.nl/d2l/le/content/133606/viewContent/1231699/View}) for more information on using git.
+Refer to the lecture slides (BrightSpace $\rightarrow$ Lecture Slides $\rightarrow$ Git $\rightarrow$ CrashCourseGit) for more information on using git.
 
 %In short, you will need to take the following steps to share code within your team:
 %\begin{enumerate}

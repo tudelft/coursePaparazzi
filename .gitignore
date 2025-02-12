@@ -5,3 +5,8 @@
 *.fls
 *.fdb
 *.toc
+*.gz
+
+main.pdf
+
+old/*
