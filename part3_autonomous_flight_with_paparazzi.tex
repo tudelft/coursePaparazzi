@@ -86,8 +86,12 @@ The steps are the same as during the simulation:
 
 You can start the orange avoider by double-clicking the \texttt{START} block. Be ready to take over control or double-click the \texttt{RETREAT} block (which reverses the drone for 2 seconds), as the drone may not always detect obstacles as accurately as during the simulation. Additionally, keep an eye on the battery voltage, as it may drop quickly.
 
-You can use VLC to view the drone's camera feed. Start VLC, then click `Media $\rightarrow$ Open File...' and open \verb"paparazzi/sw/tools/rtp_viewer/rtp\_5000.sdp".
+You can use VLC to view the drone's (front) camera feed. Start VLC, then click `Media $\rightarrow$ Open File...' and open \verb"paparazzi/sw/tools/rtp_viewer/rtp\_5000.sdp".
 The Bebop's camera is rotated by 90 degrees. You can correct this in VLC by going to `Tools $\rightarrow$ Effects and filters $\rightarrow$ Video Effects $\rightarrow$ Geometry', checking `Transform' and selecting `Rotate by 270 degrees' below it.
+If you are unable to open the drone's (front) camera feed using VLC, you can view it via the command line by running the following command in your terminal (from your Paparazzi directory):
+\begin{lstlisting}[style=Bash]
+	ffplay -vf "transpose=2, scale=2*iw:-1" -i rtp://127.0.0.1:5000 -protocol_whitelist file,udp,crypto,data,rtp -fflags nobuffer
+\end{lstlisting}
 
 When you are finished, double-click on the \texttt{Land} block in the GCS to land your drone at the takeoff location, or double-click the \texttt{Immediate Landing} block to land at your current location. If you notice something going very wrong, either take over control or double-click on the \texttt{Emergency Landing} block to land at your current location quickly and set the autopilot to \textbf{KILL} mode.
 
