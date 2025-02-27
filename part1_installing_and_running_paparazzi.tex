@@ -4,7 +4,7 @@ In the following chapters you will perform your first flight using Paparazzi, ma
 
 \section{Installing Ubuntu}
 For this course you are required to install Ubuntu.
-If you are already running Ubuntu 20.04 or 22.04, skip to the next section.
+If you are already running Ubuntu 20.04 or 22.04.1, skip to the next section.
 Otherwise, follow the steps here to install Ubuntu in a dual-boot setup with your existing Windows installation.
 This allows you to keep using your existing Windows installation next to Ubuntu.
 While it is possible to install Ubuntu as a virtual machine, this frequently causes problems with networking, USB and GPU support. Therefore we do not support virtual machines during the course.
@@ -14,7 +14,7 @@ Make sure you have backed up your files before starting the installation!
 
 Follow this tutorial to install Ubuntu next to an existing Windows installation: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. 
 
-We recommend you install Ubuntu 22.04 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04. 
+We recommend you install Ubuntu 22.04.1 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04.1. 
 
 \textbf{NOTE} Ubuntu 24.04 is NOT supported at this time!
 
@@ -71,7 +71,7 @@ Use the following steps to download the course branch and install Paparazzi:
 	\item First, the TU Delft repository of Paparazzi needs to be cloned. In the directory where you want to download the code, typically your home folder, run the following commands:
 
 	\begin{lstlisting}[style=Bash]
-		git clone git@github.com:tudelft/paparazzi.git
+		git clone https://github.com/tudelft/paparazzi.git
 		cd ./paparazzi
 	\end{lstlisting}
 
