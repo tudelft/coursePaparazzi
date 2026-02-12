@@ -4,8 +4,8 @@ In the following chapters you will perform your first flight using Paparazzi, ma
 
 \section{Installing Ubuntu}
 For this course you are required to install Ubuntu.
-If you are already running Ubuntu 20.04 or 22.04.1, skip to the next section.
-Otherwise, follow the steps here to install Ubuntu in a dual-boot setup with your existing Windows installation.
+If you are already running Ubuntu 22.04, skip to the next section.
+Otherwise, follow the steps here to install Ubuntu standalone or in a dual-boot setup with your existing Windows installation.
 This allows you to keep using your existing Windows installation next to Ubuntu.
 While it is possible to install Ubuntu as a virtual machine, this frequently causes problems with networking, USB and GPU support. Therefore we do not support virtual machines during the course.
 
@@ -16,7 +16,7 @@ Follow this tutorial to install Ubuntu next to an existing Windows installation:
 
 We recommend you install Ubuntu 22.04.1 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04.1. 
 
-\textbf{NOTE} Ubuntu 24.04 is NOT supported at this time!
+\textbf{NOTE} Ubuntu 24.04 can be used for flying but Gazebo is not yet supported!
 
 Some useful tips and common issues:
 
@@ -27,7 +27,7 @@ Some useful tips and common issues:
   
   \item If the Secure Boot option is grayed out in the BIOS, set the supervisor password in the BIOS.
   
-  \item After installing Ubuntu, if your computer boots directly to Windows, check the UEFI settings in your BIOS (usually accessible by pressing F10 or another FN key right after powering on the laptop) and change the boot order from "Windows Boot Manager" to "ubuntu" or "\textit{name of your hard disk}".
+  \item After installing Ubuntu, if your computer boots directly to Windows, check the UEFI settings in your BIOS (usually accessible by pressing F10 or another FN key right after powering on the laptop) and change the boot order from ``Windows Boot Manager'' to ``ubuntu'' or ``\textit{name of your hard disk}''.
   
   \item Some BIOS let you add a delay at start-up to give you time to select which OS you would like to boot from. This can usually be changed in the BIOS Setup.
   
@@ -77,7 +77,7 @@ Use the following steps to download the course branch and install Paparazzi:
 
 	\item To collaborate with your team, one team member should fork the repository by going to the tudelft paparazzi branch on \href{https://github.com/tudelft/paparazzi/}{https://github.com/tudelft/paparazzi/} and searching for the FORK button. This will create a copy for your team under \href{https://github.com/your_name/paparazzi/}{https://github.com/\hl{your\_name}/paparazzi/}, where \texttt{your\_name} is again your GitHub username. The person that forked the repository should give the other team members access via the \url{https://github.com/} interface.
 
-	Then the new copy should be added on all team computers with:
+	Then the group common repository (remote) should be added on all team computers with (here names team1):
 	\begin{lstlisting}[style=Bash]
 		git remote add team1 git@github.com/!\hl{your\_name}!/paparazzi.git
 	\end{lstlisting}
@@ -98,12 +98,18 @@ Use the following steps to download the course branch and install Paparazzi:
 
 	If this fails, you can manually install paparazzi by following the steps in \autoref{manual_install}.
 	
-	\item If the installation was successful, there should be a screen to select a configuration and control panel. Select the Conf and Control Panel files that were prepared for the course:
+	\item After the installation (including \texttt{make}) you can start paparazzi center:
+
+	\begin{lstlisting}[style=Bash]
+		./paparazzi
+	\end{lstlisting}
+
+	\item Select the Conf and Control Panel files that were prepared for the course:
 	\begin{enumerate}
 	\item select as Conf: \fbox{userconf/tudelft/course\_conf.xml}\\
 	\item select as Controlpanel: \fbox{userconf/tudelft/course\_control\_panel.xml}.\\
 	\end{enumerate}
-	Click `Set active' and close the dialog by clicking `Exit'.
+
 	
 
 	% \item Install the Gazebo simulator. Gazebo version 9 is recommended for Ubuntu 18.04 and 20.04. For Ubuntu 22.04 the version is Gazeobo 11. 
@@ -123,7 +129,7 @@ Use the following steps to download the course branch and install Paparazzi:
 		\item{Open the paparazzi folder as workspace.}
 	\end{enumerate}
 	
-	\item \textbf{Optional:} Build OpenCV for the Bebop if you plan to use it. Note that OpenCV is heavy and thereby slow compared to self
+	\item \textbf{Optional:} Only on Ubuntu 20.04: Build OpenCV for the Bebop if you plan to use it. Note that OpenCV is heavy and thereby slow compared to self
 	optimized C-code. That is why the example does not use OpenCV.
 
 	\begin{enumerate}
