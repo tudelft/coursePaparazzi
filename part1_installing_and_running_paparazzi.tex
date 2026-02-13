@@ -14,9 +14,9 @@ Make sure you have backed up your files before starting the installation!
 
 Follow this tutorial to install Ubuntu next to an existing Windows installation: \url{https://itsfoss.com/install-ubuntu-1404-dual-boot-mode-windows-8-81-uefi/}. 
 
-We recommend you install Ubuntu 22.04.1 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04.1. 
+We recommend you install Ubuntu 22.04.5 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04.5. 
 
-\textbf{NOTE} Ubuntu 24.04 can be used for flying but Gazebo is not yet supported!
+\textbf{NOTE} Ubuntu 24.04 can be used for flying but Gazebo (the simulator) is not yet supported!
 
 Some useful tips and common issues:
 
@@ -86,12 +86,18 @@ Use the following steps to download the course branch and install Paparazzi:
 
 	\item Checkout (go to) the \coursebranch{} branch using:
 	\begin{lstlisting}[style=Bash]
-		git checkout !\coursebranch!
+		git checkout -t origin/!\coursebranch!
 	\end{lstlisting}
 
-	\item Now install Paparazzi by running the instal script:
+	\item Now install Paparazzi by running the instal script in Ubuntu 22 or 24:
 	\begin{lstlisting}[style=Bash]
 		./install.sh
+	\end{lstlisting}
+
+	For Ubuntu 20.04 or earlier, run the following command to install Paparazzi:
+
+	\begin{lstlisting}[style=Bash]
+		./install.sh -n
 	\end{lstlisting}
 
 	Then install all required items one by one. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}

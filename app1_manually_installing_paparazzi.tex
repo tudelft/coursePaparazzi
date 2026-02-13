@@ -11,6 +11,13 @@ In case the automatic installation fails, these commands can be used in the term
 		cd ./paparazzi
 	\end{lstlisting}
 
+    On a fresh installation, you may need to install git first using:
+
+    \begin{lstlisting}[style=Bash]
+        sudo apt-get update
+        sudo apt-get install git
+    \end{lstlisting}
+
     \item Initialize, sync and update Paparazzi's submodules. Submodules are other git projects included in this project. Use:
     \begin{lstlisting}[style=Bash]
         git submodule init
@@ -36,15 +43,22 @@ In case the automatic installation fails, these commands can be used in the term
         sudo cp conf/system/udev/rules/*.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules
     \end{lstlisting}
 
-    \item If you are using Ubuntu 20.04, install Gazebo 9:
+    \item If you are using Ubuntu 20.04 or 22.04, install Gazebo 11 (Classic):
     \begin{lstlisting}[style=Bash]
-        sudo apt-get install -y gazebo9 libgazebo9-dev
+        sudo apt update
+        sudo apt-get -f -y install lsb-release wget gnupg
+        sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+        wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+        sudo apt update
+        sudo apt-get install -y gazebo11 libgazebo11-dev
     \end{lstlisting}
 
-    Otherwise, if you are using Ubuntu 22.04, install Gazebo 11:
+    If gazebo11 is not available, install it without version number:
+
     \begin{lstlisting}[style=Bash]
         sudo apt-get install -y gazebo libgazebo-dev
     \end{lstlisting}
+
     % Include this?
     Gazebo 11 is not available for Ubuntu 24.04, which is why this version of Ubuntu is not supported for this course.
 
@@ -61,6 +75,6 @@ In case the automatic installation fails, these commands can be used in the term
 
     \item Run the first-time setup script:
     \begin{lstlisting}[style=Bash]
-        ./start.py
+        ./paparazzi &
     \end{lstlisting}
 \end{enumerate}
