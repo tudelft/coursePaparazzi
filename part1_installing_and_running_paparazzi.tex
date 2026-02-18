@@ -16,7 +16,13 @@ Follow this tutorial to install Ubuntu next to an existing Windows installation:
 
 We recommend you install Ubuntu 22.04.5 \url{https://www.ubuntu.com/download/desktop}. The rest of the course manuals assume that you are running Ubuntu 22.04.5. 
 
-\textbf{NOTE} Ubuntu 24.04 can be used for flying but Gazebo (the simulator) is not yet supported!
+\textbf{NOTE} Ubuntu 24.04 is not fully supported yet. If you want to keep this OS, you can use a docker image. Read the instructions in the paparazzi folder ./docker/gazebo-classic subfolder and build the image using:
+
+\begin{lstlisting}[style=Bash]
+	cd ./docker/gazebo-classic
+	docker build -t paparazzi-gazebo-classic .
+\end{lstlisting}
+
 
 Some useful tips and common issues:
 
@@ -89,18 +95,33 @@ Use the following steps to download the course branch and install Paparazzi:
 		git checkout -t origin/!\coursebranch!
 	\end{lstlisting}
 
-	\item Now install Paparazzi by running the instal script in Ubuntu 22 or 24:
-	\begin{lstlisting}[style=Bash]
-		./install.sh
-	\end{lstlisting}
-
-	For Ubuntu 20.04 or earlier, run the following command to install Paparazzi:
+	\item Now run the Paparazzi install script. There are a few options: if you don't mind installing python packages natively, simply run:
 
 	\begin{lstlisting}[style=Bash]
 		./install.sh -n
 	\end{lstlisting}
 
-	Then install all required items one by one. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
+	If you want the default option of installing python packages in a virtual environment, run:
+
+	\begin{lstlisting}[style=Bash]
+		./install.sh
+	\end{lstlisting}
+
+	From here on you will need to activate this environment every time you want to use Paparazzi. You can do this by running the following command in the terminal:
+
+	\begin{lstlisting}[style=Bash]
+		source ~/paparazzi/pprzEnv/bin/activate
+	\end{lstlisting}
+
+	If you prefer conda: do the following instead (and also activate the right conda environment before using Paparazzi):
+
+	\begin{lstlisting}[style=Bash]
+		pip install -r requirements.txt
+		./install.sh -n
+	\end{lstlisting}
+
+
+	Then, in the GUI, click all the buttons one at a time to install all required items. Check after each item if there were no errors during the installation. If you run into trouble, also check \url{http://wiki.paparazziuav.org/wiki/Installation}
 
 	If this fails, you can manually install paparazzi by following the steps in \autoref{manual_install}.
 	
